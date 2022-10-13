@@ -6,8 +6,8 @@ const BackLogo = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 6.25rem;
-  top: 6.25rem;
+  bottom: 4vh;
+  top: 8vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,12 +1,9 @@
 import React from 'react';
-import AuthTemplate from "../Components/auth/AuthTemplate";
-import AuthForm from "../Components/auth/AuthForm";
+import LoginContainer from "../Containers/auth/LoginContainer";
 
 function LoginPage(props) {
     return (
-        <AuthTemplate>
-            <AuthForm type="login"/>
-        </AuthTemplate>
+        <LoginContainer />
     );
 }
 

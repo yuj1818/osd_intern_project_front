@@ -9,7 +9,7 @@ import NavBar from "./NavBar";
 
 const HeaderBlock = styled.div`
   position: fixed;
-  height: 6.25rem;
+  height: 8vh;
   width: 100%;
   background: #D9D9D9;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
@@ -46,7 +46,7 @@ const Wrapper = styled(Responsive)`
 `;
 
 const Spacer = styled.div`
-  height: 6.25rem;
+  height: 8vh;
 `;
 
 function Header({onLogin, onRegister, onToggle, visible}) {
@@ -61,7 +61,6 @@ function Header({onLogin, onRegister, onToggle, visible}) {
                     </div>
                     <div className="right">
                         <Button onClick={onLogin}>로그인</Button>
-                        <Button onClick={onRegister}>회원가입</Button>
                     </div>
                 </Wrapper>
             </HeaderBlock>

@@ -2,9 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 
 const FooterBlock = styled.div`
+  font-size: 1.5vh;
   position: fixed;
   bottom: 0;
-  height: 6.25rem;
+  height: 4vh;
   width: 100%;
   background: #D9D9D9;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
@@ -13,7 +14,7 @@ const FooterBlock = styled.div`
   justify-content: center;
 `
 const Spacer = styled.div`
-  height: 6.25rem;
+  height: 4vh;
 `;
 
 function Footer(props) {

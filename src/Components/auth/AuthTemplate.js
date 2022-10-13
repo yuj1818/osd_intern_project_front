@@ -29,12 +29,8 @@ const InfoBox = styled.div`
   border-radius: 2px;
 `;
 
-function AuthTemplate({children, onBack}) {
-    const navigate = useNavigate();
+function AuthTemplate({children, onBack, ToMain}) {
 
-    const ToMain = () => {
-        navigate(-1);
-    }
 
     return (
         <AuthTemplateBlock>

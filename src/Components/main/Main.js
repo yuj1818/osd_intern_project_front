@@ -5,8 +5,8 @@ import DashBob from "./DashBob";
 
 const Dashboard = styled.div`
   position: absolute;
-  top: 6.25rem;
-  bottom: 6.25rem;
+  top: 8vh;
+  bottom: 4vh;
   right: 0;
   left: 0;
   display: flex;
