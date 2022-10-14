@@ -121,23 +121,27 @@ const DTableBody = styled.div`
 `
 const DPushTag = (key, loadedMoment,weekend ,anothorM, today) => {
     return (
-        <DTableBody key={key} >
-            {
-                anothorM ?
-                    <div id={key} className="date" style={{color : "lightgray"}}>{loadedMoment.format('D')}</div>
-                    :
+        today?
+            <DTableBody key={key} style={{background:"#c8ffc8"}}>
+                {
                     weekend ?
-                        today ?
-                            <div id={key} className="date" style={{background:"#c8ffc8", color : "red"}}>{loadedMoment.format('D')}</div>
-                            :
-                            <div id={key} className="date" style={{color : "red"}}>{loadedMoment.format('D')}</div>
+                        <div id={key} className="date" style={{ color : "red"}}>{loadedMoment.format('D')}</div>
                         :
-                        today ?
-                            <div id={key} className="date"  style={{background:"#c8ffc8"}}>{loadedMoment.format('D')}</div>
+                        <div id={key} className="date" >{loadedMoment.format('D')}</div>
+                }
+            </DTableBody>
+            :
+            <DTableBody key={key} >
+                {
+                    anothorM ?
+                        <div id={key} className="date" style={{color : "lightgray"}}>{loadedMoment.format('D')}</div>
+                        :
+                        weekend ?
+                            <div id={key} className="date" style={{ color : "red"}}>{loadedMoment.format('D')}</div>
                             :
-                            <div id={key} className="date">{loadedMoment.format('D')}</div>
-            }
-        </DTableBody>
+                            <div id={key} className="date" >{loadedMoment.format('D')}</div>
+                }
+            </DTableBody>
     )
 }
 

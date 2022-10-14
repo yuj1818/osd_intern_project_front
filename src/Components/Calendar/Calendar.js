@@ -113,23 +113,27 @@ const TableBody = styled.div`
 `
 const PushTag = (key, loadedMoment,weekend ,anothorM, today) => {
     return (
-        <TableBody key={key} >
-            {
-                anothorM ?
-                    <div id={key} className="date" style={{color : "lightgray"}}>{loadedMoment.format('D')}</div>
-                    :
+        today?
+            <TableBody key={key} style={{background:"#c8ffc8"}}>
+                {
                     weekend ?
-                        today ?
-                            <div id={key} className="date" style={{background:"#c8ffc8", color : "red"}}>{loadedMoment.format('D')}</div>
-                            :
-                            <div id={key} className="date" style={{color : "red"}}>{loadedMoment.format('D')}</div>
+                        <div id={key} className="date" style={{ color : "red"}}>{loadedMoment.format('D')} Today ! </div>
                         :
-                        today ?
-                            <div id={key} className="date"  style={{background:"#c8ffc8"}}>{loadedMoment.format('D')}</div>
+                        <div id={key} className="date" >{loadedMoment.format('D')} Today ! </div>
+                }
+            </TableBody>
+            :
+            <TableBody key={key} >
+                {
+                    anothorM ?
+                        <div id={key} className="date" style={{color : "lightgray"}}>{loadedMoment.format('D')}</div>
+                        :
+                        weekend ?
+                            <div id={key} className="date" style={{ color : "red"}}>{loadedMoment.format('D')}</div>
                             :
-                            <div id={key} className="date">{loadedMoment.format('D')}</div>
-            }
-        </TableBody>
+                            <div id={key} className="date" >{loadedMoment.format('D')}</div>
+                }
+            </TableBody>
     )
 }
 
