@@ -8,7 +8,7 @@ function LoginContainer(props) {
     const navigate = useNavigate();
 
     const ToMain = () => {
-        navigate(-1);
+        navigate('/');
     }
 
     return (

@@ -8,7 +8,7 @@ function RegisterContainer(props) {
     const navigate = useNavigate();
 
     const ToMain = () => {
-        navigate(-1);
+        navigate('/login');
     }
 
     return (

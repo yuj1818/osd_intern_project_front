@@ -49,7 +49,7 @@ const Spacer = styled.div`
   height: 8vh;
 `;
 
-function Header({onLogin, onRegister, onToggle, visible}) {
+function Header({onToggle, visible}) {
 
     return (
         <>
@@ -60,7 +60,7 @@ function Header({onLogin, onRegister, onToggle, visible}) {
                         <a href="/" className="logo"><img src={logo} /></a>
                     </div>
                     <div className="right">
-                        <Button onClick={onLogin}>로그인</Button>
+                        <Button to="/login">로그인</Button>
                     </div>
                 </Wrapper>
             </HeaderBlock>

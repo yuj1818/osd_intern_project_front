@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledBox = styled.div`
-  border: solid black;
+  border: 0.15vmin solid black;
   height: 60vh;
   width: 35vw;
   font-size: 1.6vmin;
