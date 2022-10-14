@@ -32,7 +32,30 @@ const DCalendarBlock = styled.div`
 const DCalendarIndex = styled.div`
   display: flex;
   justify-content: space-around;
+  .birthday {
+    background: lightpink;
+  }
+
+  .vacation {
+    background: lightcyan;
+  }
+
+  .Event {
+    background: #ffffb5;
+  }
+  
+  .etc {
+    background: #bcc5fd;
+  }
+  
 `
+const DIndexingBar = styled.div`
+  width: 3vw;
+  height: 3vh;
+  min-height: 15px;
+  max-height: 25px;
+  font-size: 2vh;
+`;
 const DCalendarBox = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -84,12 +107,17 @@ const DTableBody = styled.div`
   }
 
   .Event {
-    background: lightyellow;
+    background: #ffffb5;
+    width: 90%;
+    padding-left: 6px;
+  }
+  .etc {
+    background: #bcc5fd;
     width: 90%;
     padding-left: 6px;
   }
 
-\`
+\`                
 `
 const DPushTag = (key, loadedMoment,weekend ,anothorM, today) => {
     return (
@@ -164,14 +192,19 @@ function DashCalendar({onClick}) {
     return (
             <Box style={{flexDirection : "column"}}>
                 <DControllerBlock>
-                    <DControlButton>«</DControlButton>
-                    <DControlButton>‹</DControlButton>
+                    <DControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</DControlButton>
+                    <DControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'month')) }}>‹</DControlButton>
                     <span>{today.format('YY 년 MM 월')}</span>
-                    <DControlButton>›</DControlButton>
-                    <DControlButton>»</DControlButton>
+                    <DControlButton onClick={()=>{ setMoment(getMoment.clone().add(1, 'month')) }}>›</DControlButton>
+                    <DControlButton onClick={()=>{ setMoment(getMoment.clone().add(1, 'year')) }}>»</DControlButton>
                 </DControllerBlock>
                 <DCalendarBlock>
-                    <DCalendarIndex>Index</DCalendarIndex>
+                    <DCalendarIndex>
+                        <DIndexingBar className="birthday"/>생일
+                        <DIndexingBar className="vacation"/>휴가
+                        <DIndexingBar className="Event"/>행사
+                        <DIndexingBar className="etc"/>기타
+                    </DCalendarIndex>
 
                     <DCalendarBox>
                         <NaviBox onClick={onClick} />
