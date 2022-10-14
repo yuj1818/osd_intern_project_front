@@ -33,7 +33,6 @@ const CalendarBlock = styled.div`
   min-width: 640px;
   height: 80vh;
   min-height: 490px;
-  border: 1px solid black;
 `
 const CalendarIndex = styled.div`
   display: flex;
@@ -137,7 +136,7 @@ const PushTag = (key, loadedMoment,weekend ,anothorM, today) => {
     )
 }
 
-function Calendar () {
+function Calendar ( {AddEventClick} ) {
 
     const [getMoment, setMoment] = useState(moment())
 
@@ -193,7 +192,7 @@ function Calendar () {
                 <CalendarControllerBlock>
                     <button><i className="fas fa-redo fa-fw me-1" /></button>
                     <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
-                    <button style={{gridColumn:"4/6",gridRow : "1"}}>일정추가</button>
+                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
                     <ControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</ControlButton>
                     <ControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'month')) }}>‹</ControlButton>
                     <span>{today.format('YY 년 MM 월')}</span>
@@ -205,7 +204,7 @@ function Calendar () {
                         <IndexingBar className="birthday"/>생일
                         <IndexingBar className="vacation"/>휴가
                         <IndexingBar className="Event"/>행사
-                        <IndexingBar className="etc"/>기타
+                        <IndexingBar className="etc"/>공휴일
                     </CalendarIndex>
                     <CalendarBox>
                         { ['일','월','화','수','목','금','토'].map((day) => {

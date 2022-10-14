@@ -207,7 +207,7 @@ function DashCalendar({onClick}) {
                         <DIndexingBar className="birthday"/>생일
                         <DIndexingBar className="vacation"/>휴가
                         <DIndexingBar className="Event"/>행사
-                        <DIndexingBar className="etc"/>기타
+                        <DIndexingBar className="etc"/>공휴일
                     </DCalendarIndex>
 
                     <DCalendarBox>
