@@ -39,6 +39,8 @@ const CalendarIndex = styled.div`
   display: flex;
   justify-content: flex-end;
   padding-right: 8px;
+
+  height: 30px;
 `
 const CalendarBox = styled.div`
   margin: 2px;
@@ -59,7 +61,7 @@ const TableBody = styled.div`
   min-height: 90px;
   text-align: left;
   .date {
-    padding-left: 8px;    
+    padding-left: 8px;
   }
   .birthday {
     background: lightpink;
@@ -77,15 +79,78 @@ const TableBody = styled.div`
     padding-left: 6px;
   }
 `
+const PushTag = (key, loadedMoment,weekend ,anothorM, today) => {
+    return (
+        <TableBody key={key} >
+            {
+                anothorM ?
+                    <div id={key} className="date" style={{color : "lightgray"}}>{loadedMoment.format('D')}</div>
+                    :
+                    weekend ?
+                        today ?
+                            <div id={key} className="date" style={{background:"#c8ffc8", color : "red"}}>{loadedMoment.format('D')}</div>
+                            :
+                            <div id={key} className="date" style={{color : "red"}}>{loadedMoment.format('D')}</div>
+                        :
+                        today ?
+                            <div id={key} className="date"  style={{background:"#c8ffc8"}}>{loadedMoment.format('D')}</div>
+                            :
+                            <div id={key} className="date">{loadedMoment.format('D')}</div>
+            }
+        </TableBody>
+    )
+}
 
-const exampleDay =() => {
-    let days = [];
-    for ( let i = 1; i <= 32; i++) {
-        days.push(i)
-    }
-    return days;
-} ;
 function Calendar () {
+
+    const [getMoment, setMoment] = useState(moment())
+
+    const today = getMoment;
+    // 이번달의 첫번째 주
+    const firstWeek = today.clone().startOf('month').week();
+    // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
+    const lastWeek = today.clone().endOf('month').week() === 1? 53 : today.clone().endOf('month').week();
+
+    const calendarArr=()=>{
+        let result = [];
+        let week = firstWeek;
+        for ( week; week <= lastWeek; week++) {
+            for ( let day=0 ; day < 7 ; day ++ ) {
+                let days = today.clone().startOf('year').week(week).startOf('week').add(day, 'day'); //d로해도되지만 직관성
+                let date = `Date-${days.format('YYYYMMDD')}`
+                //------------------------------- 날짜 처리하는 구간 -------------------------------//
+                // 크게 3분류(오늘, !이번달, 이번달)로 나눠서 처리.
+                // 오늘 날짜 처리
+                if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+                    // 일요일 인 날에는 빨간글씨
+                    if(day === 0) {
+                        result.push(PushTag(date, days, 1,0,1));
+                    }
+                    // 일요일 아닌 날에는 검정글씨
+                    else {
+                        result.push(PushTag(date, days, 0,0,1));
+                    }
+                }
+                // !이번달 => 이번 달이 아닌 날들은 글씨를 회색처리.
+                else if(days.format('MM') !== today.format('MM')){
+                    result.push (PushTag(date, days,0,1));
+                }
+                // 이번 달에 속한 날
+                else {
+                    // 일요일 인 날에는 빨간글씨
+                    if (day === 0) {
+                        result.push (PushTag(date, days, 1,0));
+                    }
+                    // 일요일 아닌 날에는 검정글씨
+                    else {
+                        result.push (PushTag(date, days, 0, 0));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     return(
         <div>
             <CalTotalBlock>
@@ -107,15 +172,8 @@ function Calendar () {
                         { ['일','월','화','수','목','금','토'].map((day) => {
                             return( <TableHead key={day}>{day}</TableHead> )
                         })}
-                        { exampleDay().map((day) => {
-                            return(
-                                <TableBody key={day}>
-                                    <div className="date" >{day}</div>
-                                    <div className="birthday">생일</div>
-                                    <div className="vacation">휴가</div>
-                                    <div className="Event">행사</div>
-                                </TableBody>)
-                        }) }
+                        {calendarArr()}
+
                     </CalendarBox>
                 </CalendarBlock>
             </CalTotalBlock>
