@@ -23,9 +23,10 @@ const DControlButton = styled.button`
 `
 const DCalendarBlock = styled.div`
   position: relative;
-  width: 99%;
+  width: 100%;
   height: 90%;
-
+  display: grid;
+  grid-auto-rows: 3vh 1fr;
 
 `
 const DCalendarIndex = styled.div`
@@ -36,14 +37,13 @@ const DCalendarBox = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 1px;
-  z-index: 1;
-
+  margin: 3px;
 `
 
 const NaviBox = styled.div`
   position: absolute;
   color: black;
-  width: 99%;
+  width: 98%;
   height: 90%;
   cursor: pointer;
   background: black;
