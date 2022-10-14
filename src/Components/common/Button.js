@@ -18,6 +18,16 @@ const buttonStyle = css`
   &:hover {
     background: lightslategray;
   }
+  
+  ${props =>
+          props.gray &&
+          css`
+            background: #D9D9D9;
+            &:hover {
+              background: lightslategray;
+            }
+          `
+  }
 `;
 
 const StyledButton = styled.button`
@@ -27,15 +37,11 @@ const StyledButton = styled.button`
 const StyledLink = styled(Link)`
   ${buttonStyle};
   text-decoration: none;
-  background: #D9D9D9;
-  &:hover {
-    background: lightslategray;
-  }
 `;
 
 const Button = props => {
     return props.to ? (
-        <StyledLink {...props} cyan={props.cyan ? 1 : 0} />
+        <StyledLink {...props} gray={props.gray ? 1 : 0} />
     ) : (
         <StyledButton {...props} />
     );

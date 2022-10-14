@@ -5,7 +5,7 @@ const TitleBox = styled.div`
   border: none;
   outline: none;
   display: block;
-  font-size: 1.8vh;
+  font-size: 1.8vmin;
   text-align: center;
   margin-bottom: 1vh;
 `

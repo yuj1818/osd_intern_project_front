@@ -20,7 +20,7 @@ function DashBob(props) {
                 <Box style={{width:"27vw", height:"4vh", marginBottom:"8vh", marginRight:"0", marginLeft:"0"}}>
                     ㅇㅇㅇ,ㅇㅇㅇ,ㅇㅇㅇ,ㅇㅇㅇ
                 </Box>
-                <Button to="/selection" style={{width:"16vw", height:"4vh"}}>
+                <Button gray to="/selection" style={{width:"16vw", height:"4vh"}}>
                     시간/메뉴 정하기
                 </Button>
             </Box>

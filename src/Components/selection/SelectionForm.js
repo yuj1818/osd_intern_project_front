@@ -8,7 +8,8 @@ import SelectDay from "./SelectDay";
 const TeamBlock = styled.div`
   display: flex;
   justify-content: center;
-  padding: 4vmin;
+  align-items: center;
+  padding: 6vh 0 1vh 0;
 `
 
 const SelectionBlock = styled.div`
@@ -17,7 +18,7 @@ const SelectionBlock = styled.div`
   padding: 4vmin;
 `
 
-function SelectionForm(props) {
+function SelectionForm({like, onLike, suggestionMenu, updateMenu, onChange, onClick}) {
     return (
         <>
             <TeamBlock>
@@ -25,7 +26,7 @@ function SelectionForm(props) {
                 <TeamNextWeek />
             </TeamBlock>
             <SelectionBlock>
-                <SelectMenu />
+                <SelectMenu like={like} onLike={onLike} suggestionMenu={suggestionMenu} updateMenu={updateMenu} onChange={onChange} onClick={onClick}/>
                 <SelectDay />
             </SelectionBlock>
         </>
