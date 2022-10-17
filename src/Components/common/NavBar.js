@@ -39,7 +39,7 @@ const NavBlock = styled.div`
 const ChangeBackColor = styled.div`
   background: #323232;
   opacity: 50%;
-  position: absolute;
+  position: fixed;
   top: 8vh;
   bottom: 4vh;
   left: 0;

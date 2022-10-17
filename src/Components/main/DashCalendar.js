@@ -71,7 +71,6 @@ const NaviBox = styled.div`
   cursor: pointer;
   background: black;
   opacity: 0;
-  z-index: 2;
   &:hover {
     opacity: 0.4;
     background-color: lightgray;

@@ -195,7 +195,7 @@ function Calendar ( {AddEventClick} ) {
                     <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
                     <ControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</ControlButton>
                     <ControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'month')) }}>‹</ControlButton>
-                    <span>{today.format('YY 년 MM 월')}</span>
+                    <span style={{gridColumn:"3",gridRow : "1/3", fontSize:"25px"}}>{today.format('YY 년 MM 월')}</span>
                     <ControlButton onClick={()=>{ setMoment(getMoment.clone().add(1, 'month')) }}>›</ControlButton>
                     <ControlButton onClick={()=>{ setMoment(getMoment.clone().add(1, 'year')) }}>»</ControlButton>
                 </CalendarControllerBlock>
