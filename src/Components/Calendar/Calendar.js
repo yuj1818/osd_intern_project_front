@@ -6,17 +6,19 @@ import CalendarController from "./CalendarController";
 const CalTotalBlock = styled.div`
   width: 100%;
   min-width: 650px;
-  height: 100%;
+  height: 90%;
   margin: 1px;
   display: grid;
   align-items: center;
   justify-items: center;
 `
+
 const CalendarBlock = styled.div`
   width: 95vw;
   min-width: 640px;
-  height: 80vh;
-  min-height: 490px;
+  height: 72vh;
+  min-height: 600px;
+  border: 1px solid black;
 `
 const CalendarIndex = styled.div`
   display: flex;
@@ -25,7 +27,6 @@ const CalendarIndex = styled.div`
   padding-right: 8px;
 
   height: 30px;
-
   .birthday {
     background: lightpink;
   }
@@ -37,8 +38,7 @@ const CalendarIndex = styled.div`
   .Event {
     background: #ffffb5;
   }
-
-  .etc {
+  .others {
     background: #bcc5fd;
   }
 `
@@ -51,7 +51,6 @@ const IndexingBar = styled.div`
   max-height: 25px;
   font-size: 2vh;
 `;
-
 const CalendarBox = styled.div`
   margin: 2px;
   display: grid;
@@ -61,6 +60,7 @@ const CalendarBox = styled.div`
 `
 const TableHead = styled.div`
   background: lightgreen;
+
 `
 const TableBody = styled.div`
   background: white;
@@ -94,7 +94,7 @@ const TableBody = styled.div`
     width: 90%;
     padding-left: 6px;
   }
-  .etc {
+  .others {
     background: #bcc5fd;
     width: 90%;
     padding-left: 6px;
@@ -154,9 +154,12 @@ function Calendar ( {AddEventClick} ) {
         let result = [];
         let week = firstWeek;
         for ( week; week <= lastWeek; week++) {
+            // day = [ 일,월,화,수,목,금,토 ]
             for ( let day=0 ; day < 7 ; day ++ ) {
-                let days = today.clone().startOf('year').week(week).startOf('week').add(day, 'day'); //d로해도되지만 직관성
-                let date = `Date-${days.format('YYYYMMDD')}`
+                // 'days' : Moment 값
+                // 'date' : ID 값을 넣기 위함.
+                let days = today.clone().startOf('year').week(week).startOf('week').add(day, 'day'); // 'D' 로해도되지만 직관성
+                let date = `Date-${days.format('YYYY-MM-DD')}`
                 //------------------------------- 날짜 처리하는 구간 -------------------------------//
                 // (이번달, !이번달)로 나눠서 처리.
                 // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
