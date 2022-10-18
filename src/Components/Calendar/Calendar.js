@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import moment from 'moment';
 import styled from "styled-components";
+import CalendarController from "./CalendarController";
 
 const CalTotalBlock = styled.div`
   width: 100%;
@@ -10,23 +11,6 @@ const CalTotalBlock = styled.div`
   display: grid;
   align-items: center;
   justify-items: center;
-`
-const CalendarControllerBlock = styled.div`
-  display: grid;
-  grid-template-columns: 50px 30px 1fr 30px 50px;
-  width: 95vw;
-  min-width: 640px;
-  height: 60px;
-  margin-top : 10px;
-  align-items: center;
-  justify-items: center;
-`
-const Spacer = styled.div`
-`
-const ControlButton = styled.button`
-  border: none;
-  text-align: center;
-  cursor: pointer;
 `
 const CalendarBlock = styled.div`
   width: 95vw;
@@ -89,6 +73,12 @@ const TableBody = styled.div`
   .date {
     padding-left: 8px;
   }
+  .weekend {
+    color : red;
+  }
+  .anotherMonth {
+    background: darkgrey !important;
+  }
   .birthday {
     background: lightpink;
     width: 90%;
@@ -110,30 +100,44 @@ const TableBody = styled.div`
     padding-left: 6px;
   }
 `
-const PushTag = (key, loadedMoment,weekend ,anothorM, today) => {
-    return (
-        today?
-            <TableBody key={key} style={{background:"#c8ffc8"}}>
-                {
-                    weekend ?
-                        <div id={key} className="date" style={{ color : "red"}}>{loadedMoment.format('D')} Today ! </div>
-                        :
-                        <div id={key} className="date" >{loadedMoment.format('D')} Today ! </div>
-                }
+const PushTag = (
+    key,
+    loadedMoment,
+    dayClass
+) => {
+    // 다른 달의 경우 모두 회색으로 처리
+    if (dayClass === "anotherMonth"
+    ) {
+        return (
+            <TableBody id={key} key={key}>
+                <div className="date" style={{color: "lightgray"}}> {loadedMoment.format('D')} </div>
             </TableBody>
-            :
-            <TableBody key={key} >
-                {
-                    anothorM ?
-                        <div id={key} className="date" style={{color : "lightgray"}}>{loadedMoment.format('D')}</div>
-                        :
-                        weekend ?
-                            <div id={key} className="date" style={{ color : "red"}}>{loadedMoment.format('D')}</div>
+        )
+    }
+    // 이번 달의 경우 (오늘,평일,주말) 각각 따로 처리
+    else {
+        // 오늘의 경우
+        if (dayClass === "Today") {
+            return (
+                <TableBody id={key} key={key} style={{background: "#c8ffc8"}}>
+                    <div className="date"> {loadedMoment.format('D')} </div>
+                </TableBody>
+            )
+        }
+        else {
+            return(
+                <TableBody id={key} key={key}>
+                    {
+                        dayClass === "week" ?
+                            // 평일일 경우 날짜를 검정색으로
+                            <div className="date"> {loadedMoment.format('D')} </div>
                             :
-                            <div id={key} className="date" >{loadedMoment.format('D')}</div>
-                }
-            </TableBody>
-    )
+                            // 주말일 경우 날짜를 빨간색으로
+                            <div className="date weekend"> {loadedMoment.format('D')} </div>
+                    }
+                </TableBody>)
+        }
+    }
 }
 
 function Calendar ( {AddEventClick} ) {
@@ -154,32 +158,26 @@ function Calendar ( {AddEventClick} ) {
                 let days = today.clone().startOf('year').week(week).startOf('week').add(day, 'day'); //d로해도되지만 직관성
                 let date = `Date-${days.format('YYYYMMDD')}`
                 //------------------------------- 날짜 처리하는 구간 -------------------------------//
-                // 크게 3분류(오늘, !이번달, 이번달)로 나눠서 처리.
-                // 오늘 날짜 처리
-                if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+                // (이번달, !이번달)로 나눠서 처리.
+                // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
+                if(days.format('MM') === today.format('MM')){
+                    // 오늘 날짜 처리
+                    if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+                        result.push(PushTag(date, days, "Today"));
+                    }
                     // 일요일 인 날에는 빨간글씨
-                    if(day === 0) {
-                        result.push(PushTag(date, days, 1,0,1));
+                    else if (day === 0) {
+                        result.push (PushTag(date, days, "weekend"));
                     }
                     // 일요일 아닌 날에는 검정글씨
                     else {
-                        result.push(PushTag(date, days, 0,0,1));
+                        result.push (PushTag(date, days, "week"));
                     }
+
                 }
-                // !이번달 => 이번 달이 아닌 날들은 글씨를 회색처리.
-                else if(days.format('MM') !== today.format('MM')){
-                    result.push (PushTag(date, days,0,1));
-                }
-                // 이번 달에 속한 날
+                // 이번달이 아닌 경우 모두 회색처리.
                 else {
-                    // 일요일 인 날에는 빨간글씨
-                    if (day === 0) {
-                        result.push (PushTag(date, days, 1,0));
-                    }
-                    // 일요일 아닌 날에는 검정글씨
-                    else {
-                        result.push (PushTag(date, days, 0, 0));
-                    }
+                    result.push (PushTag(date, days,"anotherMonth"));
                 }
             }
         }
@@ -189,26 +187,22 @@ function Calendar ( {AddEventClick} ) {
     return(
         <div>
             <CalTotalBlock>
-                <CalendarControllerBlock>
-                    <button><i className="fas fa-redo fa-fw me-1" /></button>
-                    <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
-                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
-                    <ControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</ControlButton>
-                    <ControlButton onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'month')) }}>‹</ControlButton>
-                    <span style={{gridColumn:"3",gridRow : "1/3", fontSize:"25px"}}>{today.format('YY 년 MM 월')}</span>
-                    <ControlButton onClick={()=>{ setMoment(getMoment.clone().add(1, 'month')) }}>›</ControlButton>
-                    <ControlButton onClick={()=>{ setMoment(getMoment.clone().add(1, 'year')) }}>»</ControlButton>
-                </CalendarControllerBlock>
+                <CalendarController
+                    AddEventClick={AddEventClick}
+                    setMoment={setMoment}
+                    getMoment={getMoment}
+                    today={today}
+                />
                 <CalendarBlock>
                     <CalendarIndex>
                         <IndexingBar className="birthday"/>생일
                         <IndexingBar className="vacation"/>휴가
                         <IndexingBar className="Event"/>행사
-                        <IndexingBar className="etc"/>공휴일
+                        <IndexingBar className="others"/>기타
                     </CalendarIndex>
                     <CalendarBox>
                         { ['일','월','화','수','목','금','토'].map((day) => {
-                            return( <TableHead key={day}>{day}</TableHead> )
+                            return( <TableHead key={day} className="tableHead">{day}</TableHead> )
                         })}
                         {calendarArr()}
 
