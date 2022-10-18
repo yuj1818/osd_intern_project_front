@@ -40,7 +40,7 @@ const AddNewEventBlock = styled.div`
     font-weight: bold;
   }
   input {
-    margin-left : 15px;
+    margin-left : 10px;
     width: 200px;
   }
   select {
@@ -94,89 +94,35 @@ const AddNewEvent = ({
 
     // 일정 분류 선택시 아래 선택란이 변경되는 부분
     const DateForm = () => {
-        // 생일을 선택한 경우
-        if(pickItem === "birthday") {
-            setNoCategory(false)
-            return (
-                <>
-                    <div style={{marginTop: "11px"}}>
-                        <label>생일</label>
-                        <div>
-                            <span> <select className="DateCell" id="birthMonth">
-                                    <option value="01">1</option>
-                                    <option value="02">2</option>
-                                    <option value="03">3</option>
-                                    <option value="04">4</option>
-                                    <option value="05">5</option>
-                                    <option value="06">6</option>
-                                    <option value="07">7</option>
-                                    <option value="08">8</option>
-                                    <option value="09">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                 </select> </span> 월
-                            <span> <select className="DateCell" id="birthDay">
-                                      <option value="01">1</option>
-                                      <option value="02">2</option>
-                                      <option value="03">3</option>
-                                      <option value="04">4</option>
-                                      <option value="05">5</option>
-                                      <option value="06">6</option>
-                                      <option value="07">7</option>
-                                      <option value="08">8</option>
-                                      <option value="09">9</option>
-                                      <option value="10">10</option>
-                                      <option value="11">11</option>
-                                      <option value="12">12</option>
-                                      <option value="13">13</option>
-                                      <option value="14">14</option>
-                                      <option value="15">15</option>
-                                      <option value="16">16</option>
-                                      <option value="17">17</option>
-                                      <option value="18">18</option>
-                                      <option value="19">19</option>
-                                      <option value="20">20</option>
-                                      <option value="21">21</option>
-                                      <option value="22">22</option>
-                                      <option value="23">23</option>
-                                      <option value="24">24</option>
-                                      <option value="25">25</option>
-                                      <option value="26">26</option>
-                                      <option value="27">27</option>
-                                      <option value="28">28</option>
-                                      <option value="29">29</option>
-                                      <option value="30">30</option>
-                                      <option value="31">31</option>
-                                 </select> </span> 일
-                        </div>
-                    </div>
-                </>
-            )
+        // 선택을 하지 않은 경우 에러 상태 'true' 로 변경
+        if(pickItem === "default" || pickItem === undefined) {
+            setNoCategory(true)
         }
+        // 선택을 한 경우 에러 'false' 로 변경
         else {
-            {
-                // 생일 외에 다른 것을 고를 경우
-                if(pickItem === "Event" || pickItem === "others") {
-                    setNoCategory(false)
-                }
-                    // 아무것도 고르지 않을 경우
-                // 에러 상태 'true' 로 변경
-                else {
-                    setNoCategory(true)
-                }
-            }
-            return (
-                <>
-                    <span style={{marginTop :"10px"}}>
-                        <label htmlFor="startDate" style={{marginRight:"120px"}}>시작 일자</label>
-                        <label htmlFor="endDate">종료 일자</label>
-                        <input type="date" disabled={NoCategory} id="startDate"></input>
-                        <input type="date" disabled={NoCategory} id="endDate"></input>
-                    </span>
-                </>
-            )
+            setNoCategory(false)
         }
+        return (
+            <>
+                <span style={{marginTop :"10px"}}>
+                    { pickItem === "birthday" ?
+                        <>
+                            <label htmlFor="startDate">생년월일</label>
+                            <div>
+                                <input type="date" disabled={NoCategory} id="startDate"></input>
+                            </div>
+                        </>
+                        :
+                        <>
+                            <label htmlFor="startDate" style={{marginRight:"120px"}}>시작 일자</label>
+                            <label htmlFor="endDate">종료 일자</label>
+                            <input type="date" disabled={NoCategory} id="startDate"></input>
+                            <input type="date" disabled={NoCategory} id="endDate"></input>
+                        </>
+                    }
+                </span>
+            </>
+        )
     }
 
     if (!visible) return null;

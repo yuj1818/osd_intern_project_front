@@ -18,7 +18,6 @@ const CalendarBlock = styled.div`
   min-width: 640px;
   height: 72vh;
   min-height: 600px;
-  border: 1px solid black;
 `
 const CalendarIndex = styled.div`
   display: flex;
@@ -64,6 +63,9 @@ const TableHead = styled.div`
 `
 const TableBody = styled.div`
   background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   grid-auto-rows: minmax(10rem, auto);
   width: 100%;
   min-width: 90px;
@@ -71,33 +73,31 @@ const TableBody = styled.div`
   min-height: 90px;
   text-align: left;
   .date {
+    width: 100%;
     padding-left: 8px;
+    text-align: left;
   }
   .weekend {
     color : red;
   }
   .anotherMonth {
-    background: darkgrey !important;
+    color: lightgray !important;
   }
   .birthday {
     background: lightpink;
     width: 90%;
-    padding-left: 6px;
   }
   .vacation {
     background: lightcyan;
     width: 90%;
-    padding-left: 6px;
   }
   .Event {
     background: #ffffb5;
     width: 90%;
-    padding-left: 6px;
   }
   .others {
     background: #bcc5fd;
     width: 90%;
-    padding-left: 6px;
   }
 `
 const PushTag = (
@@ -110,7 +110,7 @@ const PushTag = (
     ) {
         return (
             <TableBody id={key} key={key}>
-                <div className="date" style={{color: "lightgray"}}> {loadedMoment.format('D')} </div>
+                <div className="date anotherMonth" > {loadedMoment.format('D')} </div>
             </TableBody>
         )
     }
