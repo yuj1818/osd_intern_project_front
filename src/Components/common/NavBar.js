@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
 
 const NavBlock = styled.div`
@@ -59,13 +59,15 @@ function NavBar(props) {
         <>
             <NavBlock className="navbar" visible={props.visible}>
                 <div className="title">Menu</div>
-                <ul className="menu">
-                    {menus.map((menu, idx) => {
-                        return (
-                            <li key={idx} className="menu_list"><a href={menu.path}>{menu.name}</a></li>
-                        )
-                    })}
-                </ul>
+                {localStorage.getItem('onLoginUser') &&
+                    <ul className="menu">
+                        {menus.map((menu, idx) => {
+                            return (
+                                <li key={idx} className="menu_list"><a href={menu.path}>{menu.name}</a></li>
+                            )
+                        })}
+                    </ul>
+                }
             </NavBlock>
             <ChangeBackColor visible={props.visible}/>
         </>

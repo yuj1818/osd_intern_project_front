@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import back from "../img/back.png";
-import { useNavigate } from "react-router-dom";
 
 const AuthTemplateBlock = styled.div`
   .back{
@@ -29,7 +28,7 @@ const InfoBox = styled.div`
   border-radius: 2px;
 `;
 
-function AuthTemplate({children, onBack, ToMain}) {
+function AuthTemplate({children, ToMain}) {
 
 
     return (
