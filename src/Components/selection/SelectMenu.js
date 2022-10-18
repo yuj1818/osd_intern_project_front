@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Box from "../common/Box";
 import Title from "../common/Title";
 import Button from "../common/Button";
@@ -18,7 +18,7 @@ function SelectMenu({like, onLike,suggestionMenu ,updateMenu, onChange, onClick}
             </div>
             {updateMenu &&
                 <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-                    <Box style={{height:"4vh", width:"20vw", margin:"1vh 1vw 1vh 0.3vw", padding:"1px 2px"}}>
+                    <Box style={{height:"4vh", width:"20vw", margin:"1vh 1vw 1vh 0.4vw", padding:"1px 2px"}}>
                         {updateMenu}
                     </Box>
                     <img className="like" src={like? likeFill : likeOut} onClick={onLike} style={{height:"4vh", margin:"0 1vh"}}/>

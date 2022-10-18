@@ -14,7 +14,7 @@ function MainContainer(props) {
     return (
         <div>
             <BackgroundForm />
-            <Main onClick={onClick}/>
+            {localStorage.getItem('onLoginUser') && <Main onClick={onClick}/>}
         </div>
     );
 }

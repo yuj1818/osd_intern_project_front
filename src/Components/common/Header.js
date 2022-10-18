@@ -49,7 +49,7 @@ const Spacer = styled.div`
   height: 8vh;
 `;
 
-function Header({onToggle, visible}) {
+function Header({onLogout ,onToggle, visible}) {
 
     return (
         <>
@@ -59,9 +59,15 @@ function Header({onToggle, visible}) {
                         <img className="menu" src={visible? closeMenu : menu} onClick={onToggle}/>
                         <a href="/" className="logo"><img src={logo} /></a>
                     </div>
-                    <div className="right">
-                        <Button to="/login">로그인</Button>
-                    </div>
+                    {localStorage.getItem('onLoginUser') ?
+                        <div className="right">
+                            <Button onClick={onLogout}>로그아웃</Button>
+                        </div>
+                        :
+                        <div className="right">
+                            <Button to="/login">로그인</Button>
+                        </div>
+                    }
                 </Wrapper>
             </HeaderBlock>
             <Spacer />

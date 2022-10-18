@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "../common/Button";
 import Title from "../common/Title";
+import {useSelector} from "react-redux";
 
 const AuthFormBlock = styled.div`
   .title {
@@ -42,15 +43,21 @@ const textMap = {
     register: '회원가입',
 };
 
-function AuthForm({type}) {
+function AuthForm({type, form, onChange, onSubmit}) {
     const text = textMap[type];
     return (
         <AuthFormBlock>
             <div className="title">{text}</div>
-            <form>
+            <form onSubmit={onSubmit}>
                 <div style={{display:"flex", marginTop:"1.2rem", justifyContent:"right"}}>
                     <Title style={{width:"7rem", fontSize:"1rem", fontWeight:"bold", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"0", marginRight:"0.5rem"}}>ID</Title>
-                    <StyledInput autoComplete="username" name="username" placeholder="아이디를 입력해주세요" />
+                    <StyledInput
+                        autoComplete="userId"
+                        name="userId"
+                        placeholder="아이디를 입력해주세요"
+                        onChange={onChange}
+                        value={form.userId}
+                    />
                 </div>
                 <div style={{display:"flex", marginTop:"1.2rem", justifyContent:"right"}}>
                     <Title style={{width:"7rem", fontSize:"1rem", fontWeight:"bold", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"0", marginRight:"0.5rem"}}>PW</Title>
@@ -59,6 +66,8 @@ function AuthForm({type}) {
                         name="password"
                         placeholder="비밀번호를 입력해주세요"
                         type="password"
+                        onChange={onChange}
+                        value={form.password}
                     />
                 </div>
                 {type === 'register' && (
@@ -66,9 +75,11 @@ function AuthForm({type}) {
                         <Title style={{width:"7rem", fontSize:"1rem", fontWeight:"bold", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"0", marginRight:"0.5rem"}}>PW 재확인</Title>
                         <StyledInput
                             autoComplete="new-password"
-                            name="password"
+                            name="passwordConfirm"
                             placeholder="비밀번호 확인"
                             type="password"
+                            onChange={onChange}
+                            value={form.passwordConfirm}
                         />
                     </div>
                 )}

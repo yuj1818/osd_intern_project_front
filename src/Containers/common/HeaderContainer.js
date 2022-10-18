@@ -9,8 +9,13 @@ function HeaderContainer(props) {
         setVisible(!visible);
     };
 
+    const onLogout = () => {
+        localStorage.removeItem('onLoginUser');
+        window.location.reload();
+    }
+
     return (
-        <Header onToggle={onToggle} visible={visible}/>
+        <Header onLogout={onLogout} onToggle={onToggle} visible={visible}/>
     );
 }
 
