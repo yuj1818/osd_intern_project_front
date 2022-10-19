@@ -62,7 +62,16 @@ function SelectionContainer(props) {
     return (
         <div>
             <BackgroundForm />
-            <SelectionForm like={like} onLike={onLike} suggestionMenu={suggestionMenu} updateMenu={updateMenu} onChange={onChange} onClick={onClick} days={days} changeCheck={changeCheck} />
+            <SelectionForm
+                like={like}
+                onLike={onLike}
+                suggestionMenu={suggestionMenu}
+                updateMenu={updateMenu}
+                onChange={onChange}
+                onClick={onClick}
+                days={days}
+                changeCheck={changeCheck}
+            />
         </div>
     );
 }
