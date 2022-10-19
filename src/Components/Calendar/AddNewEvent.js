@@ -67,10 +67,7 @@ const AddNewEventBlock = styled.div`
     margin-left : 1.75rem;
     cursor : not-allowed;
   }
-
-
 `;
-
 
 const StyledButton = styled.button`
   height : 2rem;
@@ -87,7 +84,6 @@ const AddNewEvent = ({
                          NoCategory,    // 일정 분류 선택 여부 확인하는 값
                          SelectItem,     // 일정 분류에서 값 변경을 감지하는 함수
                          pickItem,      // 일정 분류에서 선택된 값
-
                      }) =>
 
 {
@@ -113,14 +109,16 @@ const AddNewEvent = ({
                     <option value="others">출장</option>
                     <option value="others">기타(워크샾 등)</option>
                 </select>
+                <span style={{marginTop : "10px"}}>
+                    <label htmlFor="startDate" style={{marginRight:"123px"}}>{pickItem==="birthday"? "생년월일" : "시작일자"}</label>
+                    <label htmlFor="endDate">{pickItem==="birthday"? "　" : "종료일자"}</label>
+                </span>
                 {
                     NoCategory ?
-                        <>
-                            <span style={{marginTop :"13px"}}>
-                                <label htmlFor="startDate" style={{marginRight:"120px"}}>시작일자</label>
-                                <label htmlFor="endDate">종료일자</label>
-                                <input type="date" disabled id="startDate" style={{marginTop:"5px" }}></input>
-                                <input type="date" disabled id="endDate"></input>
+                        <div style={{marginTop :"4px"}}>
+                            <span>
+                                <input type="date" disabled={NoCategory} id="startDate" style={{marginTop:"5px" }}></input>
+                                <input type="date" disabled={NoCategory} id="endDate"></input>
                             </span>
                             <div className="buttons" style={{justifyContent: "center"}}>
                                 <StyledButton onClick={onCancel}>취소</StyledButton>
@@ -128,34 +126,28 @@ const AddNewEvent = ({
                                     <StyledButton className="NoPick">저장</StyledButton>
                                 </div>
                             </div>
-                        </>
+                        </div>
                         :
                         pickItem==="birthday"?
-                            <>
-                                <label htmlFor="startDate" style={{marginRight:"120px"}}>생년월일</label>
+                            <div style={{marginTop :"7px"}}>
                                 <input type="date" disabled={NoCategory} id="startDate"></input>
                                 <div className="buttons" style={{justifyContent: "center"}}>
                                     <StyledButton onClick={onCancel}>취소</StyledButton>
                                     <StyledButton onClick={onConfirm}>저장</StyledButton>
                                 </div>
-                            </>
+                            </div>
                             :
-                            <>
-                                <span style={{marginTop :"13px"}}>
-                                    <label htmlFor="startDate" style={{marginRight:"123px"}}>시작일자</label>
-                                    <label htmlFor="endDate">종료일자</label>
-                                    <input type="date" id="startDate" style={{marginTop:"5px" }}></input>
-                                    <input type="date" id="endDate"></input>
+                            <div style={{marginTop :"4px"}}>
+                                <span >
+                                    <input type="date" disabled={NoCategory} id="startDate" style={{marginTop:"5px" }}></input>
+                                    <input type="date" disabled={NoCategory} id="endDate"></input>
                                 </span>
                                 <div className="buttons" style={{justifyContent: "center"}}>
                                     <StyledButton onClick={onCancel}>취소</StyledButton>
                                     <StyledButton onClick={onConfirm}>저장</StyledButton>
                                 </div>
-                            </>
-
+                            </div>
                 }
-
-
 
             </AddNewEventBlock>
         </Fullscreen>

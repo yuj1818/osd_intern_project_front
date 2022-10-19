@@ -7,9 +7,14 @@ function CalendarContainer(props) {
     // 일정추가 창 보여주것을 정하는 State
     const [NewEvent, setNewEvent] = useState(false);
     // 일정분류 선택지 정보를 담는 State
-    const [pickItem, setPickItem] = useState()
+    const [pickItem, setPickItem] = useState();
     // 카테고리 미선택 확인
     const [NoCategory, setNoCategory] = useState(true);
+
+    function inputDataCheck (e) {
+
+    }
+
 
     const AddEventClick = () => {
         setNewEvent(true);
@@ -17,24 +22,38 @@ function CalendarContainer(props) {
     const CancelClick = () => {
         setNoCategory(true);
         setNewEvent(false);
-        setPickItem("default")
+        setPickItem(undefined)
     };
-    const ConfirmClick = () => {
-        setNoCategory(true);
-        setNewEvent(false);
-        let startDay = document.getElementById('startDate').value;
-        //let endDay = document.getElementById('endDate').value;
-        let title = document.getElementById('EventTitle').value;
+    const ConfirmClick = (e) => {
+        if(document.getElementById('EventTitle').value == ''){
+            e.preventDefault() //제출완료 페이지로 넘어가는 것 방지
+            alert('제목을 입력하세요')
+        }
+        else if(document.getElementById('startDate').value == ''){
+            e.preventDefault()
+            alert('날짜를 입력하세요')
+        }
+        // else if(document.getElementById('endDate').value == ''){
+        //     e.preventDefault()
+        //     alert('날짜를 입력하세요')
+        // }
+        else {
+            setNoCategory(true);
+            setNewEvent(false);
+            let startDay = document.getElementById('startDate').value;
+            //let endDay = document.getElementById('endDate').value;
+            let title = document.getElementById('EventTitle').value;
 
-        let seletedDays = document.getElementById(`Date-${startDay}`);
-        let new_EventTag = document.createElement('div');
-        new_EventTag.setAttribute('class',`${pickItem}`);
-        new_EventTag.innerHTML = `${title}`;
+            let selectedDays = document.getElementById(`Date-${startDay}`);
+            let new_EventTag = document.createElement('div');
+            new_EventTag.setAttribute('class',`${pickItem}`);
+            new_EventTag.innerHTML = `${title}`;
 
-        seletedDays.appendChild(new_EventTag)
-        setPickItem("default")
+            selectedDays.appendChild(new_EventTag)
+            setPickItem(undefined)
 
-        //console.log(startDay) 형식 : 2022-10-17 과 같이 나타남
+            //console.log(startDay) 형식 : 2022-10-17 과 같이 나타남
+        }
 
     };
     const SelectItem = () => {
