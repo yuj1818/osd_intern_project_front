@@ -19,7 +19,7 @@ function SelectDay(props) {
             </Title>
             {days.map((day, idx) => {
                 return (
-                    <div key={idx} style={{display:"flex"}}>
+                    <div key={idx} style={{display:"flex", height:"7vh"}}>
                         <Box style={{height:"4vh", width:"25vw", margin:"1vh 0.5vw", padding:"1px 2px"}}>
                             {day}
                         </Box>
