@@ -8,15 +8,19 @@ function CalendarContainer(props) {
     const [NewEvent, setNewEvent] = useState(false);
     // 일정분류 선택지 정보를 담는 State
     const [pickItem, setPickItem] = useState()
+    // 카테고리 미선택 확인
+    const [NoCategory, setNoCategory] = useState(true);
 
     const AddEventClick = () => {
         setNewEvent(true);
     };
     const CancelClick = () => {
+        setNoCategory(true);
         setNewEvent(false);
         setPickItem("default")
     };
     const ConfirmClick = () => {
+        setNoCategory(true);
         setNewEvent(false);
         let startDay = document.getElementById('startDate').value;
         //let endDay = document.getElementById('endDate').value;
@@ -35,7 +39,8 @@ function CalendarContainer(props) {
     };
     const SelectItem = () => {
         let selectItem = document.getElementById("EventCategory").value;
-        setPickItem(selectItem)
+        setNoCategory(false);
+        setPickItem(selectItem);
     }
 
     return (
@@ -45,6 +50,7 @@ function CalendarContainer(props) {
                 visible={NewEvent}
                 onCancel={CancelClick}
                 onConfirm={ConfirmClick}
+                NoCategory={NoCategory}
                 pickItem={pickItem}
                 SelectItem={SelectItem}
             />
