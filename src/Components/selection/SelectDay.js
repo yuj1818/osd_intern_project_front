@@ -1,13 +1,9 @@
-import React from 'react';
+import React,{useState, useCallback} from 'react';
 import Box from "../common/Box";
 import Title from "../common/Title";
 import Button from "../common/Button";
 
-function SelectDay(props) {
-
-    const days = [
-        "월","화","수","목","금"
-    ];
+function SelectDay({days, changeCheck}) {
 
     return (
         <Box style={{flexDirection:"column", justifyContent:"start"}}>
@@ -15,15 +11,15 @@ function SelectDay(props) {
                 시간 정하기
             </Title>
             <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", fontSize:"1.4vmin", marginLeft:"5vw"}}>
-                못 가는 날 고르기
+                갈 수 있는 날 고르기
             </Title>
-            {days.map((day, idx) => {
+            {days.map((day) => {
                 return (
-                    <div key={idx} style={{display:"flex", height:"7vh"}}>
+                    <div key={day.id} style={{display:"flex", height:"7vh"}}>
                         <Box style={{height:"4vh", width:"25vw", margin:"1vh 0.5vw", padding:"1px 2px"}}>
-                            {day}
+                            {day.text}
                         </Box>
-                        <input type="checkbox" />
+                        <input type="checkbox" checked={day.checked} onChange={() => changeCheck(day.id)}/>
                     </div>
                 )
             })}
