@@ -18,7 +18,7 @@ const SelectionBlock = styled.div`
   padding: 4vmin;
 `
 
-function SelectionForm({like, onLike, suggestionMenu, updateMenu, onChange, onClick, days, changeCheck}) {
+function SelectionForm({like, input, text, onInsert, onChangeInput, onLike, days, onToggle}) {
     return (
         <>
             <TeamBlock>
@@ -26,8 +26,8 @@ function SelectionForm({like, onLike, suggestionMenu, updateMenu, onChange, onCl
                 <TeamNextWeek />
             </TeamBlock>
             <SelectionBlock>
-                <SelectMenu like={like} onLike={onLike} suggestionMenu={suggestionMenu} updateMenu={updateMenu} onChange={onChange} onClick={onClick}/>
-                <SelectDay days={days} changeCheck={changeCheck}/>
+                <SelectMenu like={like} onLike={onLike} input={input} text={text} onInsert={onInsert} onChangeInput={onChangeInput} />
+                <SelectDay days={days} onToggle={onToggle}/>
             </SelectionBlock>
         </>
     );

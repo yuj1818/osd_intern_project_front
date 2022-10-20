@@ -3,7 +3,7 @@ import Box from "../common/Box";
 import Title from "../common/Title";
 import Button from "../common/Button";
 
-function SelectDay({days, changeCheck}) {
+function SelectDay({days, onToggle}) {
 
     return (
         <Box style={{flexDirection:"column", justifyContent:"start"}}>
@@ -19,7 +19,7 @@ function SelectDay({days, changeCheck}) {
                         <Box style={{height:"4vh", width:"25vw", margin:"1vh 0.5vw", padding:"1px 2px"}}>
                             {day.text}
                         </Box>
-                        <input type="checkbox" checked={day.checked} onChange={() => changeCheck(day.id)}/>
+                        <input type="checkbox" checked={day.checked} onChange={() => onToggle(day.id)} />
                     </div>
                 )
             })}
