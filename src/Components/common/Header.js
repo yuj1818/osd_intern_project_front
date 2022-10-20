@@ -61,7 +61,17 @@ function Header({onLogout ,onToggle, visible}) {
                     </div>
                     {localStorage.getItem('onLoginUser') ?
                         <div className="right">
-                            <Button onClick={onLogout}>로그아웃</Button>
+                            <div style={{display:"flex", marginRight:"1.5vmin"}}>
+                                <div style={{textDecoration:"underline", marginRight:"0.3vmin"}}>
+                                    {localStorage.getItem('onLoginUser')}
+                                </div>
+                                <div>
+                                    님
+                                </div>
+                            </div>
+                            <div>
+                                <Button onClick={onLogout}>로그아웃</Button>
+                            </div>
                         </div>
                         :
                         <div className="right">
