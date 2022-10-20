@@ -29,6 +29,10 @@ const CalendarIndex = styled.div`
   .birthday {
     background: lightpink;
   }
+  .holiday {
+    background: #ffd7a3;
+    width: 90%;
+  }
 
   .vacation {
     background: lightcyan;
@@ -56,6 +60,9 @@ const CalendarBox = styled.div`
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 1px;
   text-align: center;
+  .today {
+    background: #c8ffc8;
+  }
 `
 const TableHead = styled.div`
   background: lightgreen;
@@ -72,29 +79,41 @@ const TableBody = styled.div`
   height: auto;
   min-height: 90px;
   text-align: left;
+
   .date {
-    width: 100%;
+    width: 90%;
     padding-left: 8px;
     text-align: left;
   }
-  .weekend {
-    color : red;
+
+  .sunday {
+    color: red;
   }
+
   .anotherMonth {
     color: lightgray !important;
   }
+
+  .holiday {
+    background: #ffd7a3;
+    width: 90%;
+  }
+
   .birthday {
     background: lightpink;
     width: 90%;
   }
+
   .vacation {
     background: lightcyan;
     width: 90%;
   }
+
   .Event {
     background: #ffffb5;
     width: 90%;
   }
+
   .others {
     background: #bcc5fd;
     width: 90%;
@@ -110,7 +129,7 @@ const PushTag = (
     ) {
         return (
             <TableBody id={key} key={key}>
-                <div className="date anotherMonth" > {loadedMoment.format('D')} </div>
+                <div className="date anotherMonth"> {loadedMoment.format('D')} </div>
             </TableBody>
         )
     }
@@ -119,7 +138,7 @@ const PushTag = (
         // 오늘의 경우
         if (dayClass === "Today") {
             return (
-                <TableBody id={key} key={key} style={{background: "#c8ffc8"}}>
+                <TableBody id={key} key={key} className="today">
                     <div className="date"> {loadedMoment.format('D')} </div>
                 </TableBody>
             )
@@ -133,7 +152,7 @@ const PushTag = (
                             <div className="date"> {loadedMoment.format('D')} </div>
                             :
                             // 주말일 경우 날짜를 빨간색으로
-                            <div className="date weekend"> {loadedMoment.format('D')} </div>
+                            <div className="date sunday"> {loadedMoment.format('D')} </div>
                     }
                 </TableBody>)
         }
@@ -170,7 +189,7 @@ function Calendar ( {AddEventClick} ) {
                     }
                     // 일요일 인 날에는 빨간글씨
                     else if (day === 0) {
-                        result.push (PushTag(date, days, "weekend"));
+                        result.push (PushTag(date, days, "sunday"));
                     }
                     // 일요일 아닌 날에는 검정글씨
                     else {
@@ -199,8 +218,9 @@ function Calendar ( {AddEventClick} ) {
                 <CalendarBlock>
                     <CalendarIndex>
                         <IndexingBar className="birthday"/>생일
-                        <IndexingBar className="vacation"/>휴가
+                        <IndexingBar className="holiday"/>공휴일
                         <IndexingBar className="Event"/>행사
+                        <IndexingBar className="vacation"/>휴가
                         <IndexingBar className="others"/>기타
                     </CalendarIndex>
                     <CalendarBox>
