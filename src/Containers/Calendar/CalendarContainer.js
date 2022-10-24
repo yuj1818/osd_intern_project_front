@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {monthDecrease, monthIncrease, yearIncrease, yearDecrease} from "../../modules/momenter";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 
@@ -99,9 +101,36 @@ function CalendarContainer(props) {
         window.location.reload();
     }
 
+    ////////////// Redux 구간
+
+    const { year, month  } = useSelector(state => ({
+        year : state.momenter.year,
+        month : state.momenter.month
+    }));
+
+    const dispatch = useDispatch();
+
+    const yearIncreaseButton = () => dispatch(yearIncrease());
+    const yearDecreaseButton = () => dispatch(yearDecrease());
+    const monthIncreaseButton = () => dispatch(monthIncrease());
+    const monthDecreaseButton = () => dispatch(monthDecrease());
+
     return (
         <div>
-            <Calendar AddEventClick={AddEventClick} confirm={confirm} startDate={nEvent.startDate} pickItem={category} eventTitle={nEvent.eventTitle} onReload={onReload}/>
+            <Calendar
+                AddEventClick={AddEventClick}
+                confirm={confirm}
+                startDate={nEvent.startDate}
+                pickItem={category}
+                eventTitle={nEvent.eventTitle}
+                onReload={onReload}
+                year={year}
+                month={month}
+                yearIncreaseButton={yearIncreaseButton}
+                yearDecreaseButton={yearDecreaseButton}
+                monthIncreaseButton={monthIncreaseButton}
+                monthDecreaseButton={monthDecreaseButton}
+            />
             <AddNewEvent
                 visible={NewEvent}
                 onCancel={CancelClick}

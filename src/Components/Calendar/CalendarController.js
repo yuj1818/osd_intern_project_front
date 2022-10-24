@@ -10,34 +10,22 @@ const CalendarControllerBlock = styled.div`
   align-items: center;
   justify-items: center;
 `
-const Spacer = styled.div`
-`
-const ControlButton = styled.button`
-  border: none;
-  font-size: 15px;
-  text-align: center;
-  cursor: pointer;
-`
+
+
 
 function CalendarController ({
                                  AddEventClick,
-                                 setMoment,
-                                 getMoment,
-                                 today,
-                                 onReload
+                                 onReload,
                              })
 {
+
+
     return(
         <div>
             <CalendarControllerBlock>
                 <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
                 <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
                 <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
-                <ControlButton title="1년전" onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</ControlButton>
-                <ControlButton title="1달전" onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'month')) }}>‹</ControlButton>
-                <span style={{gridColumn:"3",gridRow : "1/3", fontSize:"25px"}}>{today.format('YY 년 MM 월')}</span>
-                <ControlButton title="1달후"  onClick={()=>{ setMoment(getMoment.clone().add(1, 'month')) }}>›</ControlButton>
-                <ControlButton title="1년후"  onClick={()=>{ setMoment(getMoment.clone().add(1, 'year')) }}>»</ControlButton>
             </CalendarControllerBlock>
         </div>
     )

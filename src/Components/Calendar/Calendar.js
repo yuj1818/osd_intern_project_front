@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import moment from 'moment';
 import styled from "styled-components";
-import CalendarController from "./CalendarController";
 
 const CalTotalBlock = styled.div`
   width: 100%;
@@ -24,7 +23,6 @@ const CalendarIndex = styled.div`
   align-items: center;
   justify-content: flex-end;
   padding-right: 8px;
-
   height: 30px;
   .birthday {
     background: lightpink;
@@ -33,11 +31,9 @@ const CalendarIndex = styled.div`
     background: #ffd7a3;
     width: 90%;
   }
-
   .vacation {
     background: lightcyan;
   }
-
   .Event {
     background: #ffffb5;
   }
@@ -54,6 +50,24 @@ const IndexingBar = styled.div`
   max-height: 25px;
   font-size: 2vh;
 `;
+const CalendarControllerBlock = styled.div`
+  display: grid;
+  grid-template-columns: 50px 30px 1fr 30px 50px;
+  width: 95vw;
+  min-width: 640px;
+  height: 60px;
+  margin-top : 10px;
+  align-items: center;
+  justify-items: center;
+`
+const Spacer = styled.div`
+`
+const ControlButton = styled.button`
+  border: none;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+`
 const CalendarBox = styled.div`
   margin: 2px;
   display: grid;
@@ -66,7 +80,6 @@ const CalendarBox = styled.div`
 `
 const TableHead = styled.div`
   background: lightgreen;
-
 `
 const TableBody = styled.div`
   background: white;
@@ -89,31 +102,25 @@ const TableBody = styled.div`
   .sunday {
     color: red;
   }
-
   .anotherMonth {
     color: lightgray !important;
   }
-
   .holiday {
     background: #ffd7a3;
-    width: 100%;
+    width: 97%;
   }
-
   .birthday {
     background: lightpink;
     width: 90%;
   }
-
   .vacation {
     background: lightcyan;
     width: 90%;
   }
-
   .Event {
     background: #ffffb5;
     width: 90%;
   }
-
   .others {
     background: #bcc5fd;
     width: 90%;
@@ -300,19 +307,33 @@ const PushTag = (
         <TableBody id={key} key={key} className={`${today ? 'today' : ''}`}>
             <div className={`date ${dayClass}`}>
                 {loadedMoment.format('D')}
-                <div className="holiday">
-                    {isHoliday}
-                </div>
-                <div className={isEvent}>
-                    {eventTitle}
-                </div>
             </div>
+            <div className="holiday">
+                {isHoliday}
+            </div>
+            <div className={isEvent}>
+                {eventTitle}
+            </div>
+
         </TableBody>
     )
 
 }
 
-function Calendar ( {AddEventClick, confirm, startDate, pickItem, eventTitle, onReload} ) {
+function Calendar ({
+                       AddEventClick,
+                       confirm,
+                       startDate,
+                       pickItem,
+                       eventTitle,
+                       onReload,
+                       monthDecreaseButton,
+                       monthIncreaseButton,
+                       yearDecreaseButton,
+                       yearIncreaseButton,
+                       year,
+                       month
+    }) {
 
     const [Holidays, setHolidays] = useState([]);
     const [getMoment, setMoment] = useState(moment())
@@ -480,16 +501,36 @@ function Calendar ( {AddEventClick, confirm, startDate, pickItem, eventTitle, on
         return result;
     }
 
+    const yearPlusClick =()=> {
+        setMoment(getMoment.clone().add(1, 'year'))
+        yearIncreaseButton()
+    }
+    const yearMinusClick=()=> {
+        setMoment(getMoment.clone().subtract(1, 'year'))
+        yearDecreaseButton()
+    }
+    const monthPlusClick =()=> {
+        setMoment(getMoment.clone().add(1, 'month'))
+        monthIncreaseButton()
+    }
+    const monthMinusClick =()=> {
+        setMoment(getMoment.clone().subtract(1, 'month'))
+        monthDecreaseButton()
+    }
+
     return(
         <div>
             <CalTotalBlock>
-                <CalendarController
-                    AddEventClick={AddEventClick}
-                    setMoment={setMoment}
-                    getMoment={getMoment}
-                    today={today}
-                    onReload={onReload}
-                />
+                <CalendarControllerBlock>
+                    <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
+                    <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
+                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
+                    <ControlButton title="1년전" onClick={yearMinusClick}>«</ControlButton>
+                    <ControlButton title="1달전" onClick={monthMinusClick}>‹</ControlButton>
+                    <span style={{gridColumn:"3", fontSize:"25px"}}>{year}년 {month.toString().padStart(2,0)}월</span>
+                    <ControlButton title="1달후"  onClick={monthPlusClick}>›</ControlButton>
+                    <ControlButton title="1년후"  onClick={yearPlusClick}>»</ControlButton>
+                </CalendarControllerBlock>
                 <CalendarBlock>
                     <CalendarIndex>
                         <IndexingBar className="birthday"/>생일
