@@ -84,6 +84,12 @@ const AddNewEvent = ({
                          NoCategory,    // 일정 분류 선택 여부 확인하는 값
                          SelectItem,     // 일정 분류에서 값 변경을 감지하는 함수
                          pickItem,      // 일정 분류에서 선택된 값
+                         eventTitle,
+                         writer,
+                         category,
+                         startDate,
+                         endDate,
+                         onChangeInput,
                      }) =>
 
 {
@@ -94,9 +100,9 @@ const AddNewEvent = ({
             <AddNewEventBlock>
                 <h1>일정추가</h1>
                 <label htmlFor="EventTitle">제목 <span style={{fontSize:"15px"}}>(휴가와 생일은 이름을 입력해주세요.)</span></label>
-                <input id="EventTitle" placeholder="제목을 입력하세요."></input>
+                <input id="EventTitle" name="eventTitle" placeholder="제목을 입력하세요." value={eventTitle} onChange={onChangeInput}></input>
                 <label htmlFor="name">작성자</label>
-                <input id="name" placeholder="이름을 입력하세요."></input>
+                <input id="name" name="writer" placeholder="이름을 입력하세요." value={writer} onChange={onChangeInput}></input>
                 <label htmlFor="EventCategory">일정분류</label>
                 <select
                     defaultValue="default"
@@ -114,23 +120,10 @@ const AddNewEvent = ({
                     <label htmlFor="endDate">{pickItem==="birthday"? "　" : "종료일자"}</label>
                 </span>
                 {
-                    NoCategory ?
-                        <div style={{marginTop :"4px"}}>
-                            <span>
-                                <input type="date" disabled={NoCategory} id="startDate" style={{marginTop:"5px" }}></input>
-                                <input type="date" disabled={NoCategory} id="endDate"></input>
-                            </span>
-                            <div className="buttons" style={{justifyContent: "center"}}>
-                                <StyledButton onClick={onCancel}>취소</StyledButton>
-                                <div className="NotConfirm">
-                                    <StyledButton className="NoPick">저장</StyledButton>
-                                </div>
-                            </div>
-                        </div>
-                        :
+                    pickItem ?
                         pickItem==="birthday"?
                             <div style={{marginTop :"7px"}}>
-                                <input type="date" disabled={NoCategory} id="startDate"></input>
+                                <input type="date" disabled={NoCategory} id="startDate" name="startDate" value={startDate} onChange={onChangeInput}></input>
                                 <div className="buttons" style={{justifyContent: "center"}}>
                                     <StyledButton onClick={onCancel}>취소</StyledButton>
                                     <StyledButton onClick={onConfirm}>저장</StyledButton>
@@ -139,14 +132,27 @@ const AddNewEvent = ({
                             :
                             <div style={{marginTop :"4px"}}>
                                 <span >
-                                    <input type="date" disabled={NoCategory} id="startDate" style={{marginTop:"5px" }}></input>
-                                    <input type="date" disabled={NoCategory} id="endDate"></input>
+                                    <input type="date" disabled={NoCategory} id="startDate" name="startDate" style={{marginTop:"5px" }} value={startDate} onChange={onChangeInput}></input>
+                                    <input type="date" disabled={NoCategory} id="endDate" name="endDate" value={endDate} onChange={onChangeInput}></input>
                                 </span>
                                 <div className="buttons" style={{justifyContent: "center"}}>
                                     <StyledButton onClick={onCancel}>취소</StyledButton>
                                     <StyledButton onClick={onConfirm}>저장</StyledButton>
                                 </div>
                             </div>
+                        :
+                        <div style={{marginTop :"4px"}}>
+                            <span>
+                                <input type="date" disabled={NoCategory} id="startDate" name="startDate" style={{marginTop:"5px" }} value={startDate} onChange={onChangeInput}></input>
+                                <input type="date" disabled={NoCategory} id="endDate" name="endDate" value={endDate} onChange={onChangeInput}></input>
+                            </span>
+                            <div className="buttons" style={{justifyContent: "center"}}>
+                                <StyledButton onClick={onCancel}>취소</StyledButton>
+                                <div className="NotConfirm">
+                                    <StyledButton className="NoPick">저장</StyledButton>
+                                </div>
+                            </div>
+                        </div>
                 }
 
             </AddNewEventBlock>

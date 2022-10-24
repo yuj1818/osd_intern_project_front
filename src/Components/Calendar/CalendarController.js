@@ -23,13 +23,14 @@ function CalendarController ({
                                  AddEventClick,
                                  setMoment,
                                  getMoment,
-                                 today
+                                 today,
+                                 onReload
                              })
 {
     return(
         <div>
             <CalendarControllerBlock>
-                <button title="새로고침"><i className="fas fa-redo fa-fw me-1" /></button>
+                <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
                 <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
                 <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
                 <ControlButton title="1년전" onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</ControlButton>

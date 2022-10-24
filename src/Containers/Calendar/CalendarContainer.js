@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
-import Holiday from "../../Components/Calendar/Holiday";
 
 function CalendarContainer(props) {
 
@@ -12,10 +11,29 @@ function CalendarContainer(props) {
     // 카테고리 미선택 확인
     const [NoCategory, setNoCategory] = useState(true);
 
-    function inputDataCheck (e) {
+    const [confirm, setConfirm] = useState(false);
 
+    const [input, setInput] = useState({
+        eventTitle: '',
+        writer: '',
+        startDate: '',
+        endDate: '',
+    })
+
+    const [nEvent, setNEvent] = useState({});
+
+    const [category, setCategory] = useState('');
+
+    const { eventTitle, writer, startDate, endDate } = input;
+
+    const onChangeInput = e => {
+        const {name, value} = e.target
+        const nextInput = {
+            ...input,
+            [name]: value,
+        }
+        setInput(nextInput)
     }
-
 
     const AddEventClick = () => {
         setNewEvent(true);
@@ -26,11 +44,11 @@ function CalendarContainer(props) {
         setPickItem(undefined)
     };
     const ConfirmClick = (e) => {
-        if(document.getElementById('EventTitle').value == ''){
+        if(input.eventTitle === ''){
             e.preventDefault() //제출완료 페이지로 넘어가는 것 방지
             alert('제목을 입력하세요')
         }
-        else if(document.getElementById('startDate').value == ''){
+        else if(input.startDate === ''){
             e.preventDefault()
             alert('날짜를 입력하세요')
         }
@@ -41,31 +59,49 @@ function CalendarContainer(props) {
         else {
             setNoCategory(true);
             setNewEvent(false);
-            let startDay = document.getElementById('startDate').value;
-            //let endDay = document.getElementById('endDate').value;
-            let title = document.getElementById('EventTitle').value;
+            // let startDay = input.startDate;
+            // //let endDay = document.getElementById('endDate').value;
+            // let title = input.eventTitle;
+            //
+            // let selectedDays = document.getElementById(`Date-${startDay}`);
+            // let new_EventTag = document.createElement('div');
+            // new_EventTag.setAttribute('class',`${pickItem}`);
+            // new_EventTag.innerHTML = `${title}`;
+            //
+            // selectedDays.appendChild(new_EventTag)
 
-            let selectedDays = document.getElementById(`Date-${startDay}`);
-            let new_EventTag = document.createElement('div');
-            new_EventTag.setAttribute('class',`${pickItem}`);
-            new_EventTag.innerHTML = `${title}`;
+            setConfirm(true)
 
-            selectedDays.appendChild(new_EventTag)
+            setNEvent(input)
+
+            setCategory(pickItem)
+
             setPickItem(undefined)
+
+            setInput({
+                eventTitle: '',
+                writer: '',
+                startDate: '',
+                endDate: '',
+            })
 
             //console.log(startDay) 형식 : 2022-10-17 과 같이 나타남
         }
 
     };
-    const SelectItem = () => {
-        let selectItem = document.getElementById("EventCategory").value;
+    const SelectItem = e => {
+        let selectItem = e.target.value;
         setNoCategory(false);
         setPickItem(selectItem);
     }
 
+    const onReload = () => {
+        window.location.reload();
+    }
+
     return (
         <div>
-            <Calendar AddEventClick={AddEventClick} />
+            <Calendar AddEventClick={AddEventClick} confirm={confirm} startDate={nEvent.startDate} pickItem={category} eventTitle={nEvent.eventTitle} onReload={onReload}/>
             <AddNewEvent
                 visible={NewEvent}
                 onCancel={CancelClick}
@@ -73,8 +109,12 @@ function CalendarContainer(props) {
                 NoCategory={NoCategory}
                 pickItem={pickItem}
                 SelectItem={SelectItem}
+                eventTitle={eventTitle}
+                writer={writer}
+                startDate={startDate}
+                endDate={endDate}
+                onChangeInput={onChangeInput}
             />
-            <Holiday />
         </div>
     );
 }
