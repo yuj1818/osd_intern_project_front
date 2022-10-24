@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
+import { connect } from "react-redux";
+import { increaseYear, increaseMonth, decreaseYear, decreaseMonth } from "../../modules/calendarControl";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 
-function CalendarContainer(props) {
+function CalendarContainer({ today, increaseYear, decreaseYear, increaseMonth, decreaseMonth }) {
 
     // 일정추가 창 보여주것을 정하는 State
     const [NewEvent, setNewEvent] = useState(false);
@@ -101,7 +103,19 @@ function CalendarContainer(props) {
 
     return (
         <div>
-            <Calendar AddEventClick={AddEventClick} confirm={confirm} startDate={nEvent.startDate} pickItem={category} eventTitle={nEvent.eventTitle} onReload={onReload}/>
+            <Calendar
+                AddEventClick={AddEventClick}
+                confirm={confirm}
+                startDate={nEvent.startDate}
+                pickItem={category}
+                eventTitle={nEvent.eventTitle}
+                onReload={onReload}
+                today={today}
+                onIncreaseYear={increaseYear}
+                onDecreaseYear={decreaseYear}
+                onIncreaseMonth={increaseMonth}
+                onDecreaseMonth={decreaseMonth}
+            />
             <AddNewEvent
                 visible={NewEvent}
                 onCancel={CancelClick}
@@ -119,4 +133,14 @@ function CalendarContainer(props) {
     );
 }
 
-export default CalendarContainer;
+export default connect(
+    state => ({
+        today: state.calendarControl
+    }),
+    {
+        increaseYear,
+        decreaseYear,
+        increaseMonth,
+        decreaseMonth,
+    }
+)(CalendarContainer);

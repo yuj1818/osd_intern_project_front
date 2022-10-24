@@ -312,12 +312,21 @@ const PushTag = (
 
 }
 
-function Calendar ( {AddEventClick, confirm, startDate, pickItem, eventTitle, onReload} ) {
+function Calendar ( {
+                        AddEventClick,
+                        confirm,
+                        startDate,
+                        pickItem,
+                        eventTitle,
+                        onReload,
+                        today,
+                        onIncreaseYear,
+                        onDecreaseYear,
+                        onIncreaseMonth,
+                        onDecreaseMonth} ) {
 
     const [Holidays, setHolidays] = useState([]);
-    const [getMoment, setMoment] = useState(moment())
 
-    const today = getMoment;
     // 이번달의 첫번째 주
     const firstWeek = today.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
@@ -485,9 +494,11 @@ function Calendar ( {AddEventClick, confirm, startDate, pickItem, eventTitle, on
             <CalTotalBlock>
                 <CalendarController
                     AddEventClick={AddEventClick}
-                    setMoment={setMoment}
-                    getMoment={getMoment}
                     today={today}
+                    onIncreaseYear={onIncreaseYear}
+                    onDecreaseYear={onDecreaseYear}
+                    onIncreaseMonth={onIncreaseMonth}
+                    onDecreaseMonth={onDecreaseMonth}
                     onReload={onReload}
                 />
                 <CalendarBlock>
