@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import moment from 'moment';
 import styled from "styled-components";
 import Box from "../common/Box";
@@ -48,7 +48,7 @@ const DCalendarIndex = styled.div`
     background: #ffffb5;
   }
   
-  .etc {
+  .others {
     background: #bcc5fd;
   }
   
@@ -101,31 +101,31 @@ const DTableBody = styled.div`
     padding-left: 8px;
     text-align: left;
   }
+  
   .sunday {
     color : red;
   }
-
+  .anotherMonth {
+    color: lightgray !important;
+  }
   .holiday {
     background: #ffd7a3;
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
-
   .birthday {
     background: lightpink;
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
-
   .vacation {
     background: lightcyan;
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
-
   .Event {
     background: #ffffb5;
     width: 90%;
@@ -142,45 +142,43 @@ const DTableBody = styled.div`
 
 const DPushTag = (key,
                   loadedMoment,
-                  dayClass
+                  dayClass,
+                  isHoliday,
 ) => {
-    // 다른 달의 경우 모두 회색으로 처리
-    if (dayClass === "anotherMonth"
-    ) {
-        return (
-            <DTableBody id={key} key={key}>
-                <div className="date" style={{color: "lightgray"}}> {loadedMoment.format('D')} </div>
-            </DTableBody>
-        )
-    }
-    // 이번 달의 경우 (오늘,평일,주말) 각각 따로 처리
-    else {
-        // 오늘의 경우
-        if (dayClass === "Today") {
-            return (
-                <DTableBody id={key} key={key} style={{background: "#c8ffc8"}}>
-                    <div className="date"> {loadedMoment.format('D')} </div>
-                </DTableBody>
-            )
-        }
-        else {
-            return(
-                <DTableBody id={key} key={key}>
-                    {
-                        dayClass === "week" ?
-                            // 평일일 경우 날짜를 검정색으로
-                            <div className="date"> {loadedMoment.format('D')} </div>
-                            :
-                            // 주말일 경우 날짜를 빨간색으로
-                            <div className="date sunday"> {loadedMoment.format('D')} </div>
-                    }
-                </DTableBody>)
-        }
-    }
+    const today = loadedMoment.format('YYYYMMDD') === moment().format('YYYYMMDD');
+
+    return (
+        <DTableBody id={key} key={key} className={`${today ? 'today' : ''}`}>
+            <div className={`date ${dayClass}`}>
+                {loadedMoment.format('D')}
+            </div>
+            <div className="holiday">
+                {isHoliday}
+            </div>
+        </DTableBody>
+    )
 }
 
-function DashCalendar({onClick}) {
+function DashCalendar({
+                          onClick,
+                          year,
+                          month,
+                          yearIncreaseButton,
+                          yearDecreaseButton,
+                          monthIncreaseButton,
+                          monthDecreaseButton
+    }) {
+    const [Holidays, setHolidays] = useState([]);
     const [getMoment, setMoment] = useState(moment())
+
+    //// 나중에 API 받으면 수정해야할 부분
+    ////
+    ////
+
+
+    ////
+    ////
+    //////////////////수정 여기까지
 
     const today = getMoment;
     // 이번달의 첫번째 주
@@ -188,30 +186,57 @@ function DashCalendar({onClick}) {
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
     const lastWeek = today.clone().endOf('month').week() === 1? 53 : today.clone().endOf('month').week();
 
+    const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D"
+    let solYear = year;
+    let solMonth = month.toString().padStart(2,0);
+    const operation = 'getHoliDeInfo';
+
+    let url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`;
+
+    const getHolidays = async () => {
+        let res = await fetch(url);
+        let json = await res.json();
+        const item = json.response.body.items.item;
+
+        if (item) {
+            setHolidays(item?.length ? item : [item]);
+        }
+    }
+
+    useEffect(() => {
+        getHolidays()
+    }, [solYear,solMonth]);
+
     const calendarArr=()=> {
         let result = [];
         let week = firstWeek;
+        let event = {};
+        if(Holidays){
+            Holidays.map((holiday) => {
+                let event_year = holiday.locdate.toString().substring(0,4);
+                let event_month = holiday.locdate.toString().substring(4,6).padStart(2,0);
+                let event_day = holiday.locdate.toString().substring(6,8).padStart(2,0);
+
+                let event_ID = `Date-${event_year}-${event_month}-${event_day}`;
+                event[event_ID] = holiday.dateName;
+            })
+        }
         for (week; week <= lastWeek; week++) {
             for (let day = 0; day < 7; day++) {
                 let days = today.clone().startOf('year').week(week).startOf('week').add(day, 'day'); // 'D' 로해도되지만 직관성
                 let date = `Date-${days.format('YYYY-MM-DD')}`
+
+                let todayCheck = moment().format('YYYYMMDD') === days.format('YYYYMMDD') ? 'Today' : 'week';
+                let dayCheck = day === 0 ? 'sunday' : todayCheck;
                 //------------------------------- 날짜 처리하는 구간 -------------------------------//
                 // (이번달, !이번달)로 나눠서 처리.
                 // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
-                if(days.format('MM') === today.format('MM')){
-                    // 오늘 날짜 처리
-                    if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
-                        result.push(DPushTag(date, days, "Today"));
+                if (days.format('MM') === today.format('MM')) {
+                    if (date in event) {
+                        result.push(DPushTag(date, days, dayCheck, event[date]));
+                    } else {
+                            result.push(DPushTag(date, days, dayCheck, ''));
                     }
-                    // 일요일 인 날에는 빨간글씨
-                    else if (day === 0) {
-                        result.push (DPushTag(date, days, "sunday"));
-                    }
-                    // 일요일 아닌 날에는 검정글씨
-                    else {
-                        result.push (DPushTag(date, days, "week"));
-                    }
-
                 }
                 // 이번달이 아닌 경우 모두 회색처리.
                 else {
@@ -221,14 +246,31 @@ function DashCalendar({onClick}) {
         }
         return result;
     }
+    const yearPlusClick =()=> {
+        setMoment(getMoment.clone().add(1, 'year'))
+        yearIncreaseButton()
+    }
+    const yearMinusClick=()=> {
+        setMoment(getMoment.clone().subtract(1, 'year'))
+        yearDecreaseButton()
+    }
+    const monthPlusClick =()=> {
+        setMoment(getMoment.clone().add(1, 'month'))
+        monthIncreaseButton()
+    }
+    const monthMinusClick =()=> {
+        setMoment(getMoment.clone().subtract(1, 'month'))
+        monthDecreaseButton()
+    }
+
     return (
             <Box style={{flexDirection : "column"}}>
                 <DControllerBlock>
-                    <DControlButton title="1년전" onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'year')) }}>«</DControlButton>
-                    <DControlButton title="1달전" onClick={()=>{ setMoment(getMoment.clone().subtract(1, 'month')) }}>‹</DControlButton>
-                    <span>{today.format('YY 년 MM 월')}</span>
-                    <DControlButton title="1달후" onClick={()=>{ setMoment(getMoment.clone().add(1, 'month')) }}>›</DControlButton>
-                    <DControlButton title="1년후" onClick={()=>{ setMoment(getMoment.clone().add(1, 'year')) }}>»</DControlButton>
+                    <DControlButton title="1년전" onClick={yearMinusClick}>«</DControlButton>
+                    <DControlButton title="1달전" onClick={monthMinusClick}>‹</DControlButton>
+                    <span>{year}년{month}월</span>
+                    <DControlButton title="1달후" onClick={monthPlusClick}>›</DControlButton>
+                    <DControlButton title="1년후" onClick={yearPlusClick}>»</DControlButton>
                 </DControllerBlock>
                 <DCalendarBlock>
                     <DCalendarIndex>
@@ -236,7 +278,7 @@ function DashCalendar({onClick}) {
                         <DIndexingBar className="holiday"/>공휴일
                         <DIndexingBar className="Event"/>행사
                         <DIndexingBar className="vacation"/>휴가
-                        <DIndexingBar className="etc"/>기타
+                        <DIndexingBar className="others"/>기타
                     </DCalendarIndex>
 
                     <DCalendarBox>

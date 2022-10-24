@@ -15,11 +15,27 @@ const Dashboard = styled.div`
   overflow: auto;
 `
 
-function Main({onClick}) {
+function Main({
+                  onClick,
+                  year,
+                  month,
+                  yearIncreaseButton,
+                  yearDecreaseButton,
+                  monthDecreaseButton,
+                  monthIncreaseButton
+}) {
     return (
         <>
             <Dashboard>
-                <DashCalendar onClick={onClick}/>
+                <DashCalendar
+                    onClick={onClick}
+                    year={year}
+                month={month}
+                yearIncreaseButton={yearIncreaseButton}
+                yearDecreaseButton={yearDecreaseButton}
+                monthDecreaseButton={monthDecreaseButton}
+                monthIncreaseButton={monthIncreaseButton}
+                />
                 <DashBob />
             </Dashboard>
         </>

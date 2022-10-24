@@ -58,20 +58,10 @@ function CalendarContainer(props) {
         //     e.preventDefault()
         //     alert('날짜를 입력하세요')
         // }
+
         else {
             setNoCategory(true);
             setNewEvent(false);
-            // let startDay = input.startDate;
-            // //let endDay = document.getElementById('endDate').value;
-            // let title = input.eventTitle;
-            //
-            // let selectedDays = document.getElementById(`Date-${startDay}`);
-            // let new_EventTag = document.createElement('div');
-            // new_EventTag.setAttribute('class',`${pickItem}`);
-            // new_EventTag.innerHTML = `${title}`;
-            //
-            // selectedDays.appendChild(new_EventTag)
-
             setConfirm(true)
 
             setNEvent(input)
