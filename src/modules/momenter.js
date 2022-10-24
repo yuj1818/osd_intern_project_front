@@ -16,7 +16,7 @@ export const monthDecrease = () => ({ type : MONTH_DECREASE });
 
 /* 초기 상태 선언 */
 const initialState = {
-    year : parseInt( moment().format('YY') ),
+    year : parseInt( moment().format('YYYY') ),
     month : parseInt( moment().format('MM') ),
 };
 
