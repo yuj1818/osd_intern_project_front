@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import moment from 'moment';
+import palette from "../../lib/styles/palette";
 import styled from "styled-components";
 
 const CalTotalBlock = styled.div`
@@ -25,20 +26,19 @@ const CalendarIndex = styled.div`
   padding-right: 8px;
   height: 30px;
   .birthday {
-    background: lightpink;
+    background: ${palette.birth};
   }
   .holiday {
-    background: #ffd7a3;
-    width: 90%;
+    background: ${palette.holi};
   }
   .vacation {
-    background: lightcyan;
+    background: ${palette.vaca};
   }
   .Event {
-    background: #ffffb5;
+    background: ${palette.Event};
   }
   .others {
-    background: #bcc5fd;
+    background: ${palette.others};
   }
 `
 const IndexingBar = styled.div`
@@ -105,24 +105,24 @@ const TableBody = styled.div`
   .anotherMonth {
     color: lightgray !important;
   }
-  .holiday {
-    background: #ffd7a3;
+   .holiday {
+    background: ${palette.holi};
     width: 97%;
   }
   .birthday {
-    background: lightpink;
+    background: ${palette.birth};
     width: 90%;
   }
   .vacation {
-    background: lightcyan;
+    background: ${palette.vaca};
     width: 90%;
   }
   .Event {
-    background: #ffffb5;
+    background: ${palette.Event};
     width: 90%;
   }
   .others {
-    background: #bcc5fd;
+    background: ${palette.others};
     width: 90%;
   }
 `

@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import moment from 'moment';
 import styled from "styled-components";
+import palette from "../../lib/styles/palette";
 import Box from "../common/Box";
 
 const DControllerBlock = styled.div`
@@ -34,22 +35,22 @@ const DCalendarIndex = styled.div`
   align-items: center;
   justify-content: space-around;
   .birthday {
-    background: lightpink;
+    background: ${palette.birth};
   }
   .holiday {
-    background: #ffd7a3;
+    background: ${palette.holi};
   }
 
   .vacation {
-    background: lightcyan;
+    background: ${palette.vaca};
   }
 
   .Event {
-    background: #ffffb5;
+    background: ${palette.Event};
   }
-  
+
   .others {
-    background: #bcc5fd;
+    background: ${palette.others};
   }
   
 `
@@ -109,35 +110,35 @@ const DTableBody = styled.div`
     color: lightgray !important;
   }
   .holiday {
-    background: #ffd7a3;
+    background: ${palette.holi};
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
   .birthday {
-    background: lightpink;
+    background: ${palette.birth};
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
   .vacation {
-    background: lightcyan;
+    background: ${palette.vaca};
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
   .Event {
-    background: #ffffb5;
+    background: ${palette.Event};
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
   }
   .others {
-    background: #bcc5fd;
+    background: ${palette.others};
     width: 90%;
     padding-left: 6px;
     font-size: 1vh;
-  }   
+  }
 `
 
 const DPushTag = (key,
