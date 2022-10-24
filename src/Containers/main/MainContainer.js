@@ -2,7 +2,6 @@ import React from 'react';
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
 import { useNavigate } from "react-router-dom";
-import Holiday from "../../Components/Calendar/Holiday";
 
 function MainContainer(props) {
 
@@ -18,7 +17,6 @@ function MainContainer(props) {
             {localStorage.getItem('onLoginUser') &&
                 <div>
                     <Main onClick={onClick}/>
-                    <Holiday />
                 </div>
             }
         </div>
