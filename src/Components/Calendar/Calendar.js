@@ -345,8 +345,8 @@ function Calendar ({
     const lastWeek = today.clone().endOf('month').week() === 1? 53 : today.clone().endOf('month').week();
 
     const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D"
-    let solYear = today.format('YYYY');
-    let solMonth = today.format('MM');
+    let solYear = year;
+    let solMonth = month.toString().padStart(2,0);
     const operation = 'getHoliDeInfo';
 
     let url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`;
