@@ -17,24 +17,26 @@ const Dashboard = styled.div`
 
 function Main({
                   onClick,
-                  year,
-                  month,
-                  yearIncreaseButton,
-                  yearDecreaseButton,
-                  monthDecreaseButton,
-                  monthIncreaseButton
+                  today,
+                  onIncreaseYear,
+                  onDecreaseYear,
+                  onIncreaseMonth,
+                  onDecreaseMonth,
+                  loadingHoliday,
+                  Holidays,
 }) {
     return (
         <>
             <Dashboard>
                 <DashCalendar
                     onClick={onClick}
-                    year={year}
-                month={month}
-                yearIncreaseButton={yearIncreaseButton}
-                yearDecreaseButton={yearDecreaseButton}
-                monthDecreaseButton={monthDecreaseButton}
-                monthIncreaseButton={monthIncreaseButton}
+                    today={today}
+                    onIncreaseYear={onIncreaseYear}
+                    onDecreaseYear={onDecreaseYear}
+                    onIncreaseMonth={onIncreaseMonth}
+                    onDecreaseMonth={onDecreaseMonth}
+                    loadingHoliday={loadingHoliday}
+                    Holidays={Holidays}
                 />
                 <DashBob />
             </Dashboard>

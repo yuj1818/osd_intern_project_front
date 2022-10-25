@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { connect } from "react-redux";
+import { increaseYear, increaseMonth, decreaseYear, decreaseMonth, getHoliday } from "../../modules/momenter";
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
 import { useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {monthDecrease, monthIncrease, yearDecrease, yearIncrease} from "../../modules/momenter";
 
-function MainContainer(props) {
+function MainContainer({ today, increaseYear, decreaseYear, increaseMonth, decreaseMonth, getHoliday, loadingHoliday, holiday }) {
 
     const navigate = useNavigate();
 
@@ -13,17 +13,12 @@ function MainContainer(props) {
         navigate('/calendar');
     };
 
-    const { year, month } = useSelector(state => ({
-        year : state.momenter.year,
-        month : state.momenter.month
-    }));
+    let solYear = today.format('YYYY');
+    let solMonth = today.format('MM');
 
-    const dispatch = useDispatch();
-
-    const yearIncreaseButton = () => dispatch(yearIncrease());
-    const yearDecreaseButton = () => dispatch(yearDecrease());
-    const monthIncreaseButton = () => dispatch(monthIncrease());
-    const monthDecreaseButton = () => dispatch(monthDecrease());
+    useEffect(() => {
+        getHoliday(solYear, solMonth);
+    }, [today]);
 
     return (
         <div>
@@ -32,12 +27,13 @@ function MainContainer(props) {
                 <div>
                     <Main
                         onClick={onClick}
-                        year={year}
-                        month={month}
-                        yearIncreaseButton={yearIncreaseButton}
-                        yearDecreaseButton={yearDecreaseButton}
-                        monthIncreaseButton={monthIncreaseButton}
-                        monthDecreaseButton={monthDecreaseButton}
+                        today={today}
+                        onIncreaseYear={increaseYear}
+                        onDecreaseYear={decreaseYear}
+                        onIncreaseMonth={increaseMonth}
+                        onDecreaseMonth={decreaseMonth}
+                        loadingHoliday={loadingHoliday}
+                        Holidays={holiday}
                     />
                 </div>
             }
@@ -45,4 +41,17 @@ function MainContainer(props) {
     );
 }
 
-export default MainContainer;
+export default connect(
+    state => ({
+        today: state.momenter.today,
+        holiday: state.momenter.holiday,
+        loadingHoliday: state.momenter.loading.GET_HOLIDAY
+    }),
+    {
+        increaseYear,
+        decreaseYear,
+        increaseMonth,
+        decreaseMonth,
+        getHoliday
+    }
+)(MainContainer);

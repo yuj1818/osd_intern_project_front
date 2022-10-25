@@ -1,68 +1,91 @@
-import moment from "moment";
+import { createAction, handleActions } from "redux-actions";
+import moment from 'moment';
+import * as api from '../lib/api';
 
-/* 액션 타입 만들기 */
+const INCREASE_YEAR = 'momenter/INCREASE_YEAR';
+const DECREASE_YEAR = 'momenter/DECREASE_YEAR';
+const INCREASE_MONTH = 'momenter/INCREASE_MONTH';
+const DECREASE_MONTH = 'momenter/DECREASE_MONTH';
 
-const MONTH_INCREASE = 'momenter/MONTH_INCREASE';
-const MONTH_DECREASE = 'momenter/MONTH_DECREASE';
-const YEAR_INCREASE = 'momenter/YEAR_INCREASE';
-const YEAR_DECREASE = 'momenter/YEAR_DECREASE';
+const GET_HOLIDAY = 'momenter/GET_HOLIDAY';
+const GET_HOLIDAY_SUCCESS = 'momenter/GET_HOLIDAY_SUCCESS';
+const GET_HOLIDAY_FAILURE = 'momenter/GET_HOLIDAY_FAILURE';
 
-/* 액션 생성함수 만들기 */
-// 액션 생성함수를 만들고 export 키워드를 사용해서 내보내주세요.
-export const yearIncrease = () => ({ type: YEAR_INCREASE });
-export const yearDecrease = () => ({ type: YEAR_DECREASE });
-export const monthIncrease = () => ({ type : MONTH_INCREASE });
-export const monthDecrease = () => ({ type : MONTH_DECREASE });
+export const increaseYear = createAction(INCREASE_YEAR);
+export const decreaseYear = createAction(DECREASE_YEAR);
+export const increaseMonth = createAction(INCREASE_MONTH);
+export const decreaseMonth = createAction(DECREASE_MONTH);
 
-/* 초기 상태 선언 */
-const initialState = {
-    year : parseInt( moment().format('YYYY') ),
-    month : parseInt( moment().format('MM') ),
+export const getHoliday = (solYear, solMonth) => async dispatch => {
+    dispatch({ type: GET_HOLIDAY });
+    try {
+        const response = await api.getHoliday(solYear,solMonth);
+        const item = response.data.response.body.items.item;
+        console.log(item)
+        dispatch({
+            type: GET_HOLIDAY_SUCCESS,
+            payload: item ? item.length? item : [item] : null
+        });
+    } catch (e) {
+        dispatch({
+            type: GET_HOLIDAY_FAILURE,
+            payload: e,
+            error: true
+        });
+        throw e;
+    }
 };
 
-/* 리듀서 선언 */
-// 리듀서는 export default 로 내보내주세요.
-export default function momenter(state = initialState, action) {
-    switch (action.type) {
-        case YEAR_INCREASE:
-            return {
-                ...state,
-                year: state.year + 1
-            };
-        case YEAR_DECREASE:
-            return {
-                ...state,
-                year: state.year - 1
-            };
-        case MONTH_INCREASE:
-            if (state.month === 12) {
-                return {
-                    ...state,
-                    year : state.year + 1,
-                    month: 1
-                }
-            }
-            else {
-                return {
-                    ...state,
-                    month: state.month + 1
-                };
-            }
-        case MONTH_DECREASE:
-            if (state.month === 1) {
-                return {
-                    ...state,
-                    year : state.year - 1,
-                    month: 12
-                }
-            }
-            else {
-                return {
-                    ...state,
-                    month: state.month - 1
-                };
-            }
-        default:
-            return state;
-    }
+const initialState = {
+    loading: {
+        GET_HOLIDAY: false
+    },
+    holiday: null,
+    today: moment()
 }
+
+const momenter = handleActions(
+    {
+        [INCREASE_YEAR]: state => ({
+            ...state,
+            today: state.today.clone().add(1, 'year')
+        }),
+        [DECREASE_YEAR]: state => ({
+            ...state,
+            today: state.today.clone().subtract(1, 'year')
+        }),
+        [INCREASE_MONTH]: state => ({
+            ...state,
+            today: state.today.clone().add(1, 'month')
+        }),
+        [DECREASE_MONTH]: state => ({
+            ...state,
+            today: state.today.clone().subtract(1, 'month')
+        }),
+        [GET_HOLIDAY]: state => ({
+            ...state,
+            loading: {
+                ...state.loading,
+                GET_HOLIDAY: true
+            }
+        }),
+        [GET_HOLIDAY_SUCCESS]: (state, action) => ({
+            ...state,
+            loading: {
+                ...state.loading,
+                GET_HOLIDAY: false
+            },
+            holiday: action.payload
+        }),
+        [GET_HOLIDAY_FAILURE]: (state, action) => ({
+            ...state,
+            loading: {
+                ...state.loading,
+                GET_HOLIDAY: false
+            }
+        })
+    },
+    initialState
+);
+
+export default momenter;

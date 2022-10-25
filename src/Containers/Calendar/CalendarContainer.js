@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {monthDecrease, monthIncrease, yearIncrease, yearDecrease} from "../../modules/momenter";
+import React, {useState, useEffect} from 'react';
+import { connect } from "react-redux";
+import { increaseYear, increaseMonth, decreaseYear, decreaseMonth, getHoliday } from "../../modules/momenter";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 
-function CalendarContainer(props) {
+function CalendarContainer({today, increaseYear, decreaseYear, increaseMonth, decreaseMonth, getHoliday, loadingHoliday, holiday }) {
 
     // 일정추가 창 보여주것을 정하는 State
     const [NewEvent, setNewEvent] = useState(false);
@@ -93,17 +93,12 @@ function CalendarContainer(props) {
 
     ////////////// Redux 구간
 
-    const { year, month  } = useSelector(state => ({
-        year : state.momenter.year,
-        month : state.momenter.month
-    }));
+    let solYear = today.format('YYYY');
+    let solMonth = today.format('MM');
 
-    const dispatch = useDispatch();
-
-    const yearIncreaseButton = () => dispatch(yearIncrease());
-    const yearDecreaseButton = () => dispatch(yearDecrease());
-    const monthIncreaseButton = () => dispatch(monthIncrease());
-    const monthDecreaseButton = () => dispatch(monthDecrease());
+    useEffect(() => {
+        getHoliday(solYear, solMonth);
+    }, [today]);
 
     return (
         <div>
@@ -114,12 +109,13 @@ function CalendarContainer(props) {
                 pickItem={category}
                 eventTitle={nEvent.eventTitle}
                 onReload={onReload}
-                year={year}
-                month={month}
-                yearIncreaseButton={yearIncreaseButton}
-                yearDecreaseButton={yearDecreaseButton}
-                monthIncreaseButton={monthIncreaseButton}
-                monthDecreaseButton={monthDecreaseButton}
+                today={today}
+                onIncreaseYear={increaseYear}
+                onDecreaseYear={decreaseYear}
+                onIncreaseMonth={increaseMonth}
+                onDecreaseMonth={decreaseMonth}
+                loadingHoliday={loadingHoliday}
+                Holidays={holiday}
             />
             <AddNewEvent
                 visible={NewEvent}
@@ -138,4 +134,17 @@ function CalendarContainer(props) {
     );
 }
 
-export default CalendarContainer;
+export default connect(
+    state => ({
+        today: state.momenter.today,
+        holiday: state.momenter.holiday,
+        loadingHoliday: state.momenter.loading.GET_HOLIDAY
+    }),
+    {
+        increaseYear,
+        decreaseYear,
+        increaseMonth,
+        decreaseMonth,
+        getHoliday
+    }
+)(CalendarContainer);

@@ -327,29 +327,18 @@ function Calendar ({
                        pickItem,
                        eventTitle,
                        onReload,
-                       monthDecreaseButton,
-                       monthIncreaseButton,
-                       yearDecreaseButton,
-                       yearIncreaseButton,
-                       year,
-                       month
+                       today,
+                       onIncreaseYear,
+                       onDecreaseYear,
+                       onIncreaseMonth,
+                       onDecreaseMonth,
+                       loadingHoliday,
+                       Holidays
     }) {
-
-    const [Holidays, setHolidays] = useState([]);
-    const [getMoment, setMoment] = useState(moment())
-
-    const today = getMoment;
     // 이번달의 첫번째 주
     const firstWeek = today.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
     const lastWeek = today.clone().endOf('month').week() === 1? 53 : today.clone().endOf('month').week();
-
-    const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D"
-    let solYear = year;
-    let solMonth = month.toString().padStart(2,0);
-    const operation = 'getHoliDeInfo';
-
-    let url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`;
 
     // const getHolidays = async() => {
     //     let res = await fetch(url);
@@ -363,21 +352,6 @@ function Calendar ({
     //         }
     //     }
     // }
-
-    const getHolidays = async () => {
-        let res = await fetch(url);
-        let json = await res.json();
-        const item = json.response.body.items.item;
-
-        if (item) {
-            setHolidays(item?.length ? item : [item]);
-        }
-    }
-
-
-    useEffect(() => {
-        getHolidays()
-    }, [solYear,solMonth]);
 
     const calendarArr=()=>{
         let result = [];
@@ -501,23 +475,6 @@ function Calendar ({
         return result;
     }
 
-    const yearPlusClick =()=> {
-        setMoment(getMoment.clone().add(1, 'year'))
-        yearIncreaseButton()
-    }
-    const yearMinusClick=()=> {
-        setMoment(getMoment.clone().subtract(1, 'year'))
-        yearDecreaseButton()
-    }
-    const monthPlusClick =()=> {
-        setMoment(getMoment.clone().add(1, 'month'))
-        monthIncreaseButton()
-    }
-    const monthMinusClick =()=> {
-        setMoment(getMoment.clone().subtract(1, 'month'))
-        monthDecreaseButton()
-    }
-
     return(
         <div>
             <CalTotalBlock>
@@ -525,11 +482,11 @@ function Calendar ({
                     <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
                     <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
                     <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
-                    <ControlButton title="1년전" onClick={yearMinusClick}>«</ControlButton>
-                    <ControlButton title="1달전" onClick={monthMinusClick}>‹</ControlButton>
-                    <span style={{gridColumn:"3", fontSize:"25px"}}>{year}년 {month.toString().padStart(2,0)}월</span>
-                    <ControlButton title="1달후"  onClick={monthPlusClick}>›</ControlButton>
-                    <ControlButton title="1년후"  onClick={yearPlusClick}>»</ControlButton>
+                    <ControlButton title="1년전" onClick={onDecreaseYear}>«</ControlButton>
+                    <ControlButton title="1달전" onClick={onDecreaseMonth}>‹</ControlButton>
+                    <span style={{gridColumn:"3", fontSize:"25px"}}>{today.format('YY')}년 {today.format('MM')}월</span>
+                    <ControlButton title="1달후"  onClick={onIncreaseMonth}>›</ControlButton>
+                    <ControlButton title="1년후"  onClick={onIncreaseYear}>»</ControlButton>
                 </CalendarControllerBlock>
                 <CalendarBlock>
                     <CalendarIndex>
