@@ -229,7 +229,7 @@ function DashCalendar({
                 <DControllerBlock>
                     <DControlButton title="1년전" onClick={onDecreaseYear}>«</DControlButton>
                     <DControlButton title="1달전" onClick={onDecreaseMonth}>‹</DControlButton>
-                    <span>{today.format('YY')}년{today.format('MM')}월</span>
+                    <span>{today.format('YY')}년 {today.format('MM')}월</span>
                     <DControlButton title="1달후" onClick={onIncreaseMonth}>›</DControlButton>
                     <DControlButton title="1년후" onClick={onIncreaseYear}>»</DControlButton>
                 </DControllerBlock>
