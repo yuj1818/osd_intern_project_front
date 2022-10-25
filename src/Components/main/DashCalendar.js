@@ -52,7 +52,6 @@ const DCalendarIndex = styled.div`
   .others {
     background: ${palette.others};
   }
-  
 `
 const DIndexingBar = styled.div`
   width: 3vw;
@@ -66,6 +65,9 @@ const DCalendarBox = styled.div`
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 1px;
   margin: 3px;
+  .today {
+    background: #c8ffc8;
+  }
 `
 
 const NaviBox = styled.div`
@@ -146,10 +148,10 @@ const DPushTag = (key,
                   dayClass,
                   isHoliday,
 ) => {
-    const momentValue = loadedMoment.format('YYYYMMDD') === moment().format('YYYYMMDD');
+    const today = loadedMoment.format('YYYYMMDD') === moment().format('YYYYMMDD');
 
     return (
-        <DTableBody id={key} key={key} className={`${momentValue ? 'momentValue' : ''}`}>
+        <DTableBody id={key} key={key} className={`${today ? 'today' : ''}`}>
             <div className={`date ${dayClass}`}>
                 {loadedMoment.format('D')}
             </div>
@@ -169,15 +171,6 @@ function DashCalendar({
                           monthDecreaseButton
     }) {
     const [Holidays, setHolidays] = useState([]);
-
-    //// 나중에 API 받으면 수정해야할 부분
-    ////
-    ////
-
-
-    ////
-    ////
-    //////////////////수정 여기까지
 
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
@@ -270,13 +263,8 @@ function DashCalendar({
                         })}
                         {calendarArr()}
                     </DCalendarBox>
-
                 </DCalendarBlock>
-                {/*<iframe*/}
-                {/*    src="https://calendar.google.com/calendar/embed?height=366&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FSeoul&showTitle=0&showPrint=0&showCalendars=0&showTz=0&showTabs=0&showNav=1&src=c29ueXVqZW9uZzE4QGdtYWlsLmNvbQ&src=a28uc291dGhfa29yZWEjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%237986CB&color=%230B8043"*/}
-                {/*    style={{border:"solid 1px #777", width:"22.6875rem", height:"22.875rem", position:"relative"}}*/}
-                {/*></iframe>*/}
-                {/*<div style={{position:"absolute", width:"22.6875rem", height:"22.875rem", background:"black", opacity:"0%"}} onClick={onClick}></div>*/}
+
             </Box>
     );
 }
