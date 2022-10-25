@@ -5,13 +5,16 @@ import App from './App';
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './modules';
+import { createLogger } from "redux-logger/src";
+import thunk from "redux-thunk";
 
+const logger = createLogger();
 const store = createStore(
     rootReducer,
-    composeWithDevTools()
+    applyMiddleware(logger, thunk)
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

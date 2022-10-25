@@ -160,16 +160,15 @@ function Calendar ({
                        pickItem,
                        eventTitle,
                        onReload,
-                       momentValue,
                        monthDecreaseButton,
                        monthIncreaseButton,
                        yearDecreaseButton,
-                       yearIncreaseButton,
+                       yearIncreaseButton, 
+                       momentValue,                     
     }) {
 
     const [Holidays, setHolidays] = useState([]);
-
-
+  
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
@@ -181,6 +180,7 @@ function Calendar ({
     const operation = 'getHoliDeInfo';
 
     let url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`;
+
 
     const getHolidays = async () => {
         let res = await fetch(url);
@@ -255,7 +255,7 @@ function Calendar ({
                 <CalendarControllerBlock>
                     <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
                     <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
-                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
+                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>                    
                     <ControlButton title="1년전" onClick={yearDecreaseButton}>«</ControlButton>
                     <ControlButton title="1달전" onClick={monthDecreaseButton}>‹</ControlButton>
                     <span style={{gridColumn:"3", fontSize:"25px"}}>{momentValue.format('YYYY 년 MM 월')}</span>

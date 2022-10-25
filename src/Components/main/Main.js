@@ -21,7 +21,9 @@ function Main({
                   yearIncreaseButton,
                   yearDecreaseButton,
                   monthDecreaseButton,
-                  monthIncreaseButton
+                  monthIncreaseButton,                  
+                  loadingHoliday,
+                  Holidays,
 }) {
     return (
         <>
@@ -33,6 +35,8 @@ function Main({
                     yearDecreaseButton={yearDecreaseButton}
                     monthDecreaseButton={monthDecreaseButton}
                     monthIncreaseButton={monthIncreaseButton}
+                    loadingHoliday={loadingHoliday}
+                    Holidays={Holidays}
                 />
                 <DashBob />
             </Dashboard>

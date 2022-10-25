@@ -1,6 +1,4 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {monthDecrease, monthIncrease, yearIncrease, yearDecrease} from "../../modules/momenter";
+import React, {useState, useEffect} from 'react';
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 
@@ -103,6 +101,12 @@ function CalendarContainer(props) {
     const yearDecreaseButton = () => dispatch(yearDecrease());
     const monthIncreaseButton = () => dispatch(monthIncrease());
     const monthDecreaseButton = () => dispatch(monthDecrease());
+    const getHoliday = () => dispatch(getHoliday())
+
+
+    useEffect(() => {
+        getHoliday(momentValue.format('YYYY'), momentValue.format('MM'));
+    }, [momentValue]);
 
     return (
         <div>
@@ -118,6 +122,8 @@ function CalendarContainer(props) {
                 yearDecreaseButton={yearDecreaseButton}
                 monthIncreaseButton={monthIncreaseButton}
                 monthDecreaseButton={monthDecreaseButton}
+                loadingHoliday={loadingHoliday}
+                Holidays={holiday}
             />
             <AddNewEvent
                 visible={NewEvent}
@@ -135,5 +141,3 @@ function CalendarContainer(props) {
         </div>
     );
 }
-
-export default CalendarContainer;
