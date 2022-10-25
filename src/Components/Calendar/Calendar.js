@@ -163,39 +163,16 @@ function Calendar ({
                        monthDecreaseButton,
                        monthIncreaseButton,
                        yearDecreaseButton,
-                       yearIncreaseButton, 
-                       momentValue,                     
+                       yearIncreaseButton,
+                       loadingHoliday,
+                       momentValue,
+                       Holidays
     }) {
 
-    const [Holidays, setHolidays] = useState([]);
-  
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
     const lastWeek = momentValue.clone().endOf('month').week() === 1? 53 : momentValue.clone().endOf('month').week();
-
-    const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D"
-    let solYear = momentValue.format('YYYY');
-    let solMonth = momentValue.format('MM');
-    const operation = 'getHoliDeInfo';
-
-    let url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`;
-
-
-    const getHolidays = async () => {
-        let res = await fetch(url);
-        let json = await res.json();
-        const item = json.response.body.items.item;
-
-        if (item) {
-            setHolidays(item?.length ? item : [item]);
-        }
-    }
-
-
-    useEffect(() => {
-        getHolidays()
-    }, [solYear,solMonth]);
 
     const calendarArr=()=>{
         let result = [];

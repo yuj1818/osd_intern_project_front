@@ -86,7 +86,6 @@ const AddNewEvent = ({
                          pickItem,      // 일정 분류에서 선택된 값
                          eventTitle,
                          writer,
-                         category,
                          startDate,
                          endDate,
                          onChangeInput,

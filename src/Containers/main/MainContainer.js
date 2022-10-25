@@ -3,6 +3,7 @@ import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
 import { useNavigate } from "react-router-dom";import {useDispatch, useSelector} from "react-redux";
 import {monthDecrease, monthIncrease, yearDecrease, yearIncrease} from "../../modules/momenter";
+import { getHoliday } from "../../modules/momenter";
 
 function MainContainer(props) {
 
@@ -12,8 +13,10 @@ function MainContainer(props) {
         navigate('/calendar');
     };
 
-    const { momentValue } = useSelector(state => ({
-        momentValue : state.momenter.momentValue
+    const { momentValue, holiday, loadingHoliday } = useSelector(state => ({
+        momentValue : state.momenter.momentValue,
+        holiday: state.momenter.holiday,
+        loadingHoliday: state.momenter.loading.GET_HOLIDAY,
     }));
     
     const dispatch = useDispatch();
@@ -23,8 +26,12 @@ function MainContainer(props) {
     const monthIncreaseButton = () => dispatch(monthIncrease());
     const monthDecreaseButton = () => dispatch(monthDecrease());
 
+
+
+
+
     useEffect(() => {
-        getHoliday(momentValue.format('YYYY'), momentValue.format('MM'));
+        dispatch(getHoliday(momentValue));
     }, [momentValue]);
 
     return (
@@ -47,3 +54,5 @@ function MainContainer(props) {
         </div>
     );
 }
+
+export default MainContainer;

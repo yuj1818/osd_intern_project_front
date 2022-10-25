@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {monthDecrease, monthIncrease, yearIncrease, yearDecrease} from "../../modules/momenter";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
+import {getHoliday} from "../../modules/momenter";
 
 function CalendarContainer(props) {
 
@@ -91,8 +94,10 @@ function CalendarContainer(props) {
 
     ////////////// Redux 구간
 
-    const { momentValue } = useSelector(state => ({
+    const { momentValue, holiday, loadingHoliday } = useSelector(state => ({
         momentValue: state.momenter.momentValue,
+        holiday: state.momenter.holiday,
+        loadingHoliday: state.momenter.loading.GET_HOLIDAY,
     }));
 
     const dispatch = useDispatch();
@@ -101,11 +106,9 @@ function CalendarContainer(props) {
     const yearDecreaseButton = () => dispatch(yearDecrease());
     const monthIncreaseButton = () => dispatch(monthIncrease());
     const monthDecreaseButton = () => dispatch(monthDecrease());
-    const getHoliday = () => dispatch(getHoliday())
-
 
     useEffect(() => {
-        getHoliday(momentValue.format('YYYY'), momentValue.format('MM'));
+        dispatch(getHoliday(momentValue));
     }, [momentValue]);
 
     return (
@@ -141,3 +144,5 @@ function CalendarContainer(props) {
         </div>
     );
 }
+
+export default CalendarContainer;

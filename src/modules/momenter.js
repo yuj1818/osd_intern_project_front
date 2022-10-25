@@ -21,14 +21,18 @@ export const monthDecrease = () => ({ type : MONTH_DECREASE });
 
 /* 초기 상태 선언 */
 const initialState = {
-    year : parseInt( moment().format('YYYY') ),
-    month : parseInt( moment().format('MM') ),
+    momentValue: moment(),
+    holiday: null,
+    loading: {
+        GET_HOLIDAY: false
+    },
+
 };
 
-export const getHoliday = (solYear, solMonth) => async dispatch => {
+export const getHoliday = momentValue => async dispatch => {
     dispatch({ type: GET_HOLIDAY });
     try {
-        const response = await api.getHoliday(solYear,solMonth);
+        const response = await api.getHoliday(momentValue.format('YYYY'),momentValue.format('MM')); // API 호출
         const item = response.data.response.body.items.item;
         console.log(item)
         dispatch({
@@ -95,8 +99,7 @@ export default function momenter(state = initialState, action) {
                     ...state.loading,
                     GET_HOLIDAY: false
                 }
-
-            } 
+            }
         default:
             return state;
     }
