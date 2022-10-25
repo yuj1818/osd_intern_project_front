@@ -357,7 +357,7 @@ function Calendar ({
         let result = [];
         let week = firstWeek;
         let event = {};
-        if(Holidays){
+        if(!loadingHoliday && Holidays){
             Holidays.map((holiday) => {
                 let event_year = holiday.locdate.toString().substring(0,4);
                 let event_month = holiday.locdate.toString().substring(4,6).padStart(2,0);
