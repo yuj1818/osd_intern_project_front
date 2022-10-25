@@ -93,9 +93,8 @@ function CalendarContainer(props) {
 
     ////////////// Redux 구간
 
-    const { year, month  } = useSelector(state => ({
-        year : state.momenter.year,
-        month : state.momenter.month
+    const { momentValue } = useSelector(state => ({
+        momentValue: state.momenter.momentValue,
     }));
 
     const dispatch = useDispatch();
@@ -114,8 +113,7 @@ function CalendarContainer(props) {
                 pickItem={category}
                 eventTitle={nEvent.eventTitle}
                 onReload={onReload}
-                year={year}
-                month={month}
+                momentValue={momentValue}
                 yearIncreaseButton={yearIncreaseButton}
                 yearDecreaseButton={yearDecreaseButton}
                 monthIncreaseButton={monthIncreaseButton}

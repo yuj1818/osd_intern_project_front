@@ -17,8 +17,7 @@ const Dashboard = styled.div`
 
 function Main({
                   onClick,
-                  year,
-                  month,
+                  momentValue,
                   yearIncreaseButton,
                   yearDecreaseButton,
                   monthDecreaseButton,
@@ -29,12 +28,11 @@ function Main({
             <Dashboard>
                 <DashCalendar
                     onClick={onClick}
-                    year={year}
-                month={month}
-                yearIncreaseButton={yearIncreaseButton}
-                yearDecreaseButton={yearDecreaseButton}
-                monthDecreaseButton={monthDecreaseButton}
-                monthIncreaseButton={monthIncreaseButton}
+                    momentValue={momentValue}
+                    yearIncreaseButton={yearIncreaseButton}
+                    yearDecreaseButton={yearDecreaseButton}
+                    monthDecreaseButton={monthDecreaseButton}
+                    monthIncreaseButton={monthIncreaseButton}
                 />
                 <DashBob />
             </Dashboard>

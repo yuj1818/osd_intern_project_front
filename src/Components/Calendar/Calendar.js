@@ -327,26 +327,24 @@ function Calendar ({
                        pickItem,
                        eventTitle,
                        onReload,
+                       momentValue,
                        monthDecreaseButton,
                        monthIncreaseButton,
                        yearDecreaseButton,
                        yearIncreaseButton,
-                       year,
-                       month
     }) {
 
     const [Holidays, setHolidays] = useState([]);
-    const [getMoment, setMoment] = useState(moment())
 
-    const today = getMoment;
+
     // 이번달의 첫번째 주
-    const firstWeek = today.clone().startOf('month').week();
+    const firstWeek = momentValue.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
-    const lastWeek = today.clone().endOf('month').week() === 1? 53 : today.clone().endOf('month').week();
+    const lastWeek = momentValue.clone().endOf('month').week() === 1? 53 : momentValue.clone().endOf('month').week();
 
     const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D"
-    let solYear = year;
-    let solMonth = month.toString().padStart(2,0);
+    let solYear = momentValue.format('YYYY');
+    let solMonth = momentValue.format('MM');
     const operation = 'getHoliDeInfo';
 
     let url = `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`;
@@ -399,7 +397,7 @@ function Calendar ({
             for ( let day=0 ; day < 7 ; day ++ ) {
                 // 'days' : Moment 값
                 // 'date' : ID 값을 넣기 위함.
-                let days = today.clone().startOf('year').week(week).startOf('week').add(day, 'day'); // 'D' 로해도되지만 직관성
+                let days = momentValue.clone().startOf('year').week(week).startOf('week').add(day, 'day'); // 'D' 로해도되지만 직관성
                 let date = `Date-${days.format('YYYY-MM-DD')}`
 
                 let todayCheck = moment().format('YYYYMMDD') === days.format('YYYYMMDD') ? 'Today' : 'week';
@@ -407,7 +405,7 @@ function Calendar ({
                 //------------------------------- 날짜 처리하는 구간 -------------------------------//
                 // (이번달, !이번달)로 나눠서 처리.
                 // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
-                if (days.format('MM') === today.format('MM')) {
+                if (days.format('MM') === momentValue.format('MM')) {
                     if (date in event) {
                         if (date === `Date-${startDate}` && confirm) {
                             result.push(PushTag(date, days, dayCheck, event[date], pickItem, eventTitle));
@@ -429,7 +427,7 @@ function Calendar ({
                 // //------------------------------- 날짜 처리하는 구간 -------------------------------//
                 // // (이번달, !이번달)로 나눠서 처리.
                 // // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
-                // if(days.format('MM') === today.format('MM')){
+                // if(days.format('MM') === momentValue.format('MM')){
                 //     if (date in event) {
                 //         if (date === `Date-${startDate}` && confirm) {
                 //             // 오늘 날짜 처리
@@ -501,23 +499,6 @@ function Calendar ({
         return result;
     }
 
-    const yearPlusClick =()=> {
-        setMoment(getMoment.clone().add(1, 'year'))
-        yearIncreaseButton()
-    }
-    const yearMinusClick=()=> {
-        setMoment(getMoment.clone().subtract(1, 'year'))
-        yearDecreaseButton()
-    }
-    const monthPlusClick =()=> {
-        setMoment(getMoment.clone().add(1, 'month'))
-        monthIncreaseButton()
-    }
-    const monthMinusClick =()=> {
-        setMoment(getMoment.clone().subtract(1, 'month'))
-        monthDecreaseButton()
-    }
-
     return(
         <div>
             <CalTotalBlock>
@@ -525,11 +506,11 @@ function Calendar ({
                     <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
                     <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
                     <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
-                    <ControlButton title="1년전" onClick={yearMinusClick}>«</ControlButton>
-                    <ControlButton title="1달전" onClick={monthMinusClick}>‹</ControlButton>
-                    <span style={{gridColumn:"3", fontSize:"25px"}}>{year}년 {month.toString().padStart(2,0)}월</span>
-                    <ControlButton title="1달후"  onClick={monthPlusClick}>›</ControlButton>
-                    <ControlButton title="1년후"  onClick={yearPlusClick}>»</ControlButton>
+                    <ControlButton title="1년전" onClick={yearDecreaseButton}>«</ControlButton>
+                    <ControlButton title="1달전" onClick={monthDecreaseButton}>‹</ControlButton>
+                    <span style={{gridColumn:"3", fontSize:"25px"}}>{momentValue.format('YYYY 년 MM 월')}</span>
+                    <ControlButton title="1달후"  onClick={monthIncreaseButton}>›</ControlButton>
+                    <ControlButton title="1년후"  onClick={yearIncreaseButton}>»</ControlButton>
                 </CalendarControllerBlock>
                 <CalendarBlock>
                     <CalendarIndex>

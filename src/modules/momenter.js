@@ -16,8 +16,7 @@ export const monthDecrease = () => ({ type : MONTH_DECREASE });
 
 /* 초기 상태 선언 */
 const initialState = {
-    year : parseInt( moment().format('YYYY') ),
-    month : parseInt( moment().format('MM') ),
+    momentValue : moment()
 };
 
 /* 리듀서 선언 */
@@ -27,40 +26,22 @@ export default function momenter(state = initialState, action) {
         case YEAR_INCREASE:
             return {
                 ...state,
-                year: state.year + 1
+                momentValue: state.momentValue.clone().add(1,'year')
             };
         case YEAR_DECREASE:
             return {
                 ...state,
-                year: state.year - 1
+                momentValue: state.momentValue.clone().subtract(1,'year')
             };
         case MONTH_INCREASE:
-            if (state.month === 12) {
-                return {
-                    ...state,
-                    year : state.year + 1,
-                    month: 1
-                }
-            }
-            else {
-                return {
-                    ...state,
-                    month: state.month + 1
-                };
+            return {
+                ...state,
+                momentValue: state.momentValue.clone().add(1,'month')
             }
         case MONTH_DECREASE:
-            if (state.month === 1) {
-                return {
-                    ...state,
-                    year : state.year - 1,
-                    month: 12
-                }
-            }
-            else {
-                return {
-                    ...state,
-                    month: state.month - 1
-                };
+            return {
+                ...state,
+                momentValue: state.momentValue.clone().subtract(1,'month')
             }
         default:
             return state;

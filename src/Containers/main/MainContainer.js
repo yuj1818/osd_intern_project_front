@@ -13,9 +13,8 @@ function MainContainer(props) {
         navigate('/calendar');
     };
 
-    const { year, month } = useSelector(state => ({
-        year : state.momenter.year,
-        month : state.momenter.month
+    const { momentValue } = useSelector(state => ({
+        momentValue : state.momenter.momentValue
     }));
 
     const dispatch = useDispatch();
@@ -32,8 +31,7 @@ function MainContainer(props) {
                 <div>
                     <Main
                         onClick={onClick}
-                        year={year}
-                        month={month}
+                        momentValue={momentValue}
                         yearIncreaseButton={yearIncreaseButton}
                         yearDecreaseButton={yearDecreaseButton}
                         monthIncreaseButton={monthIncreaseButton}
