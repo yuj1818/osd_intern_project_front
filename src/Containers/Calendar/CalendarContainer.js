@@ -5,12 +5,11 @@ import {
     yearIncrease,
     monthIncrease,
     monthDecrease,
-    initialize,
-    changeField
-} from "../../modules/momenter";
+} from "../../modules/calendar/momenter";
+import {changeField, initialize} from "../../modules/calendar/newEventWrite";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
-import {getHoliday} from "../../modules/momenter";
+import {getHoliday} from "../../modules/calendar/momenter";
 import moment from "moment";
 import useActions from "../../lib/useActions";
 
@@ -19,13 +18,11 @@ function CalendarContainer(props) {
 
     ////////////// Redux 구간 /////////////////////////////////////////////////
 
-
     const { momentValue, holiday, loadingHoliday, newEventData} = useSelector(state => ({
         momentValue: state.momenter.momentValue,
         holiday: state.momenter.holiday,
         loadingHoliday: state.momenter.loading.GET_HOLIDAY,
-        newInput : state.momenter.newInput,
-        newEventData : state.momenter.newEventData
+        newEventData : state.newEventWrite.newEventData
     }));
 
     const dispatch = useDispatch();

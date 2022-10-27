@@ -1,5 +1,5 @@
 import moment from 'moment';
-import * as api from '../lib/api'
+import * as api from '../../lib/api'
 
 /* 액션 타입 만들기 */
 const MONTH_INCREASE = 'momenter/MONTH_INCREASE';
@@ -7,8 +7,6 @@ const MONTH_DECREASE = 'momenter/MONTH_DECREASE';
 const YEAR_INCREASE = 'momenter/YEAR_INCREASE';
 const YEAR_DECREASE = 'momenter/YEAR_DECREASE';
 
-const CHANGE_FIELD = 'momenter/CHANGE_FILED';
-const INITIALIZE = 'momenter/INITIALIZE';
 
 const GET_HOLIDAY = 'momenter/GET_HOLIDAY';
 const GET_HOLIDAY_SUCCESS = 'momenter/GET_HOLIDAY_SUCCESS';
@@ -21,8 +19,6 @@ export const yearDecrease = () => ({ type: YEAR_DECREASE });
 export const monthIncrease = () => ({ type : MONTH_INCREASE });
 export const monthDecrease = () => ({ type : MONTH_DECREASE });
 
-export const changeField = ({_key, _value}) => ({ type : CHANGE_FIELD, _key, _value })
-export const initialize = () => ({ type : INITIALIZE});
 
 /* 초기 상태 선언 */
 const initialState = {
@@ -31,12 +27,7 @@ const initialState = {
     loading: {
         GET_HOLIDAY: false
     },
-    newEventData : {
-        title : '',
-        category : '',
-        startDate : '',
-        endDate : ''
-    },
+
 };
 
 export const getHoliday = momentValue => async dispatch => {
@@ -84,20 +75,6 @@ export default function momenter(state = initialState, action) {
                 momentValue: state.momentValue.clone().subtract(1,'month')
             }
 
-        case CHANGE_FIELD :
-            return  {
-                ...state,
-                newEventData: {
-                    ...state.newEventData,
-                    [action._key] : action._value
-                }
-            }
-
-        case INITIALIZE :
-            return {
-                ...state,
-                newEventData: initialState.newEventData
-            }
 
         case GET_HOLIDAY :
             return {

@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
 import { useNavigate } from "react-router-dom";import {useDispatch, useSelector} from "react-redux";
-import {monthDecrease, monthIncrease, yearDecrease, yearIncrease} from "../../modules/momenter";
-import { getHoliday } from "../../modules/momenter";
+import {monthDecrease, monthIncrease, yearDecrease, yearIncrease} from "../../modules/calendar/momenter";
+import { getHoliday } from "../../modules/calendar/momenter";
 
 function MainContainer(props) {
 
@@ -55,4 +55,4 @@ function MainContainer(props) {
     );
 }
 
-export default MainContainer;
+export default React.memo(MainContainer);
