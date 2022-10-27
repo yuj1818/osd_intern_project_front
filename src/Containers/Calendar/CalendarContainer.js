@@ -15,6 +15,7 @@ import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 import {getHoliday} from "../../modules/momenter";
 import moment from "moment";
+import useActions from "../../lib/useActions";
 
 
 function CalendarContainer(props) {
@@ -31,10 +32,21 @@ function CalendarContainer(props) {
 
     const dispatch = useDispatch();
 
-    const yearIncreaseButton = () => dispatch(yearIncrease());
-    const yearDecreaseButton = () => dispatch(yearDecrease());
-    const monthIncreaseButton = () => dispatch(monthIncrease());
-    const monthDecreaseButton = () => dispatch(monthDecrease());
+    const [
+        yearIncreaseButton,
+        yearDecreaseButton,
+        monthIncreaseButton,
+        monthDecreaseButton,
+        makeE_setNull
+    ] = useActions(
+        [
+            yearIncrease,
+            yearDecrease,
+            monthIncrease,
+            monthDecrease,
+            setNull
+        ],[]
+    );
 
     const changeE_title = e => dispatch(changeTitle(e.target.value));
     const changeE_category = e => {
@@ -44,7 +56,6 @@ function CalendarContainer(props) {
     }
     const changeE_startDate = e => dispatch(changeStartDate(e.target.value));
     const changeE_endDate = e => dispatch(changeEndDate(e.target.value));
-    const makeE_setNull = () => dispatch(setNull())
 
     useEffect(() => {
         dispatch(getHoliday(momentValue));
@@ -117,4 +128,4 @@ function CalendarContainer(props) {
     );
 }
 
-export default CalendarContainer;
+export default React.memo(CalendarContainer);
