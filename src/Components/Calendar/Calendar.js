@@ -155,24 +155,24 @@ const PushTag = (
 
 function Calendar ({
                        AddEventClick,
-                       confirm,
-                       startDate,
-                       pickItem,
-                       eventTitle,
                        onReload,
+                       momentValue,
                        monthDecreaseButton,
                        monthIncreaseButton,
                        yearDecreaseButton,
                        yearIncreaseButton,
                        loadingHoliday,
-                       momentValue,
-                       Holidays
-    }) {
+                       Holidays,
+                       newEventData,
+                       changeE_category,
+                       changeE_title
+                   }) {
 
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
     const lastWeek = momentValue.clone().endOf('month').week() === 1? 53 : momentValue.clone().endOf('month').week();
+
 
     const calendarArr=()=>{
         let result = [];
@@ -189,6 +189,7 @@ function Calendar ({
             })
         }
 
+
         for ( week; week <= lastWeek; week++) {
             // day = [ 일,월,화,수,목,금,토 ]
             for ( let day=0 ; day < 7 ; day ++ ) {
@@ -204,14 +205,14 @@ function Calendar ({
                 // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
                 if (days.format('MM') === momentValue.format('MM')) {
                     if (date in event) {
-                        if (date === `Date-${startDate}` && confirm) {
-                            result.push(PushTag(date, days, dayCheck, event[date], pickItem, eventTitle));
+                        if (date === `Date-${newEventData.startDate}`) {
+                            result.push(PushTag(date, days, dayCheck, event[date], newEventData.category, newEventData.title));
                         } else {
                             result.push(PushTag(date, days, dayCheck, event[date], '', ''));
                         }
                     } else {
-                        if (date === `Date-${startDate}` && confirm) {
-                            result.push(PushTag(date, days, dayCheck, '', pickItem, eventTitle));
+                        if (date === `Date-${newEventData.startDate}`) {
+                            result.push(PushTag(date, days, dayCheck, '', newEventData.category, newEventData.title));
                         } else {
                             result.push(PushTag(date, days, dayCheck, '', '', ''));
                         }
@@ -232,7 +233,7 @@ function Calendar ({
                 <CalendarControllerBlock>
                     <button title="새로고침" onClick={onReload}><i className="fas fa-redo fa-fw me-1" /></button>
                     <Spacer style={{gridColumn:"2/4",gridRow : "1"}}></Spacer>
-                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>                    
+                    <button style={{gridColumn:"4/6",gridRow : "1"}} onClick={AddEventClick}>일정추가</button>
                     <ControlButton title="1년전" onClick={yearDecreaseButton}>«</ControlButton>
                     <ControlButton title="1달전" onClick={monthDecreaseButton}>‹</ControlButton>
                     <span style={{gridColumn:"3", fontSize:"25px"}}>{momentValue.format('YYYY 년 MM 월')}</span>

@@ -77,18 +77,23 @@ const StyledButton = styled.button`
   }
 `;
 
+const ErrorMessage = styled.span`
+  margin-left: 10px;
+  font-size: 12px;
+  color: red;
+`
+
 const AddNewEvent = ({
                          visible,       // 해당 이벤트가 보일지 말지 정하는 param / con (bool)
-                         onConfirm,     // 확인 버튼을 누를 때 발생할 이벤트
                          onCancel,      // 취소 버튼을 누를 때 발생할 이벤트
-                         NoCategory,    // 일정 분류 선택 여부 확인하는 값
-                         SelectItem,     // 일정 분류에서 값 변경을 감지하는 함수
-                         pickItem,      // 일정 분류에서 선택된 값
-                         eventTitle,
-                         writer,
-                         startDate,
-                         endDate,
+                         onConfirm,
                          onChangeInput,
+                         changeE_category,
+                         newEventData,
+                         noDataCheck,
+                         changeE_title,
+                         changeE_startDate,
+                         changeE_endDate
                      }) =>
 
 {
@@ -98,62 +103,49 @@ const AddNewEvent = ({
         <Fullscreen>
             <AddNewEventBlock>
                 <h1>일정추가</h1>
-                <label htmlFor="EventTitle">제목 <span style={{fontSize:"15px"}}>(휴가와 생일은 이름을 입력해주세요.)</span></label>
-                <input id="EventTitle" name="eventTitle" placeholder="제목을 입력하세요." value={eventTitle} onChange={onChangeInput}></input>
-                <label htmlFor="name">작성자</label>
-                <input id="name" name="writer" placeholder="이름을 입력하세요." value={writer} onChange={onChangeInput}></input>
-                <label htmlFor="EventCategory">일정분류</label>
-                <select
-                    defaultValue="default"
-                    onChange={SelectItem}
-                    id="EventCategory"
-                >
-                    <option value="default" disabled style={{ color: "#ccc" }}>선택</option>
-                    <option value="birthday" >생일</option>
-                    <option value="Event">OSD 행사</option>
-                    <option value="others">출장</option>
-                    <option value="others">기타(워크샾 등)</option>
-                </select>
-                <span style={{marginTop : "10px"}}>
-                    <label htmlFor="startDate" style={{marginRight:"123px"}}>{pickItem==="birthday"? "생년월일" : "시작일자"}</label>
-                    <label htmlFor="endDate">{pickItem==="birthday"? "　" : "종료일자"}</label>
-                </span>
-                {
-                    pickItem ?
-                        pickItem==="birthday"?
-                            <div style={{marginTop :"7px"}}>
-                                <input type="date" disabled={NoCategory} id="startDate" name="startDate" value={startDate} onChange={onChangeInput}></input>
-                                <div className="buttons" style={{justifyContent: "center"}}>
-                                    <StyledButton onClick={onCancel}>취소</StyledButton>
-                                    <StyledButton onClick={onConfirm}>저장</StyledButton>
-                                </div>
-                            </div>
-                            :
-                            <div style={{marginTop :"4px"}}>
-                                <span >
-                                    <input type="date" disabled={NoCategory} id="startDate" name="startDate" style={{marginTop:"5px" }} value={startDate} onChange={onChangeInput}></input>
-                                    <input type="date" disabled={NoCategory} id="endDate" name="endDate" value={endDate} onChange={onChangeInput}></input>
-                                </span>
-                                <div className="buttons" style={{justifyContent: "center"}}>
-                                    <StyledButton onClick={onCancel}>취소</StyledButton>
-                                    <StyledButton onClick={onConfirm}>저장</StyledButton>
-                                </div>
-                            </div>
-                        :
-                        <div style={{marginTop :"4px"}}>
-                            <span>
-                                <input type="date" disabled={NoCategory} id="startDate" name="startDate" style={{marginTop:"5px" }} value={startDate} onChange={onChangeInput}></input>
-                                <input type="date" disabled={NoCategory} id="endDate" name="endDate" value={endDate} onChange={onChangeInput}></input>
-                            </span>
-                            <div className="buttons" style={{justifyContent: "center"}}>
-                                <StyledButton onClick={onCancel}>취소</StyledButton>
-                                <div className="NotConfirm">
-                                    <StyledButton className="NoPick">저장</StyledButton>
-                                </div>
-                            </div>
-                        </div>
-                }
 
+                <label htmlFor="EventTitle">제목 <span style={{fontSize:"15px"}}>(휴가와 생일은 이름을 입력해주세요.)</span></label>
+                <span>
+                    <input id="EventTitle" name="eventTitle" placeholder="제목을 입력하세요." value={newEventData.title} onChange={changeE_title}></input>
+                    <ErrorMessage>{newEventData.title===''?'제목을 작성해주세요.':''} </ErrorMessage>
+                </span>
+
+                <label htmlFor="name">작성자</label>
+                <span>
+                    <input id="name" name="writer" placeholder="이름을 입력하세요." value={newEventData.writer} onChange={onChangeInput}></input>
+                </span>
+                <label htmlFor="EventCategory">일정분류</label>
+                <span>
+                    <select
+                        defaultValue="default"
+                        onChange={changeE_category}
+                        id="EventCategory"
+                    >
+                        <option value="default" disabled style={{ color: "#ccc" }}>선택</option>
+                        <option value="birthday" >생일</option>
+                        <option value="Event">OSD 행사</option>
+                        <option value="others">출장</option>
+                        <option value="others">기타(워크샾 등)</option>
+                    </select>
+                    <ErrorMessage>{newEventData.category===''?'일정분류를 선택해주세요.':''} </ErrorMessage>
+                </span>
+                <span style={{marginTop : "10px"}}>
+                    <label htmlFor="startDate" style={{marginRight:"123px"}}>{newEventData.category ==="birthday"? "생년월일" : "시작일자"}</label>
+                    <label htmlFor="endDate">{newEventData.category==="birthday"? "　" : "종료일자"}</label>
+                </span>
+                <span >
+                    <input type="date" disabled={newEventData.category? false:true} id="startDate" name="startDate" style={{marginTop:"5px" }} value={newEventData.startDate} onChange={changeE_startDate}></input>
+                    { newEventData.category ==="birthday"?
+                        <></>
+                        :
+                        <input type="date" disabled={newEventData.category? false:true} id="endDate" name="endDate" value={newEventData.endDate} onChange={changeE_endDate}></input>
+                    }
+                </span>
+
+                <div className="buttons" style={{justifyContent: "center"}}>
+                    <StyledButton onClick={onCancel}>취소</StyledButton>
+                    <StyledButton className={noDataCheck? 'NotConfirm':'good'} onClick={onConfirm}>저장</StyledButton>
+                </div>
             </AddNewEventBlock>
         </Fullscreen>
     );

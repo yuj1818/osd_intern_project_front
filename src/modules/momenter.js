@@ -1,12 +1,17 @@
-import { createAction, handleActions } from "redux-actions";
 import moment from 'moment';
-import * as api from '../lib/api';
+import * as api from '../lib/api'
 
 /* 액션 타입 만들기 */
 const MONTH_INCREASE = 'momenter/MONTH_INCREASE';
 const MONTH_DECREASE = 'momenter/MONTH_DECREASE';
 const YEAR_INCREASE = 'momenter/YEAR_INCREASE';
 const YEAR_DECREASE = 'momenter/YEAR_DECREASE';
+
+const CHANGE_TITLE = 'momenter/CHANGE_TITLE';
+const CHANGE_CATEGORY = 'momenter/CHANGE_CATEGORY';
+const CHANGE_STARTDATE = 'momenter/CHANGE_STARTDATE';
+const CHANGE_ENDDATE = 'momenter/CHANGE_ENDDATE';
+const SET_NULL = 'momenter/SET_NULL';
 
 const GET_HOLIDAY = 'momenter/GET_HOLIDAY';
 const GET_HOLIDAY_SUCCESS = 'momenter/GET_HOLIDAY_SUCCESS';
@@ -19,6 +24,12 @@ export const yearDecrease = () => ({ type: YEAR_DECREASE });
 export const monthIncrease = () => ({ type : MONTH_INCREASE });
 export const monthDecrease = () => ({ type : MONTH_DECREASE });
 
+export const changeTitle = eventTitle => ({ type : CHANGE_TITLE, eventTitle});
+export const changeCategory = category => ({ type : CHANGE_CATEGORY, category});
+export const changeStartDate = date => ({ type : CHANGE_STARTDATE, date});
+export const changeEndDate = date => ({ type : CHANGE_ENDDATE, date});
+export const setNull = () => ({ type : SET_NULL});
+
 /* 초기 상태 선언 */
 const initialState = {
     momentValue: moment(),
@@ -26,7 +37,12 @@ const initialState = {
     loading: {
         GET_HOLIDAY: false
     },
-
+    newEventInfo : {
+        title : '',
+        category : '',
+        startDate : '',
+        endDate : ''
+    },
 };
 
 export const getHoliday = momentValue => async dispatch => {
@@ -34,7 +50,6 @@ export const getHoliday = momentValue => async dispatch => {
     try {
         const response = await api.getHoliday(momentValue.format('YYYY'),momentValue.format('MM')); // API 호출
         const item = response.data.response.body.items.item;
-        console.log(item)
         dispatch({
             type: GET_HOLIDAY_SUCCESS,
             payload: item ? item.length? item : [item] : null
@@ -48,6 +63,7 @@ export const getHoliday = momentValue => async dispatch => {
         throw e;
     }
 };
+
 
 /* 리듀서 선언 */
 // 리듀서는 export default 로 내보내주세요.
@@ -73,25 +89,64 @@ export default function momenter(state = initialState, action) {
                 ...state,
                 momentValue: state.momentValue.clone().subtract(1,'month')
             }
+
+        case CHANGE_TITLE :
+            return {
+                ...state,
+                newEventInfo: {
+                    ...state.newEventInfo,
+                    title: action.eventTitle
+                }
+            }
+        case CHANGE_CATEGORY :
+            return {
+                ...state,
+                newEventInfo: {
+                    ...state.newEventInfo,
+                    category: action.category
+                }
+            }
+        case CHANGE_STARTDATE :
+            return {
+                ...state,
+                newEventInfo: {
+                    ...state.newEventInfo,
+                    startDate: action.date
+                }
+            }
+        case CHANGE_ENDDATE :
+            return {
+                ...state,
+                newEventInfo: {
+                    ...state.newEventInfo,
+                    endDate: action.date
+                }
+            }
+        case SET_NULL :
+            return {
+                ...state,
+                newEventInfo: initialState.newEventInfo
+            }
+
         case GET_HOLIDAY :
             return {
                 ... state,
-               loading: {
+                loading: {
                     ...state.loading,
                     GET_HOLIDAY: true
-               }
-        }
-        case GET_HOLIDAY_SUCCESS : 
-        return {
-            ...state,
-            loading: {
-                ...state.loading,
-                GET_HOLIDAY: false
-        
-            },
-            holiday: action.payload
+                }
+            }
+        case GET_HOLIDAY_SUCCESS :
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    GET_HOLIDAY: false
 
-        } 
+                },
+                holiday: action.payload
+
+            }
         case GET_HOLIDAY_FAILURE :
             return {
                 ...state,
@@ -100,6 +155,7 @@ export default function momenter(state = initialState, action) {
                     GET_HOLIDAY: false
                 }
             }
+
         default:
             return state;
     }
