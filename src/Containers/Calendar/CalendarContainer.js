@@ -5,11 +5,8 @@ import {
     yearIncrease,
     monthIncrease,
     monthDecrease,
-    changeTitle,
-    changeCategory,
-    setNull,
-    changeStartDate,
-    changeEndDate
+    initialize,
+    changeField
 } from "../../modules/momenter";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
@@ -22,12 +19,13 @@ function CalendarContainer(props) {
 
     ////////////// Redux 구간 /////////////////////////////////////////////////
 
+
     const { momentValue, holiday, loadingHoliday, newEventData} = useSelector(state => ({
         momentValue: state.momenter.momentValue,
         holiday: state.momenter.holiday,
         loadingHoliday: state.momenter.loading.GET_HOLIDAY,
         newInput : state.momenter.newInput,
-        newEventData : state.momenter.newEventInfo
+        newEventData : state.momenter.newEventData
     }));
 
     const dispatch = useDispatch();
@@ -37,25 +35,25 @@ function CalendarContainer(props) {
         yearDecreaseButton,
         monthIncreaseButton,
         monthDecreaseButton,
-        makeE_setNull
+        makeE_initialize
     ] = useActions(
         [
             yearIncrease,
             yearDecrease,
             monthIncrease,
             monthDecrease,
-            setNull
+            initialize
         ],[]
     );
 
-    const changeE_title = e => dispatch(changeTitle(e.target.value));
+    const changeE_title = e => dispatch(changeField({_key:'title', _value : e.target.value}))
     const changeE_category = e => {
-        dispatch(changeStartDate(moment().format('YYYY-MM-DD')))
-        dispatch(changeEndDate(moment().format('YYYY-MM-DD')))
-        dispatch(changeCategory(e.target.value));
+        dispatch(changeField({_key:'startDate', _value : moment().format('YYYY-MM-DD')}));
+        dispatch(changeField({_key:'endDate', _value :moment().format('YYYY-MM-DD')}));
+        dispatch(changeField({_key:'category', _value : e.target.value}));
     }
-    const changeE_startDate = e => dispatch(changeStartDate(e.target.value));
-    const changeE_endDate = e => dispatch(changeEndDate(e.target.value));
+    const changeE_startDate = e => dispatch(changeField({_key:'startDate', _value : e.target.value}));
+    const changeE_endDate = e => dispatch(changeField({_key:'endDate', _value : e.target.value}));
 
     useEffect(() => {
         dispatch(getHoliday(momentValue));
@@ -76,7 +74,7 @@ function CalendarContainer(props) {
     };
     const CancelClick = () => {
         setNewEvent(false);
-        makeE_setNull()
+        makeE_initialize()
     };
     const ConfirmClick = (e) => {
         if(newEventData.title === ''){
@@ -89,7 +87,7 @@ function CalendarContainer(props) {
         }
         else {
             setNewEvent(false);
-            makeE_setNull()
+            makeE_initialize()
         }
     };
 

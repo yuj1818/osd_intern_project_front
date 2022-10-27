@@ -7,11 +7,8 @@ const MONTH_DECREASE = 'momenter/MONTH_DECREASE';
 const YEAR_INCREASE = 'momenter/YEAR_INCREASE';
 const YEAR_DECREASE = 'momenter/YEAR_DECREASE';
 
-const CHANGE_TITLE = 'momenter/CHANGE_TITLE';
-const CHANGE_CATEGORY = 'momenter/CHANGE_CATEGORY';
-const CHANGE_STARTDATE = 'momenter/CHANGE_STARTDATE';
-const CHANGE_ENDDATE = 'momenter/CHANGE_ENDDATE';
-const SET_NULL = 'momenter/SET_NULL';
+const CHANGE_FIELD = 'momenter/CHANGE_FILED';
+const INITIALIZE = 'momenter/INITIALIZE';
 
 const GET_HOLIDAY = 'momenter/GET_HOLIDAY';
 const GET_HOLIDAY_SUCCESS = 'momenter/GET_HOLIDAY_SUCCESS';
@@ -24,11 +21,8 @@ export const yearDecrease = () => ({ type: YEAR_DECREASE });
 export const monthIncrease = () => ({ type : MONTH_INCREASE });
 export const monthDecrease = () => ({ type : MONTH_DECREASE });
 
-export const changeTitle = eventTitle => ({ type : CHANGE_TITLE, eventTitle});
-export const changeCategory = category => ({ type : CHANGE_CATEGORY, category});
-export const changeStartDate = date => ({ type : CHANGE_STARTDATE, date});
-export const changeEndDate = date => ({ type : CHANGE_ENDDATE, date});
-export const setNull = () => ({ type : SET_NULL});
+export const changeField = ({_key, _value}) => ({ type : CHANGE_FIELD, _key, _value })
+export const initialize = () => ({ type : INITIALIZE});
 
 /* 초기 상태 선언 */
 const initialState = {
@@ -37,7 +31,7 @@ const initialState = {
     loading: {
         GET_HOLIDAY: false
     },
-    newEventInfo : {
+    newEventData : {
         title : '',
         category : '',
         startDate : '',
@@ -90,42 +84,19 @@ export default function momenter(state = initialState, action) {
                 momentValue: state.momentValue.clone().subtract(1,'month')
             }
 
-        case CHANGE_TITLE :
-            return {
+        case CHANGE_FIELD :
+            return  {
                 ...state,
-                newEventInfo: {
-                    ...state.newEventInfo,
-                    title: action.eventTitle
+                newEventData: {
+                    ...state.newEventData,
+                    [action._key] : action._value
                 }
             }
-        case CHANGE_CATEGORY :
+
+        case INITIALIZE :
             return {
                 ...state,
-                newEventInfo: {
-                    ...state.newEventInfo,
-                    category: action.category
-                }
-            }
-        case CHANGE_STARTDATE :
-            return {
-                ...state,
-                newEventInfo: {
-                    ...state.newEventInfo,
-                    startDate: action.date
-                }
-            }
-        case CHANGE_ENDDATE :
-            return {
-                ...state,
-                newEventInfo: {
-                    ...state.newEventInfo,
-                    endDate: action.date
-                }
-            }
-        case SET_NULL :
-            return {
-                ...state,
-                newEventInfo: initialState.newEventInfo
+                newEventData: initialState.newEventData
             }
 
         case GET_HOLIDAY :

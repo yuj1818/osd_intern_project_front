@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react';
 import moment from 'moment';
 import palette from "../../lib/styles/palette";
 import styled from "styled-components";
@@ -164,8 +163,6 @@ function Calendar ({
                        loadingHoliday,
                        Holidays,
                        newEventData,
-                       changeE_category,
-                       changeE_title
                    }) {
 
     // 이번달의 첫번째 주
