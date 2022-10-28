@@ -57,5 +57,5 @@ export const addNewEvent = ({ title, category, startDate, endDate }) => {
 }
 
 export const deleteNewEvent = id => {
-    client.delete(`${OSDInternURL}${id}`)
+    return client.delete(`${OSDInternURL}${id}`)
 }
