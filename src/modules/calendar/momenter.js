@@ -12,6 +12,12 @@ const GET_HOLIDAY = 'momenter/GET_HOLIDAY';
 const GET_HOLIDAY_SUCCESS = 'momenter/GET_HOLIDAY_SUCCESS';
 const GET_HOLIDAY_FAILURE = 'momenter/GET_HOLIDAY_FAILURE';
 
+
+const GET_EVENT = 'momenter/GET_EVENT';
+const GET_EVENT_SUCCESS = 'momenter/GET_EVENT_SUCCESS';
+const GET_EVENT_FAILURE = 'momenter/GET_EVENT_FAILURE';
+
+
 /* 액션 생성함수 만들기 */
 // 액션 생성함수를 만들고 export 키워드를 사용해서 내보내주세요.
 export const yearIncrease = () => ({ type: YEAR_INCREASE });
@@ -28,6 +34,25 @@ const initialState = {
         GET_HOLIDAY: false
     },
 
+};
+
+export const getEvent = momentValue => async dispatch => {
+    dispatch({ type: GET_EVENT });
+    try {
+        const response = await api.getNewEvent(momentValue.format('YYYY'),momentValue.format('MM')); // API 호출
+
+        dispatch({
+            type: GET_EVENT_SUCCESS,
+            payload: response? response : null
+        });
+    } catch (e) {
+        dispatch({
+            type: GET_EVENT_FAILURE,
+            payload: e,
+            error: true
+        });
+        throw e;
+    }
 };
 
 export const getHoliday = momentValue => async dispatch => {
@@ -101,6 +126,33 @@ export default function momenter(state = initialState, action) {
                 loading: {
                     ...state.loading,
                     GET_HOLIDAY: false
+                }
+            }
+        case GET_EVENT :
+            return {
+                ... state,
+                loading: {
+                    ...state.loading,
+                    GET_EVENT: true
+                }
+            }
+        case GET_EVENT_SUCCESS :
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    GET_EVENT: false
+
+                },
+                event: action.payload
+
+            }
+        case GET_EVENT_FAILURE :
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    GET_EVENT: false
                 }
             }
 

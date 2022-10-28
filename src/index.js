@@ -7,14 +7,17 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './modules';
+import rootReducer, {rootSaga} from './modules';
 import {logger} from "redux-logger/src";
 import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga"
 
+const sagaMiddleWare = createSagaMiddleware();
 const store = createStore(
     rootReducer,
-    applyMiddleware(logger, thunk)
+    composeWithDevTools( applyMiddleware(logger, thunk, sagaMiddleWare ) )
 );
+sagaMiddleWare.run(rootSaga)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

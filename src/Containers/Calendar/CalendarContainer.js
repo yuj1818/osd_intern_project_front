@@ -4,9 +4,9 @@ import {
     yearDecrease,
     yearIncrease,
     monthIncrease,
-    monthDecrease,
+    monthDecrease, getEvent,
 } from "../../modules/calendar/momenter";
-import {changeField, initialize} from "../../modules/calendar/newEventWrite";
+import {changeField, initialize, newEventWrite} from "../../modules/calendar/newEventCRUD";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 import {getHoliday} from "../../modules/calendar/momenter";
@@ -22,7 +22,7 @@ function CalendarContainer(props) {
         momentValue: state.momenter.momentValue,
         holiday: state.momenter.holiday,
         loadingHoliday: state.momenter.loading.GET_HOLIDAY,
-        newEventData : state.newEventWrite.newEventData
+        newEventData : state.newEventCRUD.newEventData
     }));
 
     const dispatch = useDispatch();
@@ -54,6 +54,7 @@ function CalendarContainer(props) {
 
     useEffect(() => {
         dispatch(getHoliday(momentValue));
+        dispatch(getEvent(momentValue));
     }, [momentValue]);
 
     ////////////////////////////////////////////////////////////////////////////
@@ -84,6 +85,12 @@ function CalendarContainer(props) {
         }
         else {
             setNewEvent(false);
+            dispatch(newEventWrite({
+                title : newEventData.title,
+                category : newEventData.category,
+                startDate: newEventData.startDate,
+                endDate: newEventData.endDate
+            }))
             makeE_initialize()
         }
     };
