@@ -1,15 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeField, initializeForm } from "../../modules/auth";
+import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from "../../Components/auth/AuthForm";
+import { check } from "../../modules/user";
 import { useNavigate } from "react-router-dom";
 
 function LoginContainer(props) {
 
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { form } = useSelector(({ auth }) => ({
-        form: auth.login
+    const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+        form: auth.login,
+        auth: auth.auth,
+        authError: auth.authError,
+        user: user.user
     }));
 
     const onChange = e => {
@@ -25,22 +30,37 @@ function LoginContainer(props) {
 
     const onSubmit = e => {
         e.preventDefault();
-        const { userId, password } = form;
-        if (localStorage.getItem(userId) === null){
-            return alert('존재하지 않는 아이디입니다.')
-        }
-        if (localStorage.getItem(userId) === password) {
-            console.log('로그인 성공')
-            localStorage.setItem('onLoginUser',userId)
-            navigate('/')
-        } else {
-            return alert('비밀번호가 맞지 않습니다.')
-        }
+        const { m_id, m_password } = form;
+        dispatch(login({ m_id, m_password }));
     };
 
     useEffect(() => {
         dispatch(initializeForm('login'));
     }, [dispatch]);
+
+    useEffect(() => {
+        if(authError) {
+            console.log('오류 발생');
+            console.log(authError);
+            setError('로그인 실패');
+            return;
+        }
+        if(auth){
+            console.log('로그인 성공');
+            dispatch(check());
+        }
+    }, [auth, authError, dispatch]);
+
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+            try {
+                localStorage.setItem('user', user.m_name);
+            } catch (e) {
+                console.log('localStorage is not working');
+            }
+        }
+    }, [navigate, user]);
 
     return (
         <AuthForm
@@ -48,6 +68,7 @@ function LoginContainer(props) {
             form={form}
             onChange={onChange}
             onSubmit={onSubmit}
+            error = {error}
         />
     );
 }

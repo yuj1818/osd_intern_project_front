@@ -11,18 +11,35 @@ import rootReducer, {rootSaga} from './modules';
 import {logger} from "redux-logger/src";
 import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga"
+import {tempSetUser, check} from "./modules/user";
+import AxiosInterceptor from "./lib/AxiosInterceptor";
 
 const sagaMiddleWare = createSagaMiddleware();
 const store = createStore(
     rootReducer,
     composeWithDevTools( applyMiddleware(logger, thunk, sagaMiddleWare ) )
 );
+
+//페이지 새로고침 시, 로그인 상태를 유지하기 위해
+function loadUser() {
+    try {
+        const user = localStorage.getItem('user');
+        if (!user) return;
+        store.dispatch(tempSetUser(user));
+        store.dispatch(check());
+    } catch (e) {
+        console.log('localStorage is not working');
+    }
+}
+
 sagaMiddleWare.run(rootSaga)
+loadUser();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <BrowserRouter>
+            {<AxiosInterceptor/>}
             <App />
         </BrowserRouter>
     </Provider>

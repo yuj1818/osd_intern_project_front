@@ -9,7 +9,7 @@ export default function (SpecificComponent, option = null) {
         let user = useSelector(state => state.user);
 
         useEffect(() => {
-            if(localStorage.getItem('onLoginUser')) {
+            if(localStorage.getItem('user')) {
                 if(option === false) {
                     navigate('/')
                 }

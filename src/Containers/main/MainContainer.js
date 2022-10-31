@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useSelector } from 'react-redux';
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
 import { useNavigate } from "react-router-dom";import {useDispatch, useSelector} from "react-redux";
@@ -6,6 +7,8 @@ import {monthDecrease, monthIncrease, yearDecrease, yearIncrease} from "../../mo
 import { getHoliday } from "../../modules/calendar/momenter";
 
 function MainContainer(props) {
+
+    const { user } = useSelector(({user}) => ({ user: user.user }));
 
     const navigate = useNavigate();
 
@@ -26,10 +29,6 @@ function MainContainer(props) {
     const monthIncreaseButton = () => dispatch(monthIncrease());
     const monthDecreaseButton = () => dispatch(monthDecrease());
 
-
-
-
-
     useEffect(() => {
         dispatch(getHoliday(momentValue));
     }, [momentValue]);
@@ -37,7 +36,7 @@ function MainContainer(props) {
     return (
         <div>
             <BackgroundForm />
-            {localStorage.getItem('onLoginUser') &&
+            {user &&
                 <div>
                     <Main
                         onClick={onClick}                        

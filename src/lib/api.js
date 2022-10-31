@@ -81,3 +81,13 @@ export const deleteNewEvent = id => {
     console.log(`${OSDInternURL}${id}`)
     return client.delete(`${OSDInternURL}${id}`)
 }
+
+export const login = ({ m_id, m_password }) =>
+    axios.post('auth/login', {id : m_id, password: m_password});
+
+export const register = ({ m_id, m_password, m_name, m_dept }) =>
+    axios.post('auth/join', {id : m_id, password: m_password, name: m_name, deptno: m_dept})
+
+export const check = () => axios.get('auth/login/check');
+
+export const logout = () => axios.get('auth/logout');
