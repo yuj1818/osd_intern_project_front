@@ -1,6 +1,7 @@
 import moment from 'moment';
 import palette from "../../lib/styles/palette";
 import styled from "styled-components";
+import React, {useEffect, useState} from "react";
 
 const CalTotalBlock = styled.div`
   width: 100%;
@@ -125,32 +126,12 @@ const TableBody = styled.div`
     width: 90%;
   }
 `
-const PushTag = (
-    key,
-    loadedMoment,
-    dayClass,
-    isHoliday,
-    isEvent,
-    eventTitle
-) => {
-    const today = loadedMoment.format('YYYYMMDD') === moment().format('YYYYMMDD');
-
-    return (
-        <TableBody id={key} key={key} className={`${today ? 'today' : ''}`}>
-            <div className={`date ${dayClass}`}>
-                {loadedMoment.format('D')}
-            </div>
-            <div className="holiday">
-                {isHoliday}
-            </div>
-            <div className={isEvent}>
-                {eventTitle}
-            </div>
-
-        </TableBody>
-    )
-
-}
+const EventDiv = styled.div`
+    cursor: pointer;
+    :hover{
+      filter: brightness(85%);
+    }
+`
 
 function Calendar ({
                        AddEventClick,
@@ -162,67 +143,125 @@ function Calendar ({
                        yearIncreaseButton,
                        loadingHoliday,
                        Holidays,
+                       loadingEvents,
+                       events,
                        newEventData,
                    }) {
+    // 받아온 이벤트 데이터를 시작날짜와 종료날짜에 맞춰 재배열
+    const [newEventList, setNewEventList] = useState([])
+
+    useEffect( () => {
+        setNewEventList(spreadEventList(events))
+    }, [events])
 
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
     const lastWeek = momentValue.clone().endOf('month').week() === 1? 53 : momentValue.clone().endOf('month').week();
 
-
-    const calendarArr=()=>{
-        let result = [];
-        let week = firstWeek;
-        let event = {};
-        if(!loadingHoliday && Holidays){
-            Holidays.map((holiday) => {
-                let event_year = holiday.locdate.toString().substring(0,4);
-                let event_month = holiday.locdate.toString().substring(4,6).padStart(2,0);
-                let event_day = holiday.locdate.toString().substring(6,8).padStart(2,0);
-
-                let event_ID = `Date-${event_year}-${event_month}-${event_day}`;
-                event[event_ID] = holiday.dateName;
+    let spreadEventList = ( EventList ) => {
+        const newEventList = [];
+        let keyValue = 0;
+        if (!loadingEvents && EventList) {
+            EventList.map((oneEvent) => {
+                let currentDate = moment(oneEvent.cal_start_day);
+                let stopDate = moment(oneEvent.cal_end_day);
+                while (currentDate <= stopDate) {
+                    newEventList.push({
+                        title : oneEvent.cal_title,
+                        category : oneEvent.cal_category,
+                        date : moment(currentDate).format('YYYY-MM-DD'),
+                        inputKey : keyValue
+                    })
+                    keyValue++;
+                    currentDate = moment(currentDate).add(1, "days");
+                }
             })
         }
 
+        return newEventList
+    }
+    const PostEventsList = ( eventDate, newEventList ) => {
+        let foundEvents =  newEventList.filter(e => e.date === eventDate);
+        return foundEvents;
+    }
 
-        for ( week; week <= lastWeek; week++) {
+
+    const calendarArr=()=>{
+        // 공휴일 데이터 가져오기. (객체형태로)
+        // 예시 : { '2022-10-03' : '개천절' }
+
+        let holidaylist = {};
+        if(!loadingHoliday && Holidays){
+            Holidays.map((holiday) => {
+                let holiday_year = holiday.locdate.toString().substring(0,4);
+                let holiday_month = holiday.locdate.toString().substring(4,6).padStart(2,0);
+                let holiday_day = holiday.locdate.toString().substring(6,8).padStart(2,0);
+
+                let holiday_ID = `Date-${holiday_year}-${holiday_month}-${holiday_day}`;
+                holidaylist[holiday_ID] = holiday.dateName;
+            })
+        }
+
+        // 달력 만드는 구간
+        let result = [];
+        let week = firstWeek;
+
+        for (week; week <= lastWeek; week++) {
             // day = [ 일,월,화,수,목,금,토 ]
-            for ( let day=0 ; day < 7 ; day ++ ) {
-                // 'days' : Moment 값
-                // 'date' : ID 값을 넣기 위함.
-                let days = momentValue.clone().startOf('year').week(week).startOf('week').add(day, 'day'); // 'D' 로해도되지만 직관성
-                let date = `Date-${days.format('YYYY-MM-DD')}`
+            for (let day = 0; day < 7; day++) {
+                let currentMoment = momentValue.clone().startOf('year').week(week).startOf('week').add(day, 'day'); // 'D' 로해도되지만 직관성
+                let date = currentMoment.format('YYYY-MM-DD')
+                let dateID = `Date-${date}`
 
-                let todayCheck = moment().format('YYYYMMDD') === days.format('YYYYMMDD') ? 'Today' : 'week';
+                // 해당 날짜에 class 값 넣기위한 조건처리.
+                let todayCheck = currentMoment.format('YYYYMMDD') === moment().format('YYYYMMDD')  ? 'Today' : 'week';
                 let dayCheck = day === 0 ? 'sunday' : todayCheck;
-                //------------------------------- 날짜 처리하는 구간 -------------------------------//
-                // (이번달, !이번달)로 나눠서 처리.
-                // 이번달은 글씨를 (평일 : 검정, 주말 : 빨강) 처리.
-                if (days.format('MM') === momentValue.format('MM')) {
-                    if (date in event) {
-                        if (date === `Date-${newEventData.startDate}`) {
-                            result.push(PushTag(date, days, dayCheck, event[date], newEventData.category, newEventData.title));
-                        } else {
-                            result.push(PushTag(date, days, dayCheck, event[date], '', ''));
-                        }
+
+                // 이번달인 경우
+                if (currentMoment.format('MM') === momentValue.format('MM')) {
+                    if (dateID in holidaylist) {
+                        result.push(PushTag(currentMoment, dateID, dayCheck, holidaylist[dateID]));
                     } else {
-                        if (date === `Date-${newEventData.startDate}`) {
-                            result.push(PushTag(date, days, dayCheck, '', newEventData.category, newEventData.title));
-                        } else {
-                            result.push(PushTag(date, days, dayCheck, '', '', ''));
-                        }
+                        result.push(PushTag(currentMoment, dateID, dayCheck, ''));
                     }
-                }
-                // 이번달이 아닌 경우 모두 회색처리.
-                else {
-                    result.push(PushTag(date, days, "anotherMonth"));
+                    // 이번달이 아닌 경우
+                } else {
+                    result.push(PushTag(currentMoment, dateID,"anotherMonth"));
                 }
             }
         }
         return result;
     }
+
+    // currentMoment  : 해당 날짜의 모멘트값
+    // dateID         : 참조하기 위한 ID 값
+    // dayClass       : 해당 날짜의 분류 ( Today, week, sunday, anotherMonth )
+    // Holiday        : 공휴일 정보
+    const PushTag = (currentMoment, dateID, dayClass, HolidayTitle) => {
+        const today = currentMoment.format('YYYYMMDD') === moment().format('YYYYMMDD');
+
+        return (
+            <TableBody id={dateID} key={currentMoment.format('MM-DD')} className={`${today ? 'today' : ''}`}>
+                <div className={`date ${dayClass}`}>
+                    {currentMoment.format('D')}
+                </div>
+                <div className="holiday">
+                    {HolidayTitle}
+                </div>
+                {!loadingEvents && dayClass!=="anotherMonth" ?
+                    PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
+                        return (
+                            <EventDiv key={foundEvent.inputKey} className={foundEvent.category}>
+                                {foundEvent.title}
+                            </EventDiv>)})
+                    :
+                    ''
+                }
+            </TableBody>
+        )
+    }
+
 
     return(
         <div>

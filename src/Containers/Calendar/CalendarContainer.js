@@ -6,25 +6,34 @@ import {
     monthIncrease,
     monthDecrease, getEvent,
 } from "../../modules/calendar/momenter";
-import {changeField, initialize, newEventWrite} from "../../modules/calendar/newEventCRUD";
+import {
+    changeField,
+    initialize,
+    selectID,
+    newEventDBWrite,
+    newEventDBUpdate,
+    newEventDBDelete,
+    newEventCRUD
+} from "../../modules/calendar/newEventCRUD";
 import Calendar from "../../Components/Calendar/Calendar";
 import AddNewEvent from "../../Components/Calendar/AddNewEvent";
 import {getHoliday} from "../../modules/calendar/momenter";
 import moment from "moment";
 import useActions from "../../lib/useActions";
 
-
 function CalendarContainer(props) {
 
     ////////////// Redux 구간 /////////////////////////////////////////////////
 
-    const { momentValue, holiday, loadingHoliday, newEventData} = useSelector(state => ({
+    const { momentValue, holiday, events, loadingHoliday, loadingEvents, newEventData, eventID} = useSelector(state => ({
         momentValue: state.momenter.momentValue,
         holiday: state.momenter.holiday,
+        loadingEvents : state.momenter.loading.GET_EVENT,
+        events : state.momenter.event,
         loadingHoliday: state.momenter.loading.GET_HOLIDAY,
-        newEventData : state.newEventCRUD.newEventData
+        newEventData : state.newEventCRUD.newEventData,
+        eventID : state.newEventCRUD.postID
     }));
-
     const dispatch = useDispatch();
 
     const [
@@ -42,6 +51,8 @@ function CalendarContainer(props) {
             initialize
         ],[]
     );
+
+    const selectEventID = e => dispatch(selectID(e.target.value))
 
     const changeE_title = e => dispatch(changeField({_key:'title', _value : e.target.value}))
     const changeE_category = e => {
@@ -85,12 +96,22 @@ function CalendarContainer(props) {
         }
         else {
             setNewEvent(false);
-            dispatch(newEventWrite({
-                title : newEventData.title,
-                category : newEventData.category,
-                startDate: newEventData.startDate,
-                endDate: newEventData.endDate
-            }))
+            if (newEventData.category === 'birthday') {
+                dispatch(newEventDBWrite({
+                    title : newEventData.title,
+                    category : newEventData.category,
+                    startDate: newEventData.startDate,
+                    endDate: newEventData.startDate
+                }))
+            }
+            else {
+                dispatch(newEventDBWrite({
+                    title: newEventData.title,
+                    category: newEventData.category,
+                    startDate: newEventData.startDate,
+                    endDate: newEventData.endDate
+                }))
+            }
             makeE_initialize()
         }
     };
@@ -98,6 +119,20 @@ function CalendarContainer(props) {
     const onReload = () => {
         window.location.reload();
     }
+    const onDelete = () => {
+        console.log(eventID,"삭제")
+        dispatch(newEventDBDelete(eventID));
+    }
+    const onUpdateEvent = () => {
+        dispatch(newEventDBUpdate({
+            _id : eventID,
+            title : newEventData.title,
+            category : newEventData.category,
+            startDate: newEventData.startDate,
+            endDate: newEventData.endDate
+        }))
+    }
+
 
     return (
         <div>
@@ -111,6 +146,8 @@ function CalendarContainer(props) {
                 monthDecreaseButton={monthDecreaseButton}
                 loadingHoliday={loadingHoliday} // 공휴일 정보 로딩 확인
                 Holidays={holiday}              // 공휴일 정보
+                loadingEvents ={loadingEvents}  // 이벤트 정보 로딩 확인
+                events={events}                 // 이벤트 정보
                 newEventData={newEventData}
                 changeE_title={changeE_title}
                 changeE_category={changeE_category}
