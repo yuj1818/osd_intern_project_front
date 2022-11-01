@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { changeField, initializeForm, register } from "../../modules/auth";
 import AuthForm from "../../Components/auth/AuthForm";
-import { check } from '../../modules/user';
 import { useNavigate } from "react-router-dom";
 
 function RegisterContainer(props) {
@@ -10,11 +9,10 @@ function RegisterContainer(props) {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+    const { form, auth, authError } = useSelector(({ auth }) => ({
         form: auth.register,
         auth: auth.auth,
         authError: auth.authError,
-        user: user.user
     }));
 
     const onChange = e => {
@@ -52,8 +50,9 @@ function RegisterContainer(props) {
 
     useEffect(() => {
         if (authError) {
+            console.log(authError)
             if (authError.response.status === 409) {
-                setError('이미 존재하는 계정명입니다.');
+                setError(authError.response.data);
                 return;
             }
             setError('회원가입 실패');
@@ -63,20 +62,9 @@ function RegisterContainer(props) {
         if (auth) {
             console.log('회원가입 성공');
             console.log(auth);
-            dispatch(check());
+            navigate('/login')
         }
     }, [auth, authError, dispatch]);
-
-    useEffect(() => {
-        if (user) {
-            navigate('/');
-            try {
-                localStorage.setItem('user', JSON.stringify(user));
-            } catch (e) {
-                console.log('localStorage is not working');
-            }
-        }
-    }, [navigate, user]);
 
     return (
         <AuthForm

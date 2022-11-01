@@ -30,6 +30,7 @@ function* logoutSaga() {
     console.log('로그아웃')
     yield call(authAPI.logout);
     localStorage.removeItem('user');
+    window.location.reload();
   } catch (e) {
     console.log(e);
   }

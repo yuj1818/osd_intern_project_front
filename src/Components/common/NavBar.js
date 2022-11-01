@@ -59,7 +59,7 @@ function NavBar(props) {
         <>
             <NavBlock className="navbar" visible={props.visible}>
                 <div className="title">Menu</div>
-                {localStorage.getItem('onLoginUser') &&
+                {localStorage.getItem('user') &&
                     <ul className="menu">
                         {menus.map((menu, idx) => {
                             return (

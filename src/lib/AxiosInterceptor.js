@@ -11,7 +11,7 @@ function AxiosInterceptor() {
         function (er) {
             if (axios.isAxiosError(er)) {
                 if (er.response) {
-                    if (er.response.status == 401) {
+                    if (er.response.status == 403) {
                         navigate("/login");
                     }
                 }

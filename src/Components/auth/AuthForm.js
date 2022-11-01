@@ -24,13 +24,12 @@ const StyledInput = styled.input`
   }
 `;
 
-const styledOption = styled.option`
-  font-size: 1rem;
-  border: none;
-  padding: 0.5rem;
-  outline: none;
-  width: 100%;
-`
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+`;
 
 const Register = styled.div`
   font-size: 0.85rem;
@@ -119,14 +118,14 @@ function AuthForm({type, form, onChange, onSubmit, error}) {
                         </select>
                     </div>
                 )}
-
+                {error && <ErrorMessage>{error}</ErrorMessage>}
                 <Button style={{marginTop: "1.2rem", width:"100%"}}>{text}</Button>
             </form>
             <Register>
                 {type === 'login' ? (
-                    <Link to="/register">회원가입</Link>
+                    <a href="/register">회원가입</a>
                 ) : (
-                    <Link to="/login">로그인</Link>
+                    <a href="/login">로그인</a>
                 )}
             </Register>
         </AuthFormBlock>
