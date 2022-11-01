@@ -89,14 +89,16 @@ const TableBody = styled.div`
   grid-auto-rows: minmax(10rem, auto);
   width: 100%;
   min-width: 90px;
+  max-width: 100%;
   height: auto;
   min-height: 90px;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
 
   .date {
     width: 90%;
     padding-left: 8px;
-    text-align: left;
   }
 
   .sunday {
@@ -105,7 +107,7 @@ const TableBody = styled.div`
   .anotherMonth {
     color: lightgray !important;
   }
-   .holiday {
+  .holiday {
     background: ${palette.holi};
     width: 90%;
   }
@@ -127,10 +129,10 @@ const TableBody = styled.div`
   }
 `
 const EventDiv = styled.div`
-    cursor: pointer;
-    :hover{
-      filter: brightness(85%);
-    }
+  cursor: pointer;
+  :hover{
+    filter: brightness(85%);
+  }
 `
 
 function Calendar ({
@@ -144,56 +146,23 @@ function Calendar ({
                        loadingHoliday,
                        Holidays,
                        loadingEvents,
-                       events,
-                       newEventData,
+                       newEventList,
+                       onEventClick,
                    }) {
-    // 받아온 이벤트 데이터를 시작날짜와 종료날짜에 맞춰 재배열
-    const [newEventList, setNewEventList] = useState([])
 
-    useEffect( () => {
-        setNewEventList(spreadEventList(events))
-    }, [events])
 
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
     // 이번달의 마지막 주 (만약 마지막 주가 1이 나온다면 53번째 주로 변경)
     const lastWeek = momentValue.clone().endOf('month').week() === 1? 53 : momentValue.clone().endOf('month').week();
 
-    let spreadEventList = ( EventList ) => {
-        const newEventList = [];
-        let keyValue = 0;
-        if (!loadingEvents && EventList) {
-            EventList.map((oneEvent) => {
-                let currentDate = moment(oneEvent.cal_start_day);
-                let stopDate = moment(oneEvent.cal_end_day);
-                while (currentDate <= stopDate) {
-                    newEventList.push({
-                        title : oneEvent.cal_title,
-                        category : oneEvent.cal_category,
-                        date : moment(currentDate).format('YYYY-MM-DD'),
-                        inputKey : keyValue
-                    })
-                    keyValue++;
-                    currentDate = moment(currentDate).add(1, "days");
-                }
-            })
-        }
-
-        return newEventList
-    }
-    const PostEventsList = ( eventDate, newEventList ) => {
-        let foundEvents =  newEventList.filter(e => e.date === eventDate);
-        return foundEvents;
-    }
-
-
-    const calendarArr=()=>{
+    const calendarArr=()=> {
         // 공휴일 데이터 가져오기. (객체형태로)
         // 예시 : { '2022-10-03' : '개천절' }
-
         let holidaylist = {};
         if(!loadingHoliday && Holidays){
             Holidays.map((holiday) => {
+
                 let holiday_year = holiday.locdate.toString().substring(0,4);
                 let holiday_month = holiday.locdate.toString().substring(4,6).padStart(2,0);
                 let holiday_day = holiday.locdate.toString().substring(6,8).padStart(2,0);
@@ -252,14 +221,18 @@ function Calendar ({
                 {!loadingEvents && dayClass!=="anotherMonth" ?
                     PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
                         return (
-                            <EventDiv key={foundEvent.inputKey} className={foundEvent.category}>
+                            <EventDiv key={foundEvent.inputKey} id={foundEvent.inputKey} onClick={onEventClick} className={foundEvent.category}>
                                 {foundEvent.title}
-                            </EventDiv>)})
-                    :
+                            </EventDiv>)})  :
                     ''
                 }
             </TableBody>
         )
+    }
+
+    const PostEventsList = ( eventDate, newEventList ) => {
+        let foundEvents =  newEventList.filter(e => e.date === eventDate);
+        return foundEvents;
     }
 
 

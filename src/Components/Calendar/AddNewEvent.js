@@ -67,13 +67,17 @@ const AddNewEventBlock = styled.div`
     margin-left : 1.75rem;
     cursor : not-allowed;
   }
+  .good {
+    margin-left: 1.75rem;
+  }
 `;
 
 const StyledButton = styled.button`
-  height : 2rem;
-
-  & + & {
-    margin-left : 1.75rem;
+  background: #c02424;
+  color: white;
+  margin: 3px;
+  :hover {
+    filter: brightness(85%);
   }
 `;
 
@@ -82,9 +86,8 @@ const ErrorMessage = styled.span`
   font-size: 12px;
   color: red;
 `
-
 const AddNewEvent = ({
-                         visible,       // 해당 이벤트가 보일지 말지 정하는 param / con (bool)
+                         visible,       // 해당 이벤트가 보일지 말지 정하는 param /
                          onCancel,      // 취소 버튼을 누를 때 발생할 이벤트
                          onConfirm,
                          onChangeInput,
@@ -93,20 +96,29 @@ const AddNewEvent = ({
                          noDataCheck,
                          changeE_title,
                          changeE_startDate,
-                         changeE_endDate
+                         changeE_endDate,
+                         onUpdateEvent,
+                         onDelete,
+                         eventID,
                      }) =>
 
 {
-    if (!visible) return null;
-
+    if (visible ==='NoPopUp') return null;
     return (
         <Fullscreen>
             <AddNewEventBlock>
-                <h1>일정추가</h1>
+                <h1>{ visible === 'createEvent' ? '일정추가' : '일정변경'}</h1>
 
                 <label htmlFor="EventTitle">제목 <span style={{fontSize:"15px"}}>(휴가와 생일은 이름을 입력해주세요.)</span></label>
                 <span>
-                    <input id="EventTitle" name="eventTitle" placeholder="제목을 입력하세요." value={newEventData.title} onChange={changeE_title}></input>
+                    <input id="EventTitle"
+                           name="eventTitle"
+                           placeholder="제목을 입력하세요."
+                           value={newEventData.title}
+                           onChange={changeE_title}
+                    >
+                        {/*visible === 'changeEvent'? getOneEvent(eventID)[0].cal_title : ''*/}
+                    </input>
                     <ErrorMessage>{newEventData.title===''?'제목을 작성해주세요.':''} </ErrorMessage>
                 </span>
 
@@ -133,8 +145,8 @@ const AddNewEvent = ({
                     <label htmlFor="startDate" style={{marginRight:"123px"}}>{newEventData.category ==="birthday"? "생년월일" : "시작일자"}</label>
                     <label htmlFor="endDate">{newEventData.category==="birthday"? "　" : "종료일자"}</label>
                 </span>
-                <span >
-                    <input type="date" disabled={newEventData.category? false:true} id="startDate" name="startDate" style={{marginTop:"5px" }} value={newEventData.startDate} onChange={changeE_startDate}></input>
+                <span style={{marginTop:"5px" }}>
+                    <input type="date" disabled={newEventData.category? false:true} id="startDate" name="startDate" value={newEventData.startDate} onChange={changeE_startDate}></input>
                     { newEventData.category ==="birthday"?
                         <></>
                         :
@@ -143,9 +155,19 @@ const AddNewEvent = ({
                 </span>
 
                 <div className="buttons" style={{justifyContent: "center"}}>
-                    <StyledButton onClick={onCancel}>취소</StyledButton>
-                    <StyledButton className={noDataCheck? 'NotConfirm':'good'} onClick={onConfirm}>저장</StyledButton>
+                    <button onClick={onCancel}>취소</button>
+                    {visible==='changeEvent' ?
+                        <button className={noDataCheck? 'NotConfirm':'good'} onClick={onUpdateEvent}>변경</button>
+                        :
+                        <button style={{marginLeft : "1.75rem"}} className={noDataCheck? 'NotConfirm':'good'} onClick={onConfirm}>확인</button>
+                    }
+
                 </div>
+                {visible==='changeEvent' ?
+                    <StyledButton onClick={onDelete}>삭제</StyledButton>
+                    :
+                    ""
+                }
             </AddNewEventBlock>
         </Fullscreen>
     );
