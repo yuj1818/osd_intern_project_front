@@ -99,7 +99,6 @@ const AddNewEvent = ({
                          changeE_endDate,
                          onUpdateEvent,
                          onDelete,
-                         eventID,
                      }) =>
 
 {
@@ -117,7 +116,6 @@ const AddNewEvent = ({
                            value={newEventData.title}
                            onChange={changeE_title}
                     >
-                        {/*visible === 'changeEvent'? getOneEvent(eventID)[0].cal_title : ''*/}
                     </input>
                     <ErrorMessage>{newEventData.title===''?'제목을 작성해주세요.':''} </ErrorMessage>
                 </span>

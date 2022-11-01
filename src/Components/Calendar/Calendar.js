@@ -85,20 +85,19 @@ const TableBody = styled.div`
   background: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
   grid-auto-rows: minmax(10rem, auto);
   width: 100%;
   min-width: 90px;
   max-width: 100%;
   height: auto;
   min-height: 90px;
+  padding-left : 4px;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
 
   .date {
-    width: 90%;
-    padding-left: 8px;
+    padding-left: 5px;
   }
 
   .sunday {
@@ -108,8 +107,9 @@ const TableBody = styled.div`
     color: lightgray !important;
   }
   .holiday {
+    color: red;
     background: ${palette.holi};
-    width: 90%;
+    border-radius: 7px;
   }
   .birthday {
     background: ${palette.birth};
@@ -196,7 +196,7 @@ function Calendar ({
                     }
                     // 이번달이 아닌 경우
                 } else {
-                    result.push(PushTag(currentMoment, dateID,"anotherMonth"));
+                    result.push(PushTag(currentMoment, dateID,"anotherMonth",''));
                 }
             }
         }
@@ -212,12 +212,14 @@ function Calendar ({
 
         return (
             <TableBody id={dateID} key={currentMoment.format('MM-DD')} className={`${today ? 'today' : ''}`}>
-                <div className={`date ${dayClass}`}>
-                    {currentMoment.format('D')}
-                </div>
-                <div className="holiday">
-                    {HolidayTitle}
-                </div>
+                <span>
+                    <span className={HolidayTitle === ''? `date ${dayClass}`: `date sunday`}>
+                        {currentMoment.format('D')}
+                    </span>
+                    <span className="holiday">
+                        {HolidayTitle}
+                    </span>
+                </span>
                 {!loadingEvents && dayClass!=="anotherMonth" ?
                     PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
                         return (
