@@ -15,6 +15,9 @@ function RegisterContainer(props) {
         authError: auth.authError,
     }));
 
+    const isIdOk = form.id_err.includes('사용가능한');
+    const isPwOk = form.pw_err.includes('사용가능한');
+
     const onChange = e => {
         const { value, name } = e.target;
         dispatch(
@@ -41,7 +44,19 @@ function RegisterContainer(props) {
             );
             return;
         }
-        dispatch(register({ m_id, m_password, m_name, m_dept }));
+        if (isIdOk && isPwOk) {
+            dispatch(register({ m_id, m_password, m_name, m_dept }));
+        } else {
+            if (isIdOk) {
+                setError('비밀번호 재확인 필요')
+                dispatch(changeField({ form: 'register', key: 'm_password', value: ''}));
+                dispatch(
+                    changeField({ form: 'register', key: 'passwordConfirm', value:''}),
+                );
+            } else {
+                setError('아이디 재확인 필요')
+            }
+        }
     };
 
     useEffect(() => {

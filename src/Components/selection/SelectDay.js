@@ -1,4 +1,4 @@
-import React,{useState, useCallback} from 'react';
+import React from 'react';
 import Box from "../common/Box";
 import Title from "../common/Title";
 import Button from "../common/Button";
