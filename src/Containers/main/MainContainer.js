@@ -30,7 +30,10 @@ function MainContainer(props) {
     const monthDecreaseButton = () => dispatch(monthDecrease());
 
     useEffect(() => {
-        dispatch(getHoliday(momentValue));
+        //로그인 하지 않았을때는 공휴일 정보 받아오지 않도록
+        if(user){
+            dispatch(getHoliday(momentValue));
+        }
     }, [momentValue]);
 
     return (
