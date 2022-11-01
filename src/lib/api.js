@@ -4,7 +4,7 @@ const client = axios.create();
 
 // 공휴일 API
 
-const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D";
+const API_KEY = process.env.REACT_APP_HOLIDAY_API_KEY
 const operation = 'getHoliDeInfo';
 
 export const getHoliday = (solYear, solMonth) =>
