@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { Link } from "react-router-dom";
 import Button from "../common/Button";
 import Title from "../common/Title";
@@ -29,6 +29,21 @@ const ErrorMessage = styled.div`
   text-align: center;
   font-size: 0.875rem;
   margin-top: 1rem;
+`;
+
+const ConstraintErrorMessage = styled.div`
+  color: red;
+  text-align: left;
+  font-size: 0.4rem;
+  margin: 0;
+  margin-left: 5.5rem;
+  
+  ${props =>
+          props.err_msg.includes('사용가능한') &&
+          css`
+            color: green;
+          `
+  }
 `;
 
 const Register = styled.div`
@@ -72,6 +87,7 @@ function AuthForm({type, form, onChange, onSubmit, error}) {
                         value={form.m_id}
                     />
                 </div>
+                {form.id_err && <ConstraintErrorMessage err_msg={form.id_err}>{form.id_err}</ConstraintErrorMessage>}
                 <div style={{display:"flex", marginTop:"1.2rem", justifyContent:"right"}}>
                     <Title style={{width:"7rem", fontSize:"1rem", fontWeight:"bold", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"0", marginRight:"0.5rem"}}>PW</Title>
                     <StyledInput
@@ -83,6 +99,7 @@ function AuthForm({type, form, onChange, onSubmit, error}) {
                         value={form.m_password}
                     />
                 </div>
+                {form.pw_err && <ConstraintErrorMessage err_msg={form.pw_err}>{form.pw_err}</ConstraintErrorMessage>}
                 {type === 'register' && (
                     <div style={{display:"flex", marginTop:"1.2rem", justifyContent:"right"}}>
                         <Title style={{width:"7rem", fontSize:"1rem", fontWeight:"bold", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"0", marginRight:"0.5rem"}}>PW 재확인</Title>
