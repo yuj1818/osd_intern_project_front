@@ -49,6 +49,10 @@ function RegisterContainer(props) {
         } else {
             if (isIdOk) {
                 setError('비밀번호 재확인 필요')
+                dispatch(changeField({ form: 'register', key: 'm_password', value: ''}));
+                dispatch(
+                    changeField({ form: 'register', key: 'passwordConfirm', value:''}),
+                );
             } else {
                 setError('아이디 재확인 필요')
             }
