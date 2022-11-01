@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
-import { useNavigate } from "react-router-dom";import {useDispatch, useSelector} from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 import {monthDecrease, monthIncrease, yearDecrease, yearIncrease} from "../../modules/calendar/momenter";
 import { getHoliday } from "../../modules/calendar/momenter";
 
 function MainContainer(props) {
+
+    const { user } = useSelector(({user}) => ({ user: user.user }));
 
     const navigate = useNavigate();
 
@@ -26,18 +29,17 @@ function MainContainer(props) {
     const monthIncreaseButton = () => dispatch(monthIncrease());
     const monthDecreaseButton = () => dispatch(monthDecrease());
 
-
-
-
-
     useEffect(() => {
-        dispatch(getHoliday(momentValue));
+        //로그인 하지 않았을때는 공휴일 정보 받아오지 않도록
+        if(user){
+            dispatch(getHoliday(momentValue));
+        }
     }, [momentValue]);
 
     return (
         <div>
             <BackgroundForm />
-            {localStorage.getItem('onLoginUser') &&
+            {user &&
                 <div>
                     <Main
                         onClick={onClick}                        

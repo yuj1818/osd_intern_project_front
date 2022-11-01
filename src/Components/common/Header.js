@@ -20,14 +20,14 @@ const Wrapper = styled(Responsive)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+
   .left {
     height: 100%;
     display: flex;
     align-items: center;
     float: left;
   }
-  
+
   .logo {
     height: 100%;
   }
@@ -49,7 +49,7 @@ const Spacer = styled.div`
   height: 8vh;
 `;
 
-function Header({onLogout ,onToggle, visible}) {
+function Header({user, onLogout ,onToggle, visible}) {
 
     return (
         <>
@@ -59,11 +59,11 @@ function Header({onLogout ,onToggle, visible}) {
                         <img className="menu" src={visible? closeMenu : menu} onClick={onToggle}/>
                         <a href="/" className="logo"><img src={logo} /></a>
                     </div>
-                    {localStorage.getItem('onLoginUser') ?
+                    {user ?
                         <div className="right">
                             <div style={{display:"flex", marginRight:"1.5vmin"}}>
                                 <div style={{textDecoration:"underline", marginRight:"0.3vmin"}}>
-                                    {localStorage.getItem('onLoginUser')}
+                                    {localStorage.getItem('user')}
                                 </div>
                                 <div>
                                     님
