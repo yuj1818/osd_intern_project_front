@@ -24,7 +24,7 @@ function Main({
                   monthIncreaseButton,
                   Holidays,
                   newEventList,
-                  vacation,
+                  newVacationList,
                   loadingHoliday,
                   loadingEvents,
                   loadingVacation,
@@ -41,7 +41,7 @@ function Main({
                     monthIncreaseButton={monthIncreaseButton}
                     Holidays={Holidays}
                     newEventList={newEventList}
-                    vacation={vacation}
+                    newVacationList={newVacationList}
                     loadingHoliday={loadingHoliday}
                     loadingEvents={loadingEvents}
                     loadingVacation={loadingVacation}

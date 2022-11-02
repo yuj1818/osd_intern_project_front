@@ -151,7 +151,7 @@ function DashCalendar({
                           monthDecreaseButton,
                           Holidays,
                           newEventList,
-                          vacation,
+                          newVacationList,
                           loadingHoliday,
                           loadingEvents,
                           loadingVacation,
@@ -242,20 +242,20 @@ function DashCalendar({
     }
 
     const oneDayData = (eventDate) => {
-        if(!loadingVacation && vacation){
-            const oneDayFilter = vacation.filter(e => e.strdt === eventDate)
+        if(!loadingVacation && newVacationList){
+            const oneDayFilter = newVacationList.filter(e => e.date === eventDate)
             if(oneDayFilter.length > 1 ) {
-                return `${oneDayFilter[0].mnm}외 ${oneDayFilter.length-1}명`
+                return `${oneDayFilter[0].title}외 ${oneDayFilter.length-1}명`
             }
             else if (oneDayFilter.length === 1) {
-                return oneDayFilter[0].mnm
+                return oneDayFilter[0].title
             }
             else { return ''}
         }
     }
 
 
-return (
+    return (
             <Box style={{flexDirection : "column"}}>
                 <DControllerBlock>
                     <DControlButton title="1년전" onClick={yearDecreaseButton}>«</DControlButton>

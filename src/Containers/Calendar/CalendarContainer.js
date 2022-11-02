@@ -79,12 +79,18 @@ function CalendarContainer(props) {
 
 
 
-    ////////////// 이벤트리스트 처리 구간 /////////////////////////////////////////////////
-    /// 받아온 이벤트 리스트 시작날짜 종료날짜를 풀어줌. ///
+    ////////////// 받아온 API DATA 처리 구간 /////////////////////////////////////////////////
+    /// 받아온 DATA 의 시작날짜 종료날짜 사이의 값 만큼을 생성. ///
     const [newEventList, setNewEventList] = useState([])
+    const [newVacationList, setNewVacationList] = useState([])
     useEffect( () => {
         setNewEventList(spreadEventList(events))
     }, [events])
+
+    useEffect( () => {
+        setNewVacationList(spreadVacationList())
+    }, [vacation])
+
     let spreadEventList = ( EventList ) => {
         const newEventList = [];
         if (!loadingEvents && EventList) {
@@ -104,6 +110,30 @@ function CalendarContainer(props) {
         }
 
         return newEventList
+    }
+
+    const spreadVacationList = () => {
+        let newVArr = [];
+        if(!loadingVacation && vacation) {
+            vacation.map((oneDayInfo) => {
+                let currentDate = moment(oneDayInfo.strdt);
+                let stopDate = ''
+                if(oneDayInfo.enddte === null) {
+                    stopDate = moment(oneDayInfo.strdt)
+
+                } else {
+                    stopDate = moment(oneDayInfo.enddte)
+                }
+                while (currentDate <= stopDate) {
+                    newVArr.push({
+                        title : oneDayInfo.mnm,
+                        date : moment(currentDate).format('YYYY-MM-DD')
+                    })
+                    currentDate = moment(currentDate).add(1,"days");
+                }
+            })
+        }
+        return newVArr
     }
 
     ////////////// 이벤트 추가 구간 /////////////////////////////////////////////////
@@ -243,7 +273,7 @@ function CalendarContainer(props) {
                 loadingEvents ={loadingEvents}  // 이벤트 정보 로딩 확인
                 newEventList={newEventList}     // 이벤트 정보
                 loadingVacation={loadingVacation}// 휴가 정보 로딩 확인
-                vacation={vacation}             // 휴가 정보
+                newVacationList={newVacationList}// 휴가 정보
                 onEventClick={onEventClick}
             />
             <AddNewEvent
