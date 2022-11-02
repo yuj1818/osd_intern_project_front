@@ -55,9 +55,14 @@ function CalendarContainer(props) {
 
     const changeE_title = e => dispatch(changeField({_key:'title', _value : e.target.value}))
     const changeE_category = e => {
-        dispatch(changeField({_key:'startDate', _value : moment().format('YYYY-MM-DD')}));
-        dispatch(changeField({_key:'endDate', _value :moment().format('YYYY-MM-DD')}));
-        dispatch(changeField({_key:'category', _value : e.target.value}));
+        if (newEventData.startDate === '') {
+            dispatch(changeField({_key: 'startDate', _value: moment().format('YYYY-MM-DD')}));
+            dispatch(changeField({_key: 'endDate', _value: moment().format('YYYY-MM-DD')}));
+            dispatch(changeField({_key: 'category', _value: e.target.value}));
+        }
+        else {
+            dispatch(changeField({_key: 'category', _value: e.target.value}));
+        }
     }
     const changeE_startDate = e => dispatch(changeField({_key:'startDate', _value : e.target.value}));
     const changeE_endDate = e => dispatch(changeField({_key:'endDate', _value : e.target.value}));
@@ -212,6 +217,7 @@ function CalendarContainer(props) {
         dispatch(selectID(e.target.id))
         const getData = await getOneEventData(e.target.id).then(res => {return res.data[0]});
         dispatch(changeField({_key:'title', _value : getData.cal_title}))
+        dispatch(changeField({_key:'category', _value : getData.cal_category}))
         dispatch(changeField({_key:'startDate', _value : getData.cal_start_day.substring(0,10)}))
         dispatch(changeField({_key:'endDate', _value : getData.cal_end_day.substring(0,10)}))
     }

@@ -126,17 +126,31 @@ const AddNewEvent = ({
                 </span>
                 <label htmlFor="EventCategory">일정분류</label>
                 <span>
-                    <select
-                        defaultValue="default"
-                        onChange={changeE_category}
-                        id="EventCategory"
-                    >
-                        <option value="default" disabled style={{ color: "#ccc" }}>선택</option>
-                        <option value="birthday" >생일</option>
-                        <option value="Event">OSD 행사</option>
-                        <option value="others">출장</option>
-                        <option value="others">기타(워크샾 등)</option>
-                    </select>
+                     { visible === 'changeEvent'? newEventData.category === ''?
+                             <>{visible}{newEventData.category}</>
+                             :
+                             <select
+                                 defaultValue={newEventData.category}
+                                 onChange={changeE_category}
+                                 id="EventCategory"
+                             >
+                                 <option value="default" disabled style={{ color: "#ccc" }}>선택</option>
+                                 <option value="birthday" >생일</option>
+                                 <option value="Event">OSD 행사</option>
+                                 <option value="others">기타(워크샾 등)</option>
+                             </select>
+                         :
+                         <select
+                             defaultValue="default"
+                             onChange={changeE_category}
+                             id="EventCategory"
+                         >
+                             <option value="default" disabled style={{ color: "#ccc" }}>선택</option>
+                             <option value="birthday" >생일</option>
+                             <option value="Event">OSD 행사</option>
+                             <option value="others">기타(워크샾 등)</option>
+                         </select>
+                     }
                     <ErrorMessage>{newEventData.category===''?'일정분류를 선택해주세요.':''} </ErrorMessage>
                 </span>
                 <span style={{marginTop : "10px"}}>

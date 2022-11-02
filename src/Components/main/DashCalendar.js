@@ -85,7 +85,7 @@ const NaviBox = styled.div`
 
 `
 const DTableHead = styled.div`
-  height: 3vh;
+  height: 2.5vh;
   background: lightgreen;
   text-align: center;
 `
