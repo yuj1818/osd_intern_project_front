@@ -128,7 +128,8 @@ function AuthForm({type, form, onChange, onSubmit, error}) {
                 {type === 'register' && (
                     <div style={{display:"flex", marginTop:"1.2rem", justifyContent:"right"}}>
                         <Title style={{width:"7rem", fontSize:"1rem", fontWeight:"bold", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"0", marginRight:"0.5rem"}}>부서</Title>
-                        <select onChange={onChange} name="m_dept" style={{width:"100%"}}>
+                        <select onChange={onChange} name="m_dept" defaultValue="" style={{width:"100%"}}>
+                            <option value="" disabled style={{ color: "#ccc" }}>선택</option>
                             {deptOptions.map((dept, index) => (
                                 <option key={index} value={dept.value}>{dept.label}</option>
                             ))}

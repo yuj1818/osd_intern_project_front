@@ -52,7 +52,7 @@ const initialState = {
     register: {
         m_id: '',
         m_name: '',
-        m_dept: 1,
+        m_dept: '',
         m_password: '',
         passwordConfirm: '',
         id_err: '',

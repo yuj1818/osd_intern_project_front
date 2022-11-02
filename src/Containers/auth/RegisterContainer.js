@@ -32,8 +32,12 @@ function RegisterContainer(props) {
     const onSubmit = e => {
         e.preventDefault();
         const { m_id, m_name, m_dept, m_password, passwordConfirm } = form;
-        if ([m_id, m_name, m_dept, m_password, passwordConfirm].includes('')){
+        if ([m_id, m_name, m_password, passwordConfirm].includes('')){
             setError('빈 칸을 모두 입력하세요');
+            return;
+        }
+        if (m_dept == '') {
+            setError('부서를 선택해주세요');
             return;
         }
         if (m_password !== passwordConfirm) {
@@ -46,6 +50,7 @@ function RegisterContainer(props) {
         }
         if (isIdOk && isPwOk) {
             dispatch(register({ m_id, m_password, m_name, m_dept }));
+            return;
         } else {
             if (isIdOk) {
                 setError('비밀번호 재확인 필요')
@@ -53,8 +58,10 @@ function RegisterContainer(props) {
                 dispatch(
                     changeField({ form: 'register', key: 'passwordConfirm', value:''}),
                 );
+                return;
             } else {
-                setError('아이디 재확인 필요')
+                setError('아이디 재확인 필요');
+                return;
             }
         }
     };
