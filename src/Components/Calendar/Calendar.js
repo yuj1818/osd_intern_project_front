@@ -114,18 +114,22 @@ const TableBody = styled.div`
   .birthday {
     background: ${palette.birth};
     width: 90%;
+    border-radius: 7px;
   }
   .vacation {
     background: ${palette.vaca};
     width: 90%;
+    border-radius: 7px;
   }
   .Event {
     background: ${palette.Event};
     width: 90%;
+    border-radius: 7px;
   }
   .others {
     background: ${palette.others};
     width: 90%;
+    border-radius: 7px;
   }
 `
 const EventDiv = styled.div`
