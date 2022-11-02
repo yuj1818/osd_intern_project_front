@@ -117,6 +117,21 @@ function CalendarContainer(props) {
     }
     else { noDataCheck = true }
 
+    const dataCheck = () => {
+        if(newEventData.title === ''){
+            alert('제목을 입력하세요')
+            return false
+        }
+        else if(newEventData.category === ''){
+            alert('일정분류를 선택하세요')
+            return false
+        }
+        else if(newEventData.startDate > newEventData.endDate) {
+            alert('일자를 확인하세요')
+            return false
+        }
+        else return true
+    };
     const AddEventClick = () => {
         setNewEvent('createEvent');
     };
@@ -132,20 +147,12 @@ function CalendarContainer(props) {
         setCheckConfirm(false)
         setNewEvent('NoPopUp');
         dispatch(newEventDBDelete(eventID));
-    }
+    };
     const modalCancel = () => {
         setCheckConfirm(false)
-    }
+    };
     const ConfirmClick = (e) => {
-        if(newEventData.title === ''){
-            e.preventDefault() //제출완료 페이지로 넘어가는 것 방지
-            alert('제목을 입력하세요')
-        }
-        else if(newEventData.category === ''){
-            e.preventDefault()
-            alert('일정분류를 선택하세요')
-        }
-        else {
+        if (dataCheck() === true) {
             setNewEvent('NoPopUp');
             if (newEventData.category === 'birthday') {
                 alert('일정이 추가되었습니다.')
@@ -167,18 +174,12 @@ function CalendarContainer(props) {
             }
             makeE_initialize()
         }
-    };
-
-    const onUpdateEvent = e => {
-        if(newEventData.title === ''){
-            e.preventDefault() //제출완료 페이지로 넘어가는 것 방지
-            alert('제목을 입력하세요')
-        }
-        else if(newEventData.category === ''){
-            e.preventDefault()
-            alert('일정분류를 선택하세요')
-        }
         else {
+            e.preventDefault()
+        }
+    };
+    const onUpdateEvent = e => {
+        if (dataCheck() === true) {
             setNewEvent('NoPopUp');
             if (newEventData.category === 'birthday') {
                 alert('일정이 변경되었습니다.')
@@ -202,8 +203,10 @@ function CalendarContainer(props) {
                 }))
                 makeE_initialize()
             }
+        } else {
+            e.preventDefault()
         }
-    }
+    };
 
     ////////////// 캘린더 구간 /////////////////////////////////////////////////
 

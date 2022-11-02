@@ -130,6 +130,7 @@ const TableBody = styled.div`
 `
 const EventDiv = styled.div`
   cursor: pointer;
+  padding-left : 5px;
   :hover{
     filter: brightness(85%);
   }
