@@ -3,7 +3,14 @@ import BackgroundForm from "../../Components/common/BackgroundForm";
 import Main from "../../Components/main/Main";
 import { useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {monthDecrease, monthIncrease, yearDecrease, yearIncrease,getEvent} from "../../modules/calendar/momenter";
+import {
+    monthDecrease,
+    monthIncrease,
+    yearDecrease,
+    yearIncrease,
+    getEvent,
+    getVacation
+} from "../../modules/calendar/momenter";
 import { getHoliday } from "../../modules/calendar/momenter";
 import useActions from "../../lib/useActions";
 import moment from "moment/moment";
@@ -19,15 +26,16 @@ function MainContainer(props) {
         navigate('/calendar');
     };
 
-    const { momentValue, holiday, events, loadingHoliday, loadingEvents } = useSelector(state => ({
+    const { momentValue, holiday, events, vacation, loadingHoliday, loadingEvents, loadingVacation } = useSelector(state => ({
         momentValue : state.momenter.momentValue,
         holiday: state.momenter.holiday,
-        loadingHoliday: state.momenter.loading.GET_HOLIDAY,
         events : state.momenter.event,
+        vacation : state.momenter.vacation,
+        loadingHoliday: state.momenter.loading.GET_HOLIDAY,
         loadingEvents : state.momenter.loading.GET_EVENT,
+        loadingVacation : state.momenter.loading.GET_VACATION,
     }));
 
-    
     const dispatch = useDispatch();
 
     const [
@@ -49,6 +57,7 @@ function MainContainer(props) {
         if(user){
             dispatch(getHoliday(momentValue));
             dispatch(getEvent(momentValue));
+            dispatch(getVacation(momentValue));
         }
     }, [momentValue]);
 
@@ -94,10 +103,12 @@ function MainContainer(props) {
                         yearDecreaseButton={yearDecreaseButton}
                         monthIncreaseButton={monthIncreaseButton}
                         monthDecreaseButton={monthDecreaseButton}
-                        loadingHoliday={loadingHoliday}
                         Holidays={holiday}
-                        loadingEvents ={loadingEvents}
                         newEventList={newEventList}
+                        vacation={vacation}
+                        loadingHoliday={loadingHoliday}
+                        loadingEvents ={loadingEvents}
+                        loadingVacation={loadingVacation}
                     />
                 </div>
             }

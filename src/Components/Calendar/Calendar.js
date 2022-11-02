@@ -144,10 +144,12 @@ function Calendar ({
                        monthIncreaseButton,
                        yearDecreaseButton,
                        yearIncreaseButton,
-                       loadingHoliday,
                        Holidays,
-                       loadingEvents,
                        newEventList,
+                       vacation,
+                       loadingHoliday,
+                       loadingEvents,
+                       loadingVacation,
                        onEventClick,
                    }) {
 
@@ -221,13 +223,19 @@ function Calendar ({
                         {HolidayTitle}
                     </span>
                 </span>
+                {!loadingVacation && dayClass !=="anotherMonth" ?
+                    <EventDiv className="vacation">{oneDayData(currentMoment.format('YYYY-MM-DD'))}</EventDiv>
+                    :
+                    ''// 다른 달의 경우 이벤트 나타내지 않음.
+                }
                 {!loadingEvents && dayClass!=="anotherMonth" ?
                     PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
                         return (
                             <EventDiv key={foundEvent.inputKey} id={foundEvent.inputKey} onClick={onEventClick} className={foundEvent.category}>
                                 {foundEvent.title}
-                            </EventDiv>)})  :
-                    ''
+                            </EventDiv>)})
+                    :
+                    '' // 다른 달의 경우 이벤트 나타내지 않음.
                 }
             </TableBody>
         )
@@ -237,6 +245,20 @@ function Calendar ({
         let foundEvents =  newEventList.filter(e => e.date === eventDate);
         return foundEvents;
     }
+
+    const oneDayData = (eventDate) => {
+        if(!loadingVacation && vacation){
+            const oneDayFilter = vacation.filter(e => e.strdt === eventDate)
+            if(oneDayFilter.length > 1 ) {
+                return `${oneDayFilter[0].mnm}외 ${oneDayFilter.length-1}명`
+            }
+            else if (oneDayFilter.length === 1) {
+                return oneDayFilter[0].mnm
+            }
+            else { return ''}
+        }
+    }
+
 
 
     return(

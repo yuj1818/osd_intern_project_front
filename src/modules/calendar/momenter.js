@@ -7,6 +7,9 @@ const MONTH_DECREASE = 'momenter/MONTH_DECREASE';
 const YEAR_INCREASE = 'momenter/YEAR_INCREASE';
 const YEAR_DECREASE = 'momenter/YEAR_DECREASE';
 
+const GET_VACATION = 'momenter/GET_VACATION';
+const GET_VACATION_SUCCESS = 'momenter/GET_VACATION_SUCCESS';
+const GET_VACATION_FAILURE = 'momenter/GET_VACATION_FAILURE';
 
 const GET_HOLIDAY = 'momenter/GET_HOLIDAY';
 const GET_HOLIDAY_SUCCESS = 'momenter/GET_HOLIDAY_SUCCESS';
@@ -30,12 +33,33 @@ const initialState = {
     momentValue: moment(),
     holiday: null,
     event:null,
+    vacation : null,
     loading: {
         GET_HOLIDAY: false,
-        GET_EVENT : false
+        GET_EVENT : false,
+        GET_VACATION : false,
     },
-
 };
+
+
+export const getVacation = momentValue => async dispatch => {
+    dispatch({ type: GET_VACATION});
+    try {
+        const response = await api.getVacation(momentValue.format('YYYY'), momentValue.format('MM'));
+        dispatch({
+            type : GET_VACATION_SUCCESS,
+            payload : response ? response : null
+        })
+    } catch (e) {
+        dispatch({
+            type : GET_VACATION_FAILURE,
+            payload : e,
+            error : true
+        })
+        throw e;
+    }
+};
+
 export const getEvent = momentValue => async dispatch => {
     dispatch({ type: GET_EVENT });
     try {
@@ -100,6 +124,33 @@ export default function momenter(state = initialState, action) {
             return {
                 ...state,
                 momentValue: state.momentValue.clone().subtract(1,'month')
+            }
+
+        case GET_VACATION :
+            return {
+                ... state,
+                loading: {
+                    ...state.loading,
+                    GET_VACATION: true
+                }
+            }
+        case GET_VACATION_SUCCESS :
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    GET_VACATION: false
+
+                },
+                vacation: action.payload
+            }
+        case GET_VACATION_FAILURE :
+            return {
+                ...state,
+                loading: {
+                    ...state.loading,
+                    GET_VACATION: false
+                }
             }
 
         case GET_EVENT :

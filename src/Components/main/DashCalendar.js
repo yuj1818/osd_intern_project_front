@@ -149,10 +149,12 @@ function DashCalendar({
                           yearDecreaseButton,
                           monthIncreaseButton,
                           monthDecreaseButton,
-                          loadingHoliday,
                           Holidays,
-                          loadingEvents,
                           newEventList,
+                          vacation,
+                          loadingHoliday,
+                          loadingEvents,
+                          loadingVacation,
                       }) {
     // 이번달의 첫번째 주
     const firstWeek = momentValue.clone().startOf('month').week();
@@ -216,6 +218,11 @@ function DashCalendar({
                         {HolidayTitle}
                     </span>
                 </span>
+                {!loadingVacation && dayClass !=="anotherMonth" ?
+                    <div className="vacation">{oneDayData(currentMoment.format('YYYY-MM-DD'))}</div>
+                    :
+                    ''
+                }
                 {!loadingEvents && dayClass!=="anotherMonth" ?
                     PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
                         return (
@@ -232,6 +239,19 @@ function DashCalendar({
     const PostEventsList = ( eventDate, newEventList ) => {
         let foundEvents =  newEventList.filter(e => e.date === eventDate);
         return foundEvents;
+    }
+
+    const oneDayData = (eventDate) => {
+        if(!loadingVacation && vacation){
+            const oneDayFilter = vacation.filter(e => e.strdt === eventDate)
+            if(oneDayFilter.length > 1 ) {
+                return `${oneDayFilter[0].mnm}외 ${oneDayFilter.length-1}명`
+            }
+            else if (oneDayFilter.length === 1) {
+                return oneDayFilter[0].mnm
+            }
+            else { return ''}
+        }
     }
 
 

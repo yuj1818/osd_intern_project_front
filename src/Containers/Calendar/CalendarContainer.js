@@ -4,7 +4,7 @@ import {
     yearDecrease,
     yearIncrease,
     monthIncrease,
-    monthDecrease,
+    monthDecrease, getVacation,
 } from "../../modules/calendar/momenter";
 import {
     initialize,
@@ -26,14 +26,16 @@ import {getOneEventData} from "../../lib/api";
 function CalendarContainer(props) {
     ////////////// Redux 구간 /////////////////////////////////////////////////
 
-    const { momentValue, holiday, events, loadingHoliday, loadingEvents, newEventData, eventID} = useSelector(state => ({
+    const { momentValue, holiday, events, vacation, loadingHoliday, loadingEvents, loadingVacation, newEventData, eventID} = useSelector(state => ({
         momentValue: state.momenter.momentValue,
-        holiday: state.momenter.holiday,
-        loadingEvents : state.momenter.loading.GET_EVENT,
-        events : state.momenter.event,
-        loadingHoliday: state.momenter.loading.GET_HOLIDAY,
         newEventData : state.newEventCRUD.newEventData,
-        eventID : state.newEventCRUD.postID
+        eventID : state.newEventCRUD.postID,
+        holiday: state.momenter.holiday,
+        events : state.momenter.event,
+        vacation : state.momenter.vacation,
+        loadingHoliday: state.momenter.loading.GET_HOLIDAY,
+        loadingEvents : state.momenter.loading.GET_EVENT,
+        loadingVacation : state.momenter.loading.GET_VACATION,
     }));
     const dispatch = useDispatch();
 
@@ -70,6 +72,7 @@ function CalendarContainer(props) {
     useEffect(() => {
         dispatch(getHoliday(momentValue));
         dispatch(getEvent(momentValue));
+        dispatch(getVacation(momentValue));
     }, [momentValue]);
 
     ////////////////////////////////////////////////////////////////////////////
@@ -221,8 +224,8 @@ function CalendarContainer(props) {
         const getData = await getOneEventData(e.target.id).then(res => {return res.data[0]});
         dispatch(changeField({_key:'title', _value : getData.cal_title}))
         dispatch(changeField({_key:'category', _value : getData.cal_category}))
-        dispatch(changeField({_key:'startDate', _value : getData.cal_start_day.substring(0,10)}))
-        dispatch(changeField({_key:'endDate', _value : getData.cal_end_day.substring(0,10)}))
+        dispatch(changeField({_key:'startDate', _value : getData.cal_start_day}))
+        dispatch(changeField({_key:'endDate', _value : getData.cal_end_day}))
     }
 
     return (
@@ -239,6 +242,8 @@ function CalendarContainer(props) {
                 Holidays={holiday}              // 공휴일 정보
                 loadingEvents ={loadingEvents}  // 이벤트 정보 로딩 확인
                 newEventList={newEventList}     // 이벤트 정보
+                loadingVacation={loadingVacation}// 휴가 정보 로딩 확인
+                vacation={vacation}             // 휴가 정보
                 onEventClick={onEventClick}
             />
             <AddNewEvent

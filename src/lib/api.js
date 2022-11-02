@@ -10,6 +10,19 @@ const operation = 'getHoliDeInfo';
 export const getHoliday = (solYear, solMonth) =>
     client.get(`https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`);
 
+// 휴가 DB API
+
+export const getVacation = (solYear, solMonth) => {
+    return client.get(`http://172.25.4.5:2101/calendar/approval?`, {
+        params: {
+            year: solYear,
+            month: solMonth
+        }
+    })
+        .then(res => res.data)
+        .catch(error => console.log(error))
+}
+
 
 // 우리 DB API
 
