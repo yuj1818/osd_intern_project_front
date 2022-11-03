@@ -223,19 +223,19 @@ function Calendar ({
                     <span className={HolidayTitle === ''? `date ${dayClass}`: `date sunday`}>
                         {currentMoment.format('D')}
                     </span>
-                    <span className="holiday">
+                    <span title="공휴일" className="holiday">
                         {HolidayTitle}
                     </span>
                 </span>
                 {!loadingVacation && dayClass !=="anotherMonth" ?
-                    <EventDiv className="vacation">{oneDayData(currentMoment.format('YYYY-MM-DD'))}</EventDiv>
+                    <EventDiv title="자세히보기" className="vacation">{oneDayData(currentMoment.format('YYYY-MM-DD'))}</EventDiv>
                     :
                     ''// 다른 달의 경우 이벤트 나타내지 않음.
                 }
                 {!loadingEvents && dayClass!=="anotherMonth" ?
                     PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
                         return (
-                            <EventDiv key={foundEvent.inputKey} id={foundEvent.inputKey} onClick={onEventClick} className={foundEvent.category}>
+                            <EventDiv key={foundEvent.inputKey}  title="이벤트 수정하기" id={foundEvent.inputKey} onClick={onEventClick} className={foundEvent.category}>
                                 {foundEvent.title}
                             </EventDiv>)})
                     :
@@ -281,15 +281,15 @@ function Calendar ({
                 </CalendarControllerBlock>
                 <CalendarBlock>
                     <CalendarIndex>
-                        <IndexingBar className="birthday"/>생일
-                        <IndexingBar className="holiday"/>공휴일
-                        <IndexingBar className="Event"/>행사
-                        <IndexingBar className="vacation"/>휴가
-                        <IndexingBar className="others"/>기타
+                        <IndexingBar title="birthday" className="birthday"/>생일
+                        <IndexingBar title="holiday" className="holiday"/>공휴일
+                        <IndexingBar title="event" className="Event"/>행사
+                        <IndexingBar title="vacation" className="vacation"/>휴가
+                        <IndexingBar title="others" className="others"/>기타
                     </CalendarIndex>
                     <CalendarBox>
                         { ['일','월','화','수','목','금','토'].map((day) => {
-                            return( <TableHead key={day} className="tableHead">{day}</TableHead> )
+                            return( <TableHead key={day} title={`${day}요일`} className="tableHead">{day}</TableHead> )
                         })}
                         {calendarArr()}
                     </CalendarBox>
