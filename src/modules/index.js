@@ -7,6 +7,7 @@ import momenter from "./calendar/momenter";
 import newEventCRUD, {writeSaga} from "./calendar/newEventCRUD"
 import loading from "./loading";
 import user, {userSaga} from "./user";
+import team, {teamSaga} from "./team";
 
 const rootReducer = combineReducers({
     auth,
@@ -15,11 +16,12 @@ const rootReducer = combineReducers({
     momenter,
     newEventCRUD,
     loading,
-    user
+    user,
+    team,
 });
 
 export function* rootSaga() {
-    yield all([writeSaga(), authSaga(), userSaga()]);
+    yield all([writeSaga(), authSaga(), userSaga(), teamSaga()]);
 }
 
 export default rootReducer;

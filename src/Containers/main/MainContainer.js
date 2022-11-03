@@ -14,11 +14,10 @@ import {
 import { getHoliday } from "../../modules/calendar/momenter";
 import useActions from "../../lib/useActions";
 import moment from "moment/moment";
+import { getNextMember, getThisMember } from "../../modules/team";
 
 
 function MainContainer(props) {
-
-    const { user } = useSelector(({user}) => ({ user: user.user }));
 
     const navigate = useNavigate();
 
@@ -35,6 +34,12 @@ function MainContainer(props) {
         loadingEvents : state.momenter.loading.GET_EVENT,
         loadingVacation : state.momenter.loading.GET_VACATION,
     }));
+
+    const { nextTeam, thisTeam, user } = useSelector(({team, user}) => ({
+        nextTeam: team.nextMember,
+        thisTeam: team.thisMember,
+        user: user.user
+    }))
 
     const dispatch = useDispatch();
 
@@ -120,6 +125,12 @@ function MainContainer(props) {
     }
     ///////////////////////////////////
 
+    useEffect(() => {
+        if(user){
+            dispatch(getThisMember(user.m_num));
+            dispatch(getNextMember(user.m_num));
+        }
+    }, [user, dispatch])
 
     return (
         <div>
@@ -139,6 +150,8 @@ function MainContainer(props) {
                         loadingHoliday={loadingHoliday}
                         loadingEvents ={loadingEvents}
                         loadingVacation={loadingVacation}
+                        nextTeam={nextTeam}
+                        thisTeam={thisTeam}
                     />
                 </div>
             }

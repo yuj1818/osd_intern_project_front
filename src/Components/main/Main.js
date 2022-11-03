@@ -28,6 +28,8 @@ function Main({
                   loadingHoliday,
                   loadingEvents,
                   loadingVacation,
+                  nextTeam,
+                  thisTeam,
 }) {
     return (
         <>
@@ -46,7 +48,7 @@ function Main({
                     loadingEvents={loadingEvents}
                     loadingVacation={loadingVacation}
                 />
-                <DashBob />
+                <DashBob nextTeam={nextTeam} thisTeam={thisTeam}/>
             </Dashboard>
         </>
     );
