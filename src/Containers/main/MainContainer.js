@@ -14,7 +14,7 @@ import {
 import { getHoliday } from "../../modules/calendar/momenter";
 import useActions from "../../lib/useActions";
 import moment from "moment/moment";
-import { getNextMember, getThisMember } from "../../modules/team";
+import { getMember } from "../../modules/team";
 
 
 function MainContainer(props) {
@@ -127,8 +127,7 @@ function MainContainer(props) {
 
     useEffect(() => {
         if(user){
-            dispatch(getThisMember(user.m_num));
-            dispatch(getNextMember(user.m_num));
+            dispatch(getMember(user.m_num));
         }
     }, [user, dispatch])
 

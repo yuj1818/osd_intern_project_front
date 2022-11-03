@@ -4,7 +4,7 @@ import BackgroundForm from "../../Components/common/BackgroundForm";
 import { connect } from "react-redux";
 import { changeInput, insert, menuLike } from "../../modules/menus";
 import { toggle } from "../../modules/days";
-import {getNextMember, getThisMember} from "../../modules/team";
+import {getMember} from "../../modules/team";
 import { useDispatch, useSelector } from "react-redux";
 
 function SelectionContainer({input, text, like, changeInput, insert, menuLike, days, toggle}) {
@@ -19,8 +19,7 @@ function SelectionContainer({input, text, like, changeInput, insert, menuLike, d
 
     useEffect(() => {
         if(user) {
-            dispatch(getThisMember(user.m_num))
-            dispatch(getNextMember(user.m_num));
+            dispatch(getMember(user.m_num));
         }
     }, [user, dispatch])
 

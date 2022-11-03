@@ -1,4 +1,3 @@
-//auth check api 완성 전 임시로 사용
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
