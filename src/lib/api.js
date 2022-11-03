@@ -13,7 +13,7 @@ export const getHoliday = (solYear, solMonth) =>
 // 휴가 DB API
 
 export const getVacation = (solYear, solMonth) => {
-    return client.get(`http://172.25.4.5:2101/calendar/approval?`, {
+    return client.get(`calendar/approval?`, {
         params: {
             year: solYear,
             month: solMonth
@@ -26,7 +26,7 @@ export const getVacation = (solYear, solMonth) => {
 
 // 우리 DB API
 
-const OSDInternURL = 'http://172.25.4.5:2101/calendar/'
+const OSDInternURL = 'calendar/'
 
 // export const getNewEvent = (CalYear, CalMonth) => {
 //     //console.log(`http://172.25.4.5:2101/calendar/?year=${CalYear}&month=${CalMonth}`);
