@@ -155,6 +155,7 @@ function Calendar ({
                        loadingEvents,
                        loadingVacation,
                        onEventClick,
+                       onVacationClick,
                    }) {
 
 
@@ -228,16 +229,29 @@ function Calendar ({
                     </span>
                 </span>
                 {!loadingVacation && dayClass !=="anotherMonth" ?
-                    <EventDiv title="자세히보기" className="vacation">{oneDayData(currentMoment.format('YYYY-MM-DD'))}</EventDiv>
+                    <EventDiv
+                        onClick={onVacationClick}
+                        id={currentMoment.format('YYYY-MM-DD')}
+                        className="vacation" title="자세히보기"
+                    >
+                        {oneDayData(currentMoment.format('YYYY-MM-DD'))}
+                    </EventDiv>
                     :
                     ''// 다른 달의 경우 이벤트 나타내지 않음.
                 }
                 {!loadingEvents && dayClass!=="anotherMonth" ?
                     PostEventsList(currentMoment.format('YYYY-MM-DD') ,newEventList).map((foundEvent) => {
                         return (
-                            <EventDiv key={foundEvent.inputKey}  title="이벤트 수정하기" id={foundEvent.inputKey} onClick={onEventClick} className={foundEvent.category}>
+                            <EventDiv
+                                key={foundEvent.inputKey}
+                                title="이벤트 수정하기"
+                                id={foundEvent.inputKey}
+                                onClick={onEventClick}
+                                className={foundEvent.category}
+                            >
                                 {foundEvent.title}
-                            </EventDiv>)})
+                            </EventDiv>
+                        )})
                     :
                     '' // 다른 달의 경우 이벤트 나타내지 않음.
                 }
