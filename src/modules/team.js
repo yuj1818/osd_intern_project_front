@@ -16,8 +16,8 @@ export function* teamSaga() {
 };
 
 const initialState = {
-    thisMember: null,
-    nextMember: null,
+    thisMember: [],
+    nextMember: [],
     memberError: null,
 }
 

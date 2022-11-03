@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const client = axios.create();
+//baseURL: 'http://210.104.190.229:2101/',
+const client = axios.create({/*baseURL: 'http://210.104.190.229:2101/',*/ withCredentials: true });
 
 // 공휴일 API
 
-const API_KEY = process.env.REACT_APP_HOLIDAY_API_KEY
+const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D";
 const operation = 'getHoliDeInfo';
 
 export const getHoliday = (solYear, solMonth) =>
-    client.get(`https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`);
+  client.get(`https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`, {withCredentials: false});
 
 // 휴가 DB API
 
