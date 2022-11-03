@@ -13,6 +13,7 @@ import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga"
 import {tempSetUser, check} from "./modules/user";
 import AxiosInterceptor from "./lib/AxiosInterceptor";
+import {getThisTIdx} from "./modules/team";
 
 const sagaMiddleWare = createSagaMiddleware();
 const store = createStore(
