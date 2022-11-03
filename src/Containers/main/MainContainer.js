@@ -78,8 +78,7 @@ function MainContainer(props) {
     useEffect( () => {
         setNewVacationList(spreadVacationList())
     }, [vacation])
-
-
+    
     let spreadEventList = ( EventList ) => {
         const newEventList = [];
         if (!loadingEvents && EventList) {
