@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //baseURL: 'http://210.104.190.229:2101/',
-const client = axios.create({/*baseURL: 'http://210.104.190.229:2101/',*/ withCredentials: true });
+const client = axios.create({withCredentials: true });
 
 // 공휴일 API
 
@@ -110,3 +110,16 @@ export const check = () => client.get('auth/login/check');
 export const logout = () => client.get('auth/logout');
 
 export const getTeam = m_num => client.get(`bob/team/list/new/${m_num}`);
+
+export const suggestMenu = ({tIndex, mNum, fName}) =>
+    client.post('/bob/food', { tIndex, mNum, fName });
+
+export const getMenus = tIndex => client.get(`bob/food?tIndex=${tIndex}`)
+
+export const updateMenu = ({tIndex, mNum, fName}) =>
+    client.put('/bob/food', { tIndex, mNum, fName });
+
+export const likeMenu = ({tIndex, mNum, fName}) =>
+    client.post('bob/food/like', { tIndex, mNum, fName });
+
+export const getLike = ({ tIndex, mNum }) => client.get(`bob/food/like/${tIndex}/${mNum}`);

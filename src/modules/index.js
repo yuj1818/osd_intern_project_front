@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import auth, {authSaga} from "./auth";
 import {all} from 'redux-saga/effects';
-import menus from "./menus";
+import menus, {menuSaga} from "./menus";
 import days from "./days";
 import momenter from "./calendar/momenter";
 import newEventCRUD, {writeSaga} from "./calendar/newEventCRUD"
@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
 });
 
 export function* rootSaga() {
-    yield all([writeSaga(), authSaga(), userSaga(), teamSaga()]);
+    yield all([writeSaga(), authSaga(), userSaga(), teamSaga(), menuSaga()]);
 }
 
 export default rootReducer;
