@@ -123,3 +123,5 @@ export const likeMenu = ({tIndex, mNum, fName}) =>
     client.post('bob/food/like', { tIndex, mNum, fName });
 
 export const getLike = ({ tIndex, mNum }) => client.get(`bob/food/like/${tIndex}/${mNum}`);
+
+export const getThisWeekIdx = m_num => client.get(`bob/team/index/thisweek/${m_num}`);

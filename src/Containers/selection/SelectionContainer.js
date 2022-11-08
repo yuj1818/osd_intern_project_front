@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import SelectionForm from "../../Components/selection/SelectionForm";
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import { useDispatch, useSelector } from "react-redux";
-import { getMember } from "../../modules/team";
+import {getMember, getThisWeekIdx} from "../../modules/team";
 import { toggle } from "../../modules/days";
 import {
     changeInput,
@@ -62,10 +62,9 @@ function SelectionContainer(props) {
 
     useEffect(() => {
         if(user) {
-            const tIndex = user.t_index;
-            const mNum = user.m_num;
-            dispatch(getMember(mNum));
-            dispatch(getMenus(tIndex));
+            dispatch(getMember(user.m_num));
+            dispatch(getMenus(user.t_index));
+            dispatch(getThisWeekIdx(user.m_num));
         }
     }, [user, dispatch])
 
@@ -87,6 +86,10 @@ function SelectionContainer(props) {
         }
     },[liked, dispatch])
 
+    const onToggle = e => {
+        dispatch(toggle(parseInt(e.target.id)));
+    }
+
 
     return (
         <div>
@@ -98,7 +101,7 @@ function SelectionContainer(props) {
                 onClick={onClick}
                 onLike={onLike}
                 days={days}
-                onToggle={toggle}
+                onToggle={onToggle}
                 nextTeam={nextTeam}
                 thisTeam={thisTeam}
                 menus={menus}

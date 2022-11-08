@@ -19,7 +19,7 @@ function SelectDay({days, onToggle}) {
                         <Box style={{height:"4vh", width:"25vw", margin:"1vh 0.5vw", padding:"1px 2px"}}>
                             {day.text}
                         </Box>
-                        <input type="checkbox" checked={day.checked} onChange={() => onToggle(day.id)} />
+                        <input id={day.id} type="checkbox" checked={day.checked} onChange={onToggle} />
                     </div>
                 )
             })}

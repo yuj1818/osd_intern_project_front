@@ -14,7 +14,7 @@ import {
 import { getHoliday } from "../../modules/calendar/momenter";
 import useActions from "../../lib/useActions";
 import moment from "moment/moment";
-import { getMember } from "../../modules/team";
+import {getMember, getThisWeekIdx} from "../../modules/team";
 
 
 function MainContainer(props) {
@@ -127,6 +127,7 @@ function MainContainer(props) {
     useEffect(() => {
         if(user){
             dispatch(getMember(user.m_num));
+            dispatch(getThisWeekIdx(user.m_num));
         }
     }, [user, dispatch])
 
