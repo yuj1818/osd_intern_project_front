@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const client = axios.create();
+//baseURL: 'http://210.104.190.229:2101/',
+const client = axios.create({withCredentials: true });
 
 // 공휴일 API
 
-const API_KEY = process.env.REACT_APP_HOLIDAY_API_KEY
+const API_KEY = "E6c3ACjloHKJTdlaQSkPVuUcoZEWV8zH9knCD4EFe7gqpiCWNhNwdX8laJuPFjvAouKFvRsoV%2FruPjl2kz4Yqw%3D%3D";
 const operation = 'getHoliDeInfo';
 
 export const getHoliday = (solYear, solMonth) =>
-    client.get(`https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`);
+  client.get(`https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/${operation}?solYear=${solYear}&solMonth=${solMonth}&ServiceKey=${API_KEY}&_type=json`, {withCredentials: false});
 
 // 휴가 DB API
 
@@ -109,3 +110,18 @@ export const check = () => client.get('auth/login/check');
 export const logout = () => client.get('auth/logout');
 
 export const getTeam = m_num => client.get(`bob/team/list/new/${m_num}`);
+
+export const suggestMenu = ({tIndex, mNum, fName}) =>
+    client.post('/bob/food', { tIndex, mNum, fName });
+
+export const getMenus = tIndex => client.get(`bob/food?tIndex=${tIndex}`)
+
+export const updateMenu = ({tIndex, mNum, fName}) =>
+    client.put('/bob/food', { tIndex, mNum, fName });
+
+export const likeMenu = ({tIndex, mNum, fName}) =>
+    client.post('bob/food/like', { tIndex, mNum, fName });
+
+export const getLike = ({ tIndex, mNum }) => client.get(`bob/food/like/${tIndex}/${mNum}`);
+
+export const getThisWeekIdx = m_num => client.get(`bob/team/index/thisweek/${m_num}`);
