@@ -136,7 +136,7 @@ const menus = handleActions(
         }),
         [UPDATE_MENU_SUCCESS]: (state, { payload: input }) => ({
             ...state,
-            input,
+            input: input[0],
         }),
         [UPDATE_MENU_FAILURE]: (state, { payload: error }) => ({
             ...state,

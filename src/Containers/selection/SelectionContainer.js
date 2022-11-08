@@ -30,11 +30,10 @@ function SelectionContainer(props) {
         liked: menus.liked
     }))
 
-    const tIndex = user.t_index;
-    const mNum = user.m_num;
-    const fName = input;
-
     const onClick = () => {
+        const tIndex = user.t_index;
+        const mNum = user.m_num;
+        const fName = input;
         if(suggested) {
             dispatch(updateMenu({tIndex, mNum, fName}))
         } else {
@@ -49,9 +48,12 @@ function SelectionContainer(props) {
     };
 
     const onLike = e => {
+        const tIndex = user.t_index;
+        const mNum = user.m_num;
         const fName = e.target.id;
         dispatch(likeMenu({tIndex, mNum, fName}));
         dispatch(likeCheck(fName));
+        dispatch(getLike({tIndex, mNum}));
     }
 
     useEffect(() => {
@@ -60,15 +62,15 @@ function SelectionContainer(props) {
 
     useEffect(() => {
         if(user) {
+            const tIndex = user.t_index;
+            const mNum = user.m_num;
             dispatch(getMember(mNum));
             dispatch(getMenus(tIndex));
-            dispatch(getLike({tIndex, mNum}));
         }
     }, [user, dispatch])
 
     useEffect(() => {
         if(menus.length != 0) {
-            console.log(menus.find(function(menu){return menu.m_num === user.m_num }))
             if (menus.find(function(menu){return menu.m_num === user.m_num})) {
                 dispatch(suggestCheck(true))
             } else {
@@ -76,6 +78,14 @@ function SelectionContainer(props) {
             }
         }
     }, [menus, dispatch]);
+
+    useEffect(() => {
+        if (user) {
+            const tIndex = user.t_index;
+            const mNum = user.m_num;
+            dispatch(getLike({tIndex,mNum}))
+        }
+    },[liked, dispatch])
 
 
     return (
@@ -93,7 +103,6 @@ function SelectionContainer(props) {
                 thisTeam={thisTeam}
                 menus={menus}
                 suggested={suggested}
-                liked={liked}
             />
         </div>
     );

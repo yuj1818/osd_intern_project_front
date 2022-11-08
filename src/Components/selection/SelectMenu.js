@@ -5,7 +5,7 @@ import Button from "../common/Button";
 import likeOut from "../img/like_outline.png";
 import likeFill from "../img/like_filled.png";
 
-function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggested, liked}) {
+function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggested}) {
 
     return (
         <Box style={{flexDirection:"column", justifyContent:"start"}}>
@@ -30,7 +30,7 @@ function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggest
                                 {menu.f_name}
                             </Box>
                             <div style={{height:"100%", width:"5vw", display:"flex", alignItems:"center", justifyContent:"center"}}>
-                                <img id={menu.f_name} className="like" src={liked == menu.f_name? likeFill : likeOut} onClick={onLike} style={{height:"4vh"}}/>
+                                <img id={menu.f_name} className="like" src={like == menu.f_name? likeFill : likeOut} onClick={onLike} style={{height:"4vh"}}/>
                             </div>
                         </div>
                     )
