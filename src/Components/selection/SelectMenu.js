@@ -13,7 +13,12 @@ const StyledInput = styled.input`
   font-size: 1.5vmin;
   height: 4vh;
   width: 20vw;
-  :disabled{
+  &:hover {
+    &:disabled{
+      cursor: not-allowed;
+    }
+  }
+  &:disabled{
     border: 0.15vmin solid lightgray;
     background: #D9D9D9;
   }
@@ -22,8 +27,8 @@ const StyledInput = styled.input`
 function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggested}) {
 
     return (
-        <Box style={{flexDirection:"column", justifyContent:"start"}}>
-            <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", margin:"3vh 0 8vh 5vw"}}>
+        <Box style={{flexDirection:"column", justifyContent:"start", height:"55vh"}}>
+            <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", margin:"3vh 0 6vh 5vw"}}>
                 메뉴 선정
             </Title>
 
@@ -41,7 +46,7 @@ function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggest
                                 {menu.f_name}
                             </Box>
                             <div style={{height:"100%", width:"5vw", display:"flex", alignItems:"center", justifyContent:"center"}}>
-                                <img id={menu.f_name} className="like" src={like == menu.f_name? likeFill : likeOut} onClick={onLike} style={{height:"4vh"}}/>
+                                <img id={menu.f_name} className="like" src={like == menu.f_name? likeFill : likeOut} onClick={onLike} style={{height:"4vh", cursor:"pointer"}}/>
                             </div>
                         </div>
                     )

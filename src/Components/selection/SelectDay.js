@@ -6,8 +6,8 @@ import Button from "../common/Button";
 function SelectDay({days, onToggle}) {
 
     return (
-        <Box style={{flexDirection:"column", justifyContent:"start"}}>
-            <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", margin:"3vh 0 5vh 5vw"}}>
+        <Box style={{flexDirection:"column", justifyContent:"start", height:"55vh"}}>
+            <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", margin:"3vh 0 3vh 5vw"}}>
                 시간 정하기
             </Title>
             <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", fontSize:"1.4vmin", marginLeft:"5vw"}}>
@@ -19,11 +19,11 @@ function SelectDay({days, onToggle}) {
                         <Box style={{height:"4vh", width:"25vw", margin:"1vh 0.5vw", padding:"1px 2px"}}>
                             {day.text}
                         </Box>
-                        <input id={day.id} type="checkbox" checked={day.checked} onChange={onToggle} />
+                        <input id={day.id} type="checkbox" checked={day.checked} onChange={onToggle} style={{cursor:"pointer"}} />
                     </div>
                 )
             })}
-            <Button gray style={{width:"16vw", height:"4vh", marginTop:"4vmin"}}>결정</Button>
+            <Button gray style={{width:"16vw", height:"4vh", marginTop:"2vmin"}}>결정</Button>
         </Box>
     );
 }
