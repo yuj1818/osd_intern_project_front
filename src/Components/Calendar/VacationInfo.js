@@ -62,7 +62,7 @@ function VacationInfo({
         return (
             <Fullscreen onClick={VacationOutClick}>
                 <VacationInfoBlock>
-                    <h2>{PickedId}일 휴가명단</h2>
+                    <h2>{PickedId} 휴가명단</h2>
                     <VacationItemBlock>
                     {newVacationList.filter(e => e.date === PickedId).map((data,idx) => {
                         return (

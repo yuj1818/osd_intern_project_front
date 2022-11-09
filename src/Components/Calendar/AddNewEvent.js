@@ -17,13 +17,15 @@ const AddNewEventBlock = styled.div`
   display: flex;
   flex-direction: column;
   width : 460px;
-  background : white;
   box-shadow : 0 0 8px rgba(0, 0, 0, 0.125);
+  border-radius: 10px;
   h1 {
     margin-top: 0;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     background: #001448;
     color : white;
     font-size: 25px;

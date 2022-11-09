@@ -73,8 +73,8 @@ const DCalendarBox = styled.div`
 const NaviBox = styled.div`
   position: absolute;
   color: black;
-  width: 98%;
-  height: 90%;
+  width: 98.5%;
+  height: 93%;
   cursor: pointer;
   background: black;
   opacity: 0;
