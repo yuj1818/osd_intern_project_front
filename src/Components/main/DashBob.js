@@ -3,7 +3,7 @@ import Box from "../common/Box";
 import Title from "../common/Title";
 import Button from "../common/Button";
 
-function DashBob({nextTeam,thisTeam}) {
+function DashBob({nextTeam,thisTeam, selectedMenu}) {
     return (
         <div style={{display:"block"}}>
             <Box style={{flexDirection:"column"}}>
@@ -12,7 +12,9 @@ function DashBob({nextTeam,thisTeam}) {
                 </Title>
                 <Box style={{width:"27vw", height:"7vh", flexDirection:"column", marginBottom:"6vh", marginRight:"0", marginLeft:"0" }}>
                     {thisTeam.length > 0 &&
-                        <div style={{width:"100%", display:"flex", justifyContent:"flex-start", paddingLeft:"4vmin", marginBottom:"0.5vmin", fontSize: "1.3vh"}}>mm/dd d요일 - 도시락</div>
+                        <div style={{width:"100%", display:"flex", justifyContent:"flex-start", paddingLeft:"4vmin", marginBottom:"0.5vmin", fontSize: "1.3vh"}}>
+                            mm/dd d요일 - {selectedMenu.length !== 0 && selectedMenu[0].f_name}
+                        </div>
                     }
                     {thisTeam.length === 0 &&
                         <div style={{color:"gray"}}>아직 팀이 만들어지지 않았습니다.</div>

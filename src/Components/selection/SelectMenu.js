@@ -4,6 +4,20 @@ import Title from "../common/Title";
 import Button from "../common/Button";
 import likeOut from "../img/like_outline.png";
 import likeFill from "../img/like_filled.png";
+import styled from 'styled-components';
+
+//style={{border:"0.15vmin solid black", margin:"1vh 0.5vw", fontSize:"1.5vmin", height:"4vh",width:"20vw"}}
+const StyledInput = styled.input`
+  border: 0.15vmin solid black;
+  margin: 1vh 0.5vw;
+  font-size: 1.5vmin;
+  height: 4vh;
+  width: 20vw;
+  :disabled{
+    border: 0.15vmin solid lightgray;
+    background: #D9D9D9;
+  }
+`
 
 function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggested}) {
 
@@ -14,12 +28,9 @@ function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggest
             </Title>
 
             <div style={{display:"flex", alignItems:"center", justifyContent:"center", width:"100%", height:"7vh"}}>
-                <input id="suggest_menu" onChange={onChangeInput} value={input} type="text" style={{border:"0.15vmin solid black", margin:"1vh 0.5vw", fontSize:"1.5vmin", height:"4vh",width:"20vw"}} />
+                <StyledInput id="suggest_menu" placeholder={suggested? '' : '메뉴 추가 전, 투표 불가능'} disabled={suggested} onChange={onChangeInput} value={input} type="text" />
                 <div style={{height:"100%", width:"5vw", display:"flex", alignItems:"center", justifyContent:"center"}}>
-                    {suggested ?
-                        <Button gray style={{height:"4vh", margin:"0 0.3vw"}} onClick={onClick}>수정</Button> :
-                        <Button gray style={{height:"4vh", margin:"0 0.3vw"}} onClick={onClick}>추가</Button>
-                    }
+                    <Button gray disabled={suggested} style={{height:"4vh", width:"4vw", margin:"0 0.3vw", padding:"0"}} onClick={onClick}>추가</Button>
                 </div>
             </div>
             {menus &&

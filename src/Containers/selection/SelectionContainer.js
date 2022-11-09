@@ -8,17 +8,21 @@ import {
     changeInput,
     getMenus,
     suggestMenu,
-    updateMenu,
     initialize,
     suggestCheck,
-    getLike, likeMenu, likeCheck
+    getLike,
+    likeMenu,
+    likeCheck,
+    getSelectedMenu,
+    emptyCheck
 } from "../../modules/menus";
+import AskModal from "../../Components/common/AskModal";
 
 function SelectionContainer(props) {
 
     const dispatch = useDispatch();
 
-    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked} = useSelector(({team, user, menus, days}) => ({
+    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty } = useSelector(({team, user, menus, days}) => ({
         nextTeam: team.nextMember,
         thisTeam: team.thisMember,
         user: user.user,
@@ -27,19 +31,22 @@ function SelectionContainer(props) {
         input: menus.input,
         days: days.days,
         suggested: menus.suggested,
-        liked: menus.liked
+        liked: menus.liked,
+        thisWeekIdx: team.thisWeekIdx,
+        selectedMenu: menus.selectedMenu,
+        checkEmpty: menus.checkEmpty,
     }))
 
     const onClick = () => {
         const tIndex = user.t_index;
         const mNum = user.m_num;
         const fName = input;
-        if(suggested) {
-            dispatch(updateMenu({tIndex, mNum, fName}))
+        if (input === '') {
+            dispatch(emptyCheck(true));
         } else {
             dispatch(suggestMenu({tIndex, mNum, fName}));
+            window.location.reload();
         }
-        window.location.reload();
         dispatch(changeInput(''));
     }
 
@@ -69,14 +76,14 @@ function SelectionContainer(props) {
     }, [user, dispatch])
 
     useEffect(() => {
-        if(menus.length != 0) {
+        if(menus.length !== 0 && user) {
             if (menus.find(function(menu){return menu.m_num === user.m_num})) {
                 dispatch(suggestCheck(true))
             } else {
                 dispatch(suggestCheck(false))
             }
         }
-    }, [menus, dispatch]);
+    }, [menus, user, dispatch]);
 
     useEffect(() => {
         if (user) {
@@ -84,12 +91,21 @@ function SelectionContainer(props) {
             const mNum = user.m_num;
             dispatch(getLike({tIndex,mNum}))
         }
-    },[liked, dispatch])
+    },[liked, user, dispatch])
 
     const onToggle = e => {
         dispatch(toggle(parseInt(e.target.id)));
     }
 
+    useEffect(() => {
+        if(user) {
+            dispatch(getSelectedMenu(thisWeekIdx));
+        }
+    }, [thisWeekIdx, user, dispatch])
+
+    const modalConfirm = () => {
+        dispatch(emptyCheck(false));
+    };
 
     return (
         <div>
@@ -106,6 +122,13 @@ function SelectionContainer(props) {
                 thisTeam={thisTeam}
                 menus={menus}
                 suggested={suggested}
+                selectedMenu={selectedMenu}
+            />
+            <AskModal
+                visible={checkEmpty}
+                title="메뉴 이름 빈칸"
+                description="메뉴 이름을 적어주세요. 빈칸으로는 제출할 수 없습니다."
+                onConfirm={modalConfirm}
             />
         </div>
     );

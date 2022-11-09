@@ -4,7 +4,7 @@ import Box from "../common/Box";
 
 function TeamNextWeek({nextTeam}) {
     return (
-        <Box style={{ display:"flex", height:"10vh", width:"35vw", flexDirection:"column"}}>
+        <Box style={{ display:"flex", height:"15vh", width:"35vw", flexDirection:"column"}}>
             <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", margin:"1vh 0 1vh 5vw"}}>
                 다음 주 밥친구
             </Title>
