@@ -16,6 +16,7 @@ const Fullscreen = styled.div`
 const AddNewEventBlock = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: white;
   width : 460px;
   box-shadow : 0 0 8px rgba(0, 0, 0, 0.125);
   border-radius: 10px;

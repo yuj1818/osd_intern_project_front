@@ -175,13 +175,15 @@ function CalendarContainer(props) {
         makeE_initialize()
     };
     const onDelete = () => {
+        // 모달창에서 재확인.
         setCheckConfirm(true)
     };
     const modalConfirm = () => {
-        alert('삭제되었습니다')
-        setCheckConfirm(false)
+        alert('삭제되었습니다');
+        setCheckConfirm(false);
         setNewEvent('NoPopUp');
         dispatch(newEventDBDelete(eventID));
+        makeE_initialize();
     };
     const modalCancel = () => {
         setCheckConfirm(false)
