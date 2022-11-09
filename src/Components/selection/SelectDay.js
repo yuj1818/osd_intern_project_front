@@ -3,7 +3,7 @@ import Box from "../common/Box";
 import Title from "../common/Title";
 import Button from "../common/Button";
 
-function SelectDay({days, onToggle}) {
+function SelectDay({days, onToggle, onSubmit, picked, onChangeDay}) {
 
     return (
         <Box style={{flexDirection:"column", justifyContent:"start", height:"55vh"}}>
@@ -23,7 +23,10 @@ function SelectDay({days, onToggle}) {
                     </div>
                 )
             })}
-            <Button gray style={{width:"16vw", height:"4vh", marginTop:"2vmin"}}>결정</Button>
+            {picked ?
+                <Button gray onClick={onChangeDay} style={{width:"16vw", height:"4vh", marginTop:"2vmin"}}>수정</Button>:
+                <Button gray onClick={onSubmit} style={{width:"16vw", height:"4vh", marginTop:"2vmin"}}>결정</Button>
+            }
         </Box>
     );
 }

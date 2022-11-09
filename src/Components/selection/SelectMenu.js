@@ -46,7 +46,7 @@ function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggest
                                 {menu.f_name}
                             </Box>
                             <div style={{height:"100%", width:"5vw", display:"flex", alignItems:"center", justifyContent:"center"}}>
-                                <img id={menu.f_name} className="like" src={like == menu.f_name? likeFill : likeOut} onClick={onLike} style={{height:"4vh", cursor:"pointer"}}/>
+                                <img id={menu.f_name} className="like" src={like === menu.f_name? likeFill : likeOut} onClick={onLike} style={{height:"4vh", cursor:"pointer"}}/>
                             </div>
                         </div>
                     )

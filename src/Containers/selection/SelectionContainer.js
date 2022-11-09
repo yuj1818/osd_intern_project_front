@@ -3,7 +3,7 @@ import SelectionForm from "../../Components/selection/SelectionForm";
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import { useDispatch, useSelector } from "react-redux";
 import {getMember, getThisWeekIdx} from "../../modules/team";
-import { toggle } from "../../modules/days";
+import {selectDays, toggle, pickedCheck, changeDays} from "../../modules/days";
 import {
     changeInput,
     getMenus,
@@ -22,7 +22,7 @@ function SelectionContainer(props) {
 
     const dispatch = useDispatch();
 
-    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty } = useSelector(({team, user, menus, days}) => ({
+    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty, picked } = useSelector(({team, user, menus, days}) => ({
         nextTeam: team.nextMember,
         thisTeam: team.thisMember,
         user: user.user,
@@ -35,16 +35,14 @@ function SelectionContainer(props) {
         thisWeekIdx: team.thisWeekIdx,
         selectedMenu: menus.selectedMenu,
         checkEmpty: menus.checkEmpty,
+        picked: days.picked,
     }))
 
     const onClick = () => {
-        const tIndex = user.t_index;
-        const mNum = user.m_num;
-        const fName = input;
         if (input === '') {
             dispatch(emptyCheck(true));
         } else {
-            dispatch(suggestMenu({tIndex, mNum, fName}));
+            dispatch(suggestMenu({tIndex: user.t_index, mNum: user.m_num, fName: input}));
             window.location.reload();
         }
         dispatch(changeInput(''));
@@ -55,12 +53,9 @@ function SelectionContainer(props) {
     };
 
     const onLike = e => {
-        const tIndex = user.t_index;
-        const mNum = user.m_num;
-        const fName = e.target.id;
-        dispatch(likeMenu({tIndex, mNum, fName}));
-        dispatch(likeCheck(fName));
-        dispatch(getLike({tIndex, mNum}));
+        dispatch(likeMenu({tIndex: user.t_index, mNum: user.m_num, fName: e.target.id}));
+        dispatch(likeCheck(e.target.id));
+        dispatch(getLike({tIndex: user.t_index, mNum: user.m_num}));
     }
 
     useEffect(() => {
@@ -87,9 +82,7 @@ function SelectionContainer(props) {
 
     useEffect(() => {
         if (user) {
-            const tIndex = user.t_index;
-            const mNum = user.m_num;
-            dispatch(getLike({tIndex,mNum}))
+            dispatch(getLike({tIndex: user.t_index,mNum: user.m_num}))
         }
     },[liked, user, dispatch])
 
@@ -107,6 +100,15 @@ function SelectionContainer(props) {
         dispatch(emptyCheck(false));
     };
 
+    const onSubmit = () => {
+        dispatch(selectDays({t_index: user.t_index, m_num: user.m_num, days}));
+        dispatch(pickedCheck(true));
+    }
+
+    const onChangeDay = () => {
+        dispatch(changeDays({t_index: user.t_index, m_num: user.m_num, days}));
+    }
+
     return (
         <div>
             <BackgroundForm />
@@ -123,6 +125,9 @@ function SelectionContainer(props) {
                 menus={menus}
                 suggested={suggested}
                 selectedMenu={selectedMenu}
+                onSubmit = {onSubmit}
+                picked={picked}
+                onChangeDay={onChangeDay}
             />
             <AskModal
                 visible={checkEmpty}

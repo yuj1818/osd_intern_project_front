@@ -116,9 +116,6 @@ export const suggestMenu = ({tIndex, mNum, fName}) =>
 
 export const getMenus = tIndex => client.get(`bob/food?tIndex=${tIndex}`)
 
-export const updateMenu = ({tIndex, mNum, fName}) =>
-    client.put('/bob/food', { tIndex, mNum, fName });
-
 export const likeMenu = ({tIndex, mNum, fName}) =>
     client.post('bob/food/like', { tIndex, mNum, fName });
 
@@ -127,3 +124,9 @@ export const getLike = ({ tIndex, mNum }) => client.get(`bob/food/like/${tIndex}
 export const getThisWeekIdx = m_num => client.get(`bob/team/index/thisweek/${m_num}`);
 
 export const getSelectedMenu = t_index => client.get(`bob/food/like/${t_index}`);
+
+export const selectDays = ({t_index, m_num, days}) =>
+    client.post(`bob/day/${t_index}/${m_num}`, days);
+
+export const changeDays = ({t_index, m_num, days}) =>
+    client.put(`bob/day/${t_index}/${m_num}`, days);
