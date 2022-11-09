@@ -25,6 +25,10 @@ const buttonStyle = css`
             background: #D9D9D9;
             &:hover {
               background: lightslategray;
+              &:disabled {
+                background: #D9D9D9;
+                cursor: not-allowed;
+              }
             }
           `
   }

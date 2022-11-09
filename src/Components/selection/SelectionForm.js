@@ -18,11 +18,11 @@ const SelectionBlock = styled.div`
   padding: 4vmin;
 `
 
-function SelectionForm({like, input, onChangeInput, onLike, days, onToggle, nextTeam, thisTeam, onClick, menus, suggested, liked}) {
+function SelectionForm({like, input, onChangeInput, onLike, days, onToggle, nextTeam, thisTeam, onClick, menus, suggested, liked, selectedMenu}) {
     return (
         <>
             <TeamBlock>
-                <TeamThisWeek thisTeam={thisTeam}/>
+                <TeamThisWeek thisTeam={thisTeam} selectedMenu={selectedMenu}/>
                 <TeamNextWeek nextTeam={nextTeam}/>
             </TeamBlock>
             <SelectionBlock>

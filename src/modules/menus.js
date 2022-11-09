@@ -13,16 +13,14 @@ const SUGGEST_CHECK = 'menus/SUGGEST_CHECK';
 
 const LIKE_CHECK = 'menus/LIKE_CHECK';
 
+const EMPTY_CHECK = 'menus/EMPTY_CHECK';
+
 const [GET_MENUS, GET_MENUS_SUCCESS, GET_MENUS_FAILURE] = createRequestActionTypes(
     'menus/GET_MENUS'
 );
 
 const [SUGGEST_MENU, SUGGEST_MENU_SUCCESS, SUGGEST_MENUS_FAILURE] = createRequestActionTypes(
     'menus/SUGGEST_MENU'
-);
-
-const [UPDATE_MENU, UPDATE_MENU_SUCCESS, UPDATE_MENU_FAILURE] = createRequestActionTypes(
-    'menus/UPDATE_MENU'
 );
 
 const [LIKE_MENU, LIKE_MENU_SUCCESS, LIKE_MENU_FAILURE] = createRequestActionTypes(
@@ -33,15 +31,13 @@ const [GET_LIKE, GET_LIKE_SUCCESS, GET_LIKE_FAILURE] = createRequestActionTypes(
     'menus/GET_LIKE'
 );
 
+const [GET_SELECTED_MENU, GET_SELECTED_MENU_SUCCESS, GET_SELECTED_MENU_FAILURE] = createRequestActionTypes(
+    'menus/GET_SELECTED_MENU'
+);
+
 export const getMenus = createAction(GET_MENUS, t_index => t_index);
 
 export const suggestMenu = createAction(SUGGEST_MENU, ({tIndex, mNum, fName}) => ({
-    tIndex,
-    mNum,
-    fName
-}));
-
-export const updateMenu = createAction(UPDATE_MENU, ({tIndex, mNum, fName}) => ({
     tIndex,
     mNum,
     fName
@@ -66,18 +62,22 @@ export const suggestCheck = createAction(SUGGEST_CHECK, suggested => suggested)
 
 export const likeCheck = createAction(LIKE_CHECK, like => like)
 
+export const emptyCheck = createAction(EMPTY_CHECK, checkEmpty => checkEmpty)
+
+export const getSelectedMenu = createAction(GET_SELECTED_MENU, t_index => t_index);
+
 const getMenusSaga = createRequestSaga(GET_MENUS, menuAPI.getMenus);
 const suggestMenuSaga = createRequestSaga(SUGGEST_MENU, menuAPI.suggestMenu);
-const updateMenuSaga = createRequestSaga(UPDATE_MENU, menuAPI.updateMenu);
 const likeMenuSaga = createRequestSaga(LIKE_MENU, menuAPI.likeMenu);
 const getLikeSaga = createRequestSaga(GET_LIKE, menuAPI.getLike);
+const selectedMenuSaga = createRequestSaga(GET_SELECTED_MENU, menuAPI.getSelectedMenu);
 
 export function* menuSaga() {
     yield takeLatest(SUGGEST_MENU, suggestMenuSaga);
     yield takeLatest(GET_MENUS, getMenusSaga);
-    yield takeLatest(UPDATE_MENU, updateMenuSaga);
     yield takeLatest(LIKE_MENU, likeMenuSaga);
     yield takeLatest(GET_LIKE, getLikeSaga);
+    yield takeLatest(GET_SELECTED_MENU, selectedMenuSaga);
 }
 
 const initialState = {
@@ -90,6 +90,8 @@ const initialState = {
     pick: null,
     likeError: null,
     liked: false,
+    selectedMenu: [],
+    checkEmpty: false,
 };
 
 const menus = handleActions(
@@ -102,6 +104,10 @@ const menus = handleActions(
         [SUGGEST_CHECK]: (state, { payload: suggested }) => ({
             ...state,
             suggested: suggested,
+        }),
+        [EMPTY_CHECK]: (state, { payload: checkEmpty }) => ({
+            ...state,
+            checkEmpty: checkEmpty,
         }),
         [LIKE_CHECK]: (state, { payload: liked }) => ({
             ...state,
@@ -129,19 +135,6 @@ const menus = handleActions(
             ...state,
             menuError,
         }),
-        [UPDATE_MENU]: state => ({
-            ...state,
-            menu: null,
-            menuError: null,
-        }),
-        [UPDATE_MENU_SUCCESS]: (state, { payload: input }) => ({
-            ...state,
-            input: input[0],
-        }),
-        [UPDATE_MENU_FAILURE]: (state, { payload: error }) => ({
-            ...state,
-            menuError: error,
-        }),
         [LIKE_MENU]: state => ({
             ...state,
             pick: null,
@@ -161,7 +154,17 @@ const menus = handleActions(
         }),
         [GET_LIKE_FAILURE]: (state, { payload: error }) => ({
             ...state,
+            like: null,
             likeError: error,
+        }),
+        [GET_SELECTED_MENU_SUCCESS]: (state, { payload: selectedMenu }) => ({
+            ...state,
+            selectedMenu: selectedMenu,
+        }),
+        [GET_SELECTED_MENU_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            selectedMenu: null,
+            menuError: error,
         }),
     },
     initialState

@@ -15,6 +15,7 @@ import { getHoliday } from "../../modules/calendar/momenter";
 import useActions from "../../lib/useActions";
 import moment from "moment/moment";
 import {getMember, getThisWeekIdx} from "../../modules/team";
+import {getSelectedMenu} from "../../modules/menus";
 
 
 function MainContainer(props) {
@@ -35,10 +36,12 @@ function MainContainer(props) {
         loadingVacation : state.momenter.loading.GET_VACATION,
     }));
 
-    const { nextTeam, thisTeam, user } = useSelector(({team, user}) => ({
+    const { nextTeam, thisTeam, user, thisWeekIdx, selectedMenu } = useSelector(({team, user, menus}) => ({
         nextTeam: team.nextMember,
         thisTeam: team.thisMember,
-        user: user.user
+        user: user.user,
+        thisWeekIdx: team.thisWeekIdx,
+        selectedMenu: menus.selectedMenu,
     }))
 
     const dispatch = useDispatch();
@@ -131,6 +134,12 @@ function MainContainer(props) {
         }
     }, [user, dispatch])
 
+    useEffect(() => {
+        if(user) {
+            dispatch(getSelectedMenu(thisWeekIdx));
+        }
+    }, [thisWeekIdx, user, dispatch]);
+
     return (
         <div>
             <BackgroundForm />
@@ -151,6 +160,7 @@ function MainContainer(props) {
                         loadingVacation={loadingVacation}
                         nextTeam={nextTeam}
                         thisTeam={thisTeam}
+                        selectedMenu={selectedMenu}
                     />
                 </div>
             }
