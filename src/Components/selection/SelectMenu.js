@@ -33,7 +33,7 @@ function SelectMenu({like, onLike, input, onChangeInput, onClick, menus, suggest
             </Title>
 
             <div style={{display:"flex", alignItems:"center", justifyContent:"center", width:"100%", height:"7vh"}}>
-                <StyledInput id="suggest_menu" placeholder={suggested? '' : '메뉴 추가 전, 투표 불가능'} disabled={suggested} onChange={onChangeInput} value={input} type="text" />
+                <StyledInput id="suggest_menu" placeholder={suggested? '' : '메뉴는 1개만 제안 가능'} disabled={suggested} onChange={onChangeInput} value={input} type="text" />
                 <div style={{height:"100%", width:"5vw", display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <Button gray disabled={suggested} style={{height:"4vh", width:"4vw", margin:"0 0.3vw", padding:"0"}} onClick={onClick}>추가</Button>
                 </div>

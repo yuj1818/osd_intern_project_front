@@ -2,7 +2,7 @@ import React from 'react';
 import Title from "../common/Title";
 import Box from "../common/Box";
 
-function TeamThisWeek({thisTeam, selectedMenu}) {
+function TeamThisWeek({thisTeam, selectedMenu, selectedDay}) {
     return (
         <Box style={{ height:"15vh", width:"35vw", flexDirection:"column"}}>
             <Title style={{width:"100%", display:"flex", justifyContent:"flex-start", margin:"1vh 0 1vh 5vw"}}>
@@ -11,7 +11,7 @@ function TeamThisWeek({thisTeam, selectedMenu}) {
             <Box style={{ flexDirection:"column" ,height:"5vh", width:"30vw", margin:"0", marginBottom:"2vh", padding:"1vmin"}}>
                 {thisTeam.length > 0 &&
                     <div style={{marginBottom:"0.5vh" , fontSize: "1.2vh"}}>
-                        mm/dd ㅇ요일 - {selectedMenu.length !== 0 && selectedMenu[0].f_name}
+                        {selectedDay} - {selectedMenu.length !== 0 && selectedMenu[0].f_name}
                     </div>
                 }
                 <div style={{display:"flex"}}>

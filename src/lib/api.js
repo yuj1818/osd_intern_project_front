@@ -130,3 +130,9 @@ export const selectDays = ({t_index, m_num, days}) =>
 
 export const changeDays = ({t_index, m_num, days}) =>
     client.put(`bob/day/${t_index}/${m_num}`, days);
+
+export const getSelectedDays = ({t_index, m_num}) =>
+    client.get(`bob/day/${t_index}/${m_num}`);
+
+export const getSelectedDay = t_index =>
+    client.get(`bob/day/${t_index}`);

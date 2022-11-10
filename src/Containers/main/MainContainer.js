@@ -16,7 +16,8 @@ import useActions from "../../lib/useActions";
 import moment from "moment/moment";
 import {getMember, getThisWeekIdx} from "../../modules/team";
 import {getSelectedMenu} from "../../modules/menus";
-
+import {getSelectedDay} from "../../modules/days";
+import 'moment/locale/ko';
 
 function MainContainer(props) {
 
@@ -36,12 +37,13 @@ function MainContainer(props) {
         loadingVacation : state.momenter.loading.GET_VACATION,
     }));
 
-    const { nextTeam, thisTeam, user, thisWeekIdx, selectedMenu } = useSelector(({team, user, menus}) => ({
+    const { nextTeam, thisTeam, user, thisWeekIdx, selectedMenu, selectedDay } = useSelector(({team, user, menus, days}) => ({
         nextTeam: team.nextMember,
         thisTeam: team.thisMember,
         user: user.user,
         thisWeekIdx: team.thisWeekIdx,
         selectedMenu: menus.selectedMenu,
+        selectedDay: days.selectedDay,
     }))
 
     const dispatch = useDispatch();
@@ -137,8 +139,13 @@ function MainContainer(props) {
     useEffect(() => {
         if(user) {
             dispatch(getSelectedMenu(thisWeekIdx));
+            dispatch(getSelectedDay(thisWeekIdx));
         }
     }, [thisWeekIdx, user, dispatch]);
+
+    const now = moment().week()
+
+    const selectedDayCal = moment().week(now - 1).day(selectedDay + 1).format("MM월 DD일 ddd")
 
     return (
         <div>
@@ -161,6 +168,7 @@ function MainContainer(props) {
                         nextTeam={nextTeam}
                         thisTeam={thisTeam}
                         selectedMenu={selectedMenu}
+                        selectedDay={selectedDayCal}
                     />
                 </div>
             }

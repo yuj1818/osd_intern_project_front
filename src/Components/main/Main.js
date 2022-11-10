@@ -31,6 +31,7 @@ function Main({
                   nextTeam,
                   thisTeam,
                   selectedMenu,
+                  selectedDay,
 }) {
     return (
         <>
@@ -49,7 +50,7 @@ function Main({
                     loadingEvents={loadingEvents}
                     loadingVacation={loadingVacation}
                 />
-                <DashBob nextTeam={nextTeam} thisTeam={thisTeam} selectedMenu={selectedMenu}/>
+                <DashBob nextTeam={nextTeam} thisTeam={thisTeam} selectedMenu={selectedMenu} selectedDay={selectedDay} />
             </Dashboard>
         </>
     );

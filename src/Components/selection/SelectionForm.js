@@ -33,12 +33,13 @@ function SelectionForm({
                            selectedMenu,
                            onSubmit,
                            picked,
-                           onChangeDay
+                           onChangeDay,
+                           selectedDay,
 }) {
     return (
         <>
             <TeamBlock>
-                <TeamThisWeek thisTeam={thisTeam} selectedMenu={selectedMenu}/>
+                <TeamThisWeek thisTeam={thisTeam} selectedMenu={selectedMenu} selectedDay={selectedDay} days={days}/>
                 <TeamNextWeek nextTeam={nextTeam}/>
             </TeamBlock>
             <SelectionBlock>

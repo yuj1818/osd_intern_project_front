@@ -3,7 +3,15 @@ import SelectionForm from "../../Components/selection/SelectionForm";
 import BackgroundForm from "../../Components/common/BackgroundForm";
 import { useDispatch, useSelector } from "react-redux";
 import {getMember, getThisWeekIdx} from "../../modules/team";
-import {selectDays, toggle, pickedCheck, changeDays} from "../../modules/days";
+import {
+    selectDays,
+    toggle,
+    pickedCheck,
+    changeDays,
+    getSelectedDays,
+    changedCheck,
+    getSelectedDay
+} from "../../modules/days";
 import {
     changeInput,
     getMenus,
@@ -17,12 +25,14 @@ import {
     emptyCheck
 } from "../../modules/menus";
 import AskModal from "../../Components/common/AskModal";
+import moment from "moment";
+import 'moment/locale/ko';
 
 function SelectionContainer(props) {
 
     const dispatch = useDispatch();
 
-    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty, picked } = useSelector(({team, user, menus, days}) => ({
+    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty, picked, selectedDays, changed, selectedDay } = useSelector(({team, user, menus, days}) => ({
         nextTeam: team.nextMember,
         thisTeam: team.thisMember,
         user: user.user,
@@ -36,6 +46,9 @@ function SelectionContainer(props) {
         selectedMenu: menus.selectedMenu,
         checkEmpty: menus.checkEmpty,
         picked: days.picked,
+        selectedDays: days.selectedDays,
+        changed: days.changed,
+        selectedDay: days.selectedDay,
     }))
 
     const onClick = () => {
@@ -67,6 +80,7 @@ function SelectionContainer(props) {
             dispatch(getMember(user.m_num));
             dispatch(getMenus(user.t_index));
             dispatch(getThisWeekIdx(user.m_num));
+            dispatch(getSelectedDays({t_index: user.t_index, m_num: user.m_num}));
         }
     }, [user, dispatch])
 
@@ -81,6 +95,12 @@ function SelectionContainer(props) {
     }, [menus, user, dispatch]);
 
     useEffect(() => {
+        if(selectedDays.length !== 0) {
+            dispatch(pickedCheck(true))
+        }
+    }, [selectedDays, dispatch]);
+
+    useEffect(() => {
         if (user) {
             dispatch(getLike({tIndex: user.t_index,mNum: user.m_num}))
         }
@@ -93,21 +113,32 @@ function SelectionContainer(props) {
     useEffect(() => {
         if(user) {
             dispatch(getSelectedMenu(thisWeekIdx));
+            dispatch(getSelectedDay(thisWeekIdx));
         }
     }, [thisWeekIdx, user, dispatch])
 
-    const modalConfirm = () => {
+    const emptyModalConfirm = () => {
         dispatch(emptyCheck(false));
+    };
+
+    const changeModalConfirm = () => {
+        dispatch(changedCheck(false));
     };
 
     const onSubmit = () => {
         dispatch(selectDays({t_index: user.t_index, m_num: user.m_num, days}));
-        dispatch(pickedCheck(true));
+        dispatch(pickedCheck(true))
     }
 
     const onChangeDay = () => {
         dispatch(changeDays({t_index: user.t_index, m_num: user.m_num, days}));
+        dispatch(getSelectedDays({t_index: user.t_index, m_num: user.m_num}));
+        dispatch(changedCheck(true));
     }
+
+    const now = moment().week()
+
+    const selectedDayCal = moment().week(now - 1).day(selectedDay + 1).format("MM월 DD일 ddd")
 
     return (
         <div>
@@ -128,12 +159,19 @@ function SelectionContainer(props) {
                 onSubmit = {onSubmit}
                 picked={picked}
                 onChangeDay={onChangeDay}
+                selectedDay={selectedDayCal}
             />
             <AskModal
                 visible={checkEmpty}
                 title="메뉴 이름 빈칸"
                 description="메뉴 이름을 적어주세요. 빈칸으로는 제출할 수 없습니다."
-                onConfirm={modalConfirm}
+                onConfirm={emptyModalConfirm}
+            />
+            <AskModal
+                visible={changed}
+                title="날짜 변경"
+                description="날짜 선택을 변경하셨습니다"
+                onConfirm={changeModalConfirm}
             />
         </div>
     );
