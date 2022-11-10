@@ -32,7 +32,7 @@ function SelectionContainer(props) {
 
     const dispatch = useDispatch();
 
-    const { nextTeam, thisTeam,  user, menus, like, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty, picked, selectedDays, changed, selectedDay } = useSelector(({team, user, menus, days}) => ({
+    const { nextTeam, thisTeam,  user, menu, menus, like, pick, input, days, suggested, liked, thisWeekIdx, selectedMenu, checkEmpty, picked, pickedMsg, selectedDays, changed, selectedDay } = useSelector(({team, user, menus, days}) => ({
         nextTeam: team.nextMember,
         thisTeam: team.thisMember,
         user: user.user,
@@ -49,6 +49,9 @@ function SelectionContainer(props) {
         selectedDays: days.selectedDays,
         changed: days.changed,
         selectedDay: days.selectedDay,
+        pick: menus.pick,
+        pickedMsg: menus.pickedMsg,
+        menu: menus.menu,
     }))
 
     const onClick = () => {
@@ -68,8 +71,13 @@ function SelectionContainer(props) {
     const onLike = e => {
         dispatch(likeMenu({tIndex: user.t_index, mNum: user.m_num, fName: e.target.id}));
         dispatch(likeCheck(e.target.id));
-        dispatch(getLike({tIndex: user.t_index, mNum: user.m_num}));
     }
+
+    useEffect(() => {
+        if(pick) {
+            dispatch(getLike({tIndex: user.t_index, mNum: user.m_num}));
+        }
+    },[pick, dispatch])
 
     useEffect(() => {
         dispatch(initialize());
@@ -83,6 +91,18 @@ function SelectionContainer(props) {
             dispatch(getSelectedDays({t_index: user.t_index, m_num: user.m_num}));
         }
     }, [user, dispatch])
+
+    useEffect(() => {
+        if(menu) {
+            dispatch(getMenus(user.t_index));
+        }
+    },[menu, dispatch])
+
+    useEffect(() => {
+        if(pickedMsg) {
+            dispatch(getSelectedDays({t_index: user.t_index, m_num: user.m_num}));
+        }
+    }, [pickedMsg, dispatch]);
 
     useEffect(() => {
         if(menus.length !== 0 && user) {
@@ -132,7 +152,6 @@ function SelectionContainer(props) {
 
     const onChangeDay = () => {
         dispatch(changeDays({t_index: user.t_index, m_num: user.m_num, days}));
-        dispatch(getSelectedDays({t_index: user.t_index, m_num: user.m_num}));
         dispatch(changedCheck(true));
     }
 
